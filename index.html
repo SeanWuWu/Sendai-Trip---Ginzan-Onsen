@@ -14,6 +14,7 @@
   <link rel="stylesheet" href="./styles.css" />
 </head>
 <body>
+  <canvas id="snow-canvas"></canvas>
   <div class="app-shell">
     <!-- 雲端同步提示條 -->
     <div id="sync-banner" class="sync-banner" role="status">
@@ -78,6 +79,30 @@
 
     <!-- ==================== M1 時間表 ==================== -->
     <main id="pane-tl" class="tab-pane active">
+      
+      <!-- 現場智慧感知卡 (Now & Next) -->
+      <div class="now-next-card">
+        <div style="display:flex;align-items:center;justify-content:space-between;">
+          <div class="live-pulse-badge">
+            <span class="pulse-dot"></span>
+            <span>NOW & NEXT · 現場即時導引</span>
+          </div>
+          <span style="font-size:11px;color:var(--accent);font-family:'JetBrains Mono',monospace;">Day 3 推薦</span>
+        </div>
+        <div class="now-title-row">
+          <div>
+            <div class="now-title">JR 仙台站 ➔ 大石田站</div>
+            <div class="now-time">11:18 發車 · 山形新幹線 TSUBASA (E8系)</div>
+          </div>
+          <a href="https://www.google.com/maps/search/?api=1&query=JR+Sendai+Station" target="_blank" rel="noopener" class="icon-nav-btn" title="開啟車站 Google 地圖">
+            🗺️
+          </a>
+        </div>
+        <div style="font-size:12px;color:var(--sub);margin-top:4px;">
+          搭乘新幹線直達大石田站，轉乘「御宿やなだ屋」接駁車或銀山花笠號前往溫泉街。
+        </div>
+      </div>
+
       <div id="day-tabs" class="day-tabs" role="tablist">
           <button type="button" class="day-tab active" data-day-idx="0" role="tab" aria-selected="true">
             <span class="day-tab-top">Day 1</span>
@@ -355,6 +380,10 @@
         </div>
 
         <!-- 6 顆旅遊常用膠囊 -->
+        <button type="button" id="exp-add-trigger" class="add-trigger-btn exp-trigger" style="margin-bottom:0;">
+          <span>＋ 手動輸入／自訂記帳</span>
+          <span style="font-size:11.5px;color:var(--sub);font-weight:400;">滑桿微調 · 步進加減 · 分攤設定</span>
+        </button>
         <div id="exp-capsule-grid" class="capsule-grid">
         <div class="capsule-btn" data-cap-idx="0">
           <div class="cap-left">
@@ -423,10 +452,7 @@
         </div>
       </div>
 
-        <button type="button" id="exp-add-trigger" class="add-trigger-btn exp-trigger" style="margin-bottom:0;">
-          <span>＋ 手動輸入／自訂記帳</span>
-          <span style="font-size:11.5px;color:var(--sub);font-weight:400;">滑桿微調 · 步進加減 · 分攤設定</span>
-        </button>
+        
       </div>
 
       <!-- 浮出式新增/微調帳目視窗（點選膠囊、手動輸入或編輯時彈出，儲存完後自動消失） -->
@@ -1194,6 +1220,85 @@
 
     <!-- ==================== M5 更多（7 大區塊手風琴摺疊，預設全收合） ==================== -->
     <section id="pane-more" class="tab-pane">
+
+      <!-- 🎫 復古票券展示（置頂） -->
+      <div style="font-size:12px;font-family:'JetBrains Mono',monospace;color:var(--accent);margin-bottom:8px;font-weight:700;">🎫 VINTAGE TICKETS & TRANSIT</div>
+      
+      <div class="vintage-ticket-card">
+        <div class="ticket-head-row">
+          <span class="ticket-series">【星宇航空 · 去程登機證】</span>
+          <span class="ticket-train-code">STARLUX · JX 862</span>
+        </div>
+        <div class="ticket-route-row">
+          <div class="station-block">
+            <div class="station-city">台北</div>
+            <div class="station-time">11:50 TPE</div>
+          </div>
+          <div class="transit-decor-line">
+            <span class="transit-duration">3h 10m 直達</span>
+            <div class="line-track"></div>
+          </div>
+          <div class="station-block">
+            <div class="station-city">仙台</div>
+            <div class="station-time">16:00 SDJ</div>
+          </div>
+        </div>
+        <div class="ticket-dashed-foot">
+          <span>2027.03.27 週六 · 2人來回 NT$ 16,500</span>
+          <span style="color:var(--accent);font-weight:700;">已確認機票 ✓</span>
+        </div>
+      </div>
+
+      <div class="vintage-ticket-card">
+        <div class="ticket-head-row">
+          <span class="ticket-series">【山形新幹線 · 指定席乘車券】</span>
+          <span class="ticket-train-code">TSUBASA · E8 系</span>
+        </div>
+        <div class="ticket-route-row">
+          <div class="station-block">
+            <div class="station-city">仙台</div>
+            <div class="station-time">11:18 DEP</div>
+          </div>
+          <div class="transit-decor-line">
+            <span class="transit-duration">1h 14m</span>
+            <div class="line-track"></div>
+          </div>
+          <div class="station-block">
+            <div class="station-city">大石田</div>
+            <div class="station-time">12:32 ARR</div>
+          </div>
+        </div>
+        <div class="ticket-dashed-foot">
+          <span>大石田站轉乘旅館接駁車至銀山溫泉</span>
+          <span style="color:var(--accent);">建議提前劃位</span>
+        </div>
+      </div>
+
+      <div class="vintage-ticket-card">
+        <div class="ticket-head-row">
+          <span class="ticket-series">【星宇航空 · 回程登機證】</span>
+          <span class="ticket-train-code">STARLUX · JX 863</span>
+        </div>
+        <div class="ticket-route-row">
+          <div class="station-block">
+            <div class="station-city">仙台</div>
+            <div class="station-time">17:20 SDJ</div>
+          </div>
+          <div class="transit-decor-line">
+            <span class="transit-duration">3h 50m 直達</span>
+            <div class="line-track"></div>
+          </div>
+          <div class="station-block">
+            <div class="station-city">台北</div>
+            <div class="station-time">20:10 TPE</div>
+          </div>
+        </div>
+        <div class="ticket-dashed-foot">
+          <span>2027.03.31 週三 · 提早 2.5 小時至機場</span>
+          <span style="color:var(--accent);font-weight:700;">已確認機票 ✓</span>
+        </div>
+      </div>
+
       <!-- 1. 行前清單（可摺疊） -->
       <div class="accordion-header collapsed" data-target="more-chk-wrap" style="margin-top:0;">
         <span class="acc-title">1 · 雙人行前準備清單</span>

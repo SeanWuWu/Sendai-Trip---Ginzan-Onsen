@@ -1700,14 +1700,14 @@
   let quickCurr = 'JPY';
   let expListExpanded = false;
 
-  // 仙台專屬 6 顆日本旅遊高頻膠囊（超商、牛舌/定食、地鐵/JR車票、藥妝購物、自動販賣機、居酒屋）
+  // 仙台雙人旅遊 6 顆高頻生活膠囊（早餐、午餐、晚餐、飲料咖啡、超商交通、伴手甜點）
   const DEFAULT_CAPSULES = [
-    { icon: '🏪', name: '超商／零食', cat: '美食', jpy: 800, twd: 180, presetsJpy: [300, 500, 800, 1200, 2000], presetsTwd: [60, 100, 180, 260, 450] },
-    { icon: '🥩', name: '牛舌／定食', cat: '美食', jpy: 3200, twd: 700, presetsJpy: [2000, 2500, 3200, 5000, 8000], presetsTwd: [450, 550, 700, 1100, 1800] },
-    { icon: '🚇', name: '地鐵／JR車票', cat: '交通', jpy: 660, twd: 145, presetsJpy: [210, 420, 660, 1000, 3000], presetsTwd: [45, 90, 145, 220, 650] },
-    { icon: '🛍️', name: '藥妝／伴手禮', cat: '購物/伴手禮', jpy: 5000, twd: 1100, presetsJpy: [1500, 3000, 5000, 10000, 15000], presetsTwd: [330, 650, 1100, 2200, 3300] },
-    { icon: '🧃', name: '自動販賣機／毛豆奶昔', cat: '美食', jpy: 450, twd: 100, presetsJpy: [160, 300, 450, 800, 1200], presetsTwd: [35, 65, 100, 175, 260] },
-    { icon: '🍶', name: '居酒屋／燒肉', cat: '美食', jpy: 8000, twd: 1750, presetsJpy: [4000, 6000, 8000, 12000, 20000], presetsTwd: [880, 1300, 1750, 2600, 4400] }
+    { icon: '🍳', name: '早餐', cat: '美食', jpy: 800, twd: 175, presetsJpy: [400, 600, 800, 1200, 1800], presetsTwd: [90, 130, 175, 260, 400] },
+    { icon: '🍜', name: '午餐', cat: '美食', jpy: 2000, twd: 430, presetsJpy: [1000, 1500, 2000, 3000, 4500], presetsTwd: [215, 320, 430, 650, 970] },
+    { icon: '🍱', name: '晚餐', cat: '美食', jpy: 4500, twd: 970, presetsJpy: [2500, 3500, 4500, 7000, 10000], presetsTwd: [540, 750, 970, 1500, 2150] },
+    { icon: '☕', name: '飲料／咖啡', cat: '美食', jpy: 500, twd: 110, presetsJpy: [160, 350, 500, 750, 1000], presetsTwd: [35, 75, 110, 160, 215] },
+    { icon: '🏪', name: '超商／車票', cat: '交通', jpy: 1000, twd: 215, presetsJpy: [300, 660, 1000, 1500, 2500], presetsTwd: [65, 140, 215, 320, 540] },
+    { icon: '🍡', name: '甜點／小吃', cat: '美食', jpy: 600, twd: 130, presetsJpy: [300, 450, 600, 900, 1500], presetsTwd: [65, 100, 130, 195, 320] }
   ];
 
   function getCapsules() {
@@ -3390,4 +3390,51 @@ create policy "Allow anon read write trip_store"
   } else {
     bootApp();
   }
+})();
+
+
+// ==================== 浪漫微落雪效果 (Canvas Snow) ====================
+(function() {
+  const canvas = document.getElementById('snow-canvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  let width = canvas.width = window.innerWidth;
+  let height = canvas.height = window.innerHeight;
+  window.addEventListener('resize', () => {
+    width = canvas.width = window.innerWidth;
+    height = canvas.height = window.innerHeight;
+  });
+
+  const flakes = [];
+  for (let i = 0; i < 35; i++) {
+    flakes.push({
+      x: Math.random() * width,
+      y: Math.random() * height,
+      radius: Math.random() * 1.8 + 0.8,
+      speed: Math.random() * 0.6 + 0.3,
+      wind: Math.random() * 0.4 - 0.2,
+      alpha: Math.random() * 0.4 + 0.2
+    });
+  }
+
+  function renderSnow() {
+    ctx.clearRect(0, 0, width, height);
+    flakes.forEach((f) => {
+      ctx.beginPath();
+      ctx.arc(f.x, f.y, f.radius, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(250, 247, 242, ${f.alpha})`;
+      ctx.fill();
+
+      f.y += f.speed;
+      f.x += f.wind;
+      if (f.y > height) {
+        f.y = -5;
+        f.x = Math.random() * width;
+      }
+      if (f.x > width) f.x = 0;
+      if (f.x < 0) f.x = width;
+    });
+    requestAnimationFrame(renderSnow);
+  }
+  renderSnow();
 })();
