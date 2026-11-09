@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no" />
-  <meta name="theme-color" content="#12151A" />
+  <meta name="theme-color" content="#1a2433" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <title>仙台・銀山溫泉 雙人旅誌｜大正浪漫版</title>
@@ -13,46 +13,42 @@
   <!-- 字體引入：古典文學明朝體 + 鐵道時刻等寬字 -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=JetBrains+Mono:wght@400;500;600;700&family=Noto+Serif+JP:wght@400;600;700;900&family=Noto+Serif+TC:wght@400;600;700;900&family=Shippori+Mincho:wght@500;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;800&family=JetBrains+Mono:wght@400;500;600;700&family=Noto+Serif+JP:wght@500;700;900&family=Noto+Serif+TC:wght@500;700;900&family=Shippori+Mincho:wght@600;800&display=swap" rel="stylesheet">
 
   <style>
     /* =========================================================
-       大正浪漫視覺系統規格（Taisho Chic Design Tokens）
+       銀山溫泉夜景大正浪漫主題 (Ginzan Twilight Romantic Theme)
        ========================================================= */
     :root {
-      --bg-base: #12151A;                   /* 濃紺 / 墨夜 (Sumikuro) */
-      --bg-card: rgba(28, 32, 38, 0.88);    /* 煙燻木褐磨砂 */
-      --bg-card-solid: #1C2026;
-      --bg-hover: rgba(216, 156, 72, 0.08);
+      --bg-base: #141A22;
+      --bg-card: rgba(22, 28, 38, 0.78);
+      --bg-card-hover: rgba(30, 38, 52, 0.88);
       
-      --amber: #D89C48;                     /* 瓦斯燈琥珀金 */
-      --amber-glow: rgba(216, 156, 72, 0.28);
-      --amber-soft: rgba(216, 156, 72, 0.12);
+      --amber: #E2A654;                      /* 瓦斯燈琥珀金 */
+      --amber-glow: rgba(226, 166, 84, 0.35);
+      --amber-soft: rgba(226, 166, 84, 0.15);
       
-      --vermilion: #A83B3B;                 /* 銀山暖紅 / 大正朱 */
-      --vermilion-soft: rgba(168, 59, 59, 0.18);
+      --vermilion: #C24A4A;                  /* 銀山朱紅橋 */
+      --pine: #3B7056;                       /* 青葉松綠 */
       
-      --pine: #2E5A44;                      /* 仙台青葉杜之都松綠 */
-      --pine-soft: rgba(46, 90, 68, 0.25);
+      --text-main: #FAF7F2;                  /* 和紙象牙白 */
+      --text-sub: #A9B3C2;                   /* 柔和霧銀灰 */
+      --text-muted: #727C8C;
       
-      --text-main: #F3EFE6;                 /* 和紙象牙白 */
-      --text-sub: #8E95A0;                  /* 銀鼠灰 */
-      --text-muted: #5F6672;
+      --border-brass: rgba(226, 166, 84, 0.28); /* 黃銅細線 */
+      --border-sub: rgba(255, 255, 255, 0.12);
       
-      --border-brass: rgba(216, 156, 72, 0.22); /* 黃銅細線 */
-      --border-sub: rgba(255, 255, 255, 0.08);
-      
-      --font-serif: 'Shippori Mincho', 'Noto Serif JP', 'Noto Serif TC', 'Source Han Serif', serif;
+      --font-serif: 'Shippori Mincho', 'Noto Serif JP', 'Noto Serif TC', serif;
       --font-mono: 'JetBrains Mono', 'Cinzel', monospace;
-      --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang TC", "Microsoft JhengHei", sans-serif;
+      --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang TC", sans-serif;
       
-      --radius-sm: 6px;
-      --radius-md: 12px;
-      --radius-lg: 18px;
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --radius-lg: 20px;
       --radius-pill: 9999px;
       
-      --shadow-soft: 0 8px 24px rgba(0, 0, 0, 0.45);
-      --shadow-brass: 0 4px 20px rgba(216, 156, 72, 0.15);
+      --shadow-card: 0 12px 36px rgba(0, 0, 0, 0.45);
+      --shadow-glow: 0 4px 20px rgba(226, 166, 84, 0.22);
     }
 
     * {
@@ -70,8 +66,10 @@
       display: flex;
       justify-content: center;
       background-image: 
-        radial-gradient(circle at 50% 0%, rgba(216, 156, 72, 0.08) 0%, transparent 60%),
-        radial-gradient(circle at 100% 100%, rgba(46, 90, 68, 0.06) 0%, transparent 50%);
+        linear-gradient(180deg, rgba(14, 18, 26, 0.72) 0%, rgba(14, 18, 26, 0.86) 60%, rgba(14, 18, 26, 0.96) 100%),
+        url( + bg_b64 + r);
+      background-size: cover;
+      background-position: center top;
       background-attachment: fixed;
       overflow-x: hidden;
     }
@@ -81,11 +79,12 @@
       max-width: 480px;
       min-height: 100vh;
       position: relative;
-      padding-bottom: calc(78px + env(safe-area-inset-bottom, 16px));
-      background: var(--bg-base);
-      box-shadow: 0 0 50px rgba(0, 0, 0, 0.8);
-      border-left: 1px solid rgba(216, 156, 72, 0.08);
-      border-right: 1px solid rgba(216, 156, 72, 0.08);
+      padding-bottom: calc(84px + env(safe-area-inset-bottom, 16px));
+      box-shadow: 0 0 60px rgba(0, 0, 0, 0.9);
+      border-left: 1px solid rgba(226, 166, 84, 0.12);
+      border-right: 1px solid rgba(226, 166, 84, 0.12);
+      backdrop-filter: blur(2px);
+      -webkit-backdrop-filter: blur(2px);
     }
 
     /* 頂部和洋微型膠囊 Header */
@@ -93,11 +92,11 @@
       position: sticky;
       top: 0;
       z-index: 90;
-      padding: 10px 14px 6px 14px;
-      background: rgba(18, 21, 26, 0.82);
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
-      border-bottom: 1px solid rgba(216, 156, 72, 0.15);
+      padding: 10px 16px 8px 16px;
+      background: rgba(18, 24, 34, 0.78);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(226, 166, 84, 0.2);
     }
 
     .capsule-inner {
@@ -111,17 +110,17 @@
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      padding: 5px 12px;
+      padding: 6px 14px;
       border-radius: var(--radius-pill);
-      background: rgba(28, 32, 38, 0.9);
+      background: rgba(25, 33, 46, 0.85);
       border: 1px solid var(--border-brass);
-      font-size: 11.5px;
-      box-shadow: var(--shadow-brass);
+      font-size: 12px;
+      box-shadow: var(--shadow-glow);
     }
 
     .capsule-badge {
       color: var(--amber);
-      font-weight: 600;
+      font-weight: 700;
       font-family: var(--font-mono);
       letter-spacing: 0.04em;
     }
@@ -135,21 +134,22 @@
     .capsule-tools {
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 8px;
     }
 
     .tool-icon-btn {
-      width: 32px;
-      height: 32px;
+      width: 36px;
+      height: 36px;
       border-radius: var(--radius-pill);
-      background: rgba(28, 32, 38, 0.9);
+      background: rgba(25, 33, 46, 0.85);
       border: 1px solid var(--border-brass);
       color: var(--amber);
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      font-size: 13px;
+      font-size: 14px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
       transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
     }
     .tool-icon-btn:active {
@@ -157,37 +157,37 @@
       background: var(--amber-soft);
     }
 
-    /* 換匯抽屜（微型展開） */
-    .fx-mini-drawer {
+    /* 天氣與換匯抽屜 */
+    .top-drawer-panel {
       display: none;
-      margin-top: 8px;
-      padding: 10px 12px;
-      background: var(--bg-card-solid);
+      margin-top: 10px;
+      padding: 12px 14px;
+      background: rgba(22, 29, 41, 0.94);
       border: 1px solid var(--border-brass);
       border-radius: var(--radius-md);
-      box-shadow: var(--shadow-soft);
+      box-shadow: var(--shadow-card);
       animation: fadeInSlide 0.22s ease-out;
     }
-    .fx-mini-drawer.open {
+    .top-drawer-panel.open {
       display: block;
     }
 
     @keyframes fadeInSlide {
-      from { opacity: 0; transform: translateY(-6px); }
+      from { opacity: 0; transform: translateY(-8px); }
       to { opacity: 1; transform: translateY(0); }
     }
 
     /* 頁首詩意大標 */
     .taisho-hero {
-      padding: 16px 16px 12px 16px;
+      padding: 18px 16px 12px 16px;
     }
     .hero-eyebrow {
       font-family: var(--font-mono);
-      font-size: 10.5px;
-      letter-spacing: 0.15em;
+      font-size: 11px;
+      letter-spacing: 0.16em;
       color: var(--amber);
       text-transform: uppercase;
-      margin-bottom: 2px;
+      margin-bottom: 3px;
       display: flex;
       align-items: center;
       gap: 6px;
@@ -200,7 +200,7 @@
     }
     .hero-title {
       font-family: var(--font-serif);
-      font-size: 22px;
+      font-size: 24px;
       font-weight: 800;
       letter-spacing: 0.06em;
       color: var(--text-main);
@@ -210,35 +210,38 @@
     }
     .hero-days-tag {
       font-family: var(--font-mono);
-      font-size: 11px;
-      padding: 2px 7px;
+      font-size: 11.5px;
+      padding: 3px 9px;
       border: 1px solid var(--border-brass);
       border-radius: var(--radius-sm);
       color: var(--amber);
       background: var(--amber-soft);
+      letter-spacing: 0.05em;
     }
 
     /* =========================================================
-       Now & Next 智能感知卡 (Smart Companion Card)
+       Now & Next 智能感知卡
        ========================================================= */
     .now-next-card {
       margin: 0 16px 16px 16px;
-      background: linear-gradient(135deg, rgba(38, 44, 52, 0.95), rgba(24, 27, 33, 0.95));
+      background: linear-gradient(135deg, rgba(32, 42, 58, 0.88), rgba(20, 27, 38, 0.92));
       border: 1px solid var(--amber);
       border-radius: var(--radius-lg);
-      padding: 16px;
+      padding: 16px 18px;
       position: relative;
       overflow: hidden;
-      box-shadow: 0 10px 30px rgba(216, 156, 72, 0.15);
+      box-shadow: var(--shadow-card), var(--shadow-glow);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
     }
     .now-next-card::before {
       content: '';
       position: absolute;
-      top: -40px;
-      right: -40px;
-      width: 110px;
-      height: 110px;
-      background: radial-gradient(circle, rgba(216, 156, 72, 0.22), transparent 70%);
+      top: -30px;
+      right: -30px;
+      width: 120px;
+      height: 120px;
+      background: radial-gradient(circle, rgba(226, 166, 84, 0.28), transparent 70%);
       pointer-events: none;
     }
 
@@ -246,7 +249,7 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: 10px;
+      margin-bottom: 8px;
     }
     .live-pulse-badge {
       display: inline-flex;
@@ -255,90 +258,70 @@
       font-family: var(--font-mono);
       font-size: 11px;
       color: var(--amber);
-      font-weight: 600;
+      font-weight: 700;
       letter-spacing: 0.08em;
     }
     .pulse-dot {
-      width: 7px;
-      height: 7px;
+      width: 8px;
+      height: 8px;
       border-radius: 50%;
       background: var(--amber);
-      box-shadow: 0 0 8px var(--amber);
+      box-shadow: 0 0 10px var(--amber);
       animation: livePulse 1.8s infinite ease-in-out;
     }
     @keyframes livePulse {
       0%, 100% { opacity: 0.5; transform: scale(0.9); }
-      50% { opacity: 1; transform: scale(1.25); }
+      50% { opacity: 1; transform: scale(1.3); }
     }
 
-    .now-title {
-      font-family: var(--font-serif);
-      font-size: 17px;
-      font-weight: 700;
-      letter-spacing: 0.04em;
-      margin-bottom: 6px;
-      color: var(--text-main);
+    .now-title-row {
       display: flex;
       align-items: center;
-      gap: 6px;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 4px;
+    }
+    .now-title {
+      font-family: var(--font-serif);
+      font-size: 18px;
+      font-weight: 800;
+      letter-spacing: 0.03em;
+      color: var(--text-main);
     }
     .now-time {
       font-family: var(--font-mono);
       color: var(--amber);
       font-size: 13px;
-      font-weight: 600;
+      font-weight: 700;
+      white-space: nowrap;
     }
     .now-desc {
       font-size: 12.5px;
       color: var(--text-sub);
       line-height: 1.5;
-      margin-bottom: 14px;
     }
 
-    .now-action-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 8px;
-    }
-    .action-btn-gold {
+    /* 簡約按鈕圖示 */
+    .icon-nav-btn {
+      width: 32px;
+      height: 32px;
+      border-radius: var(--radius-sm);
+      background: var(--amber-soft);
+      border: 1px solid var(--border-brass);
+      color: var(--amber);
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: 6px;
-      padding: 9px 12px;
-      border-radius: var(--radius-md);
+      text-decoration: none;
+      cursor: pointer;
+      font-size: 14px;
+      flex-shrink: 0;
+      transition: all 0.2s ease;
+    }
+    .icon-nav-btn:active {
+      transform: scale(0.92);
       background: var(--amber);
       color: #12151A;
-      font-weight: 700;
-      font-size: 12.5px;
-      text-decoration: none;
-      cursor: pointer;
-      border: none;
-      transition: all 0.2s ease;
-    }
-    .action-btn-gold:active {
-      transform: scale(0.96);
-      background: #c38a3c;
-    }
-    .action-btn-outline {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-      padding: 9px 12px;
-      border-radius: var(--radius-md);
-      background: rgba(28, 32, 38, 0.7);
-      color: var(--text-main);
-      font-weight: 600;
-      font-size: 12.5px;
-      border: 1px solid var(--border-brass);
-      cursor: pointer;
-      text-decoration: none;
-      transition: all 0.2s ease;
-    }
-    .action-btn-outline:active {
-      transform: scale(0.96);
-      background: var(--amber-soft);
     }
 
     /* =========================================================
@@ -358,7 +341,7 @@
       min-width: 68px;
       padding: 8px 4px;
       border-radius: var(--radius-md);
-      background: var(--bg-card);
+      background: rgba(25, 33, 46, 0.75);
       border: 1px solid var(--border-sub);
       color: var(--text-sub);
       text-align: center;
@@ -366,19 +349,21 @@
       display: flex;
       flex-direction: column;
       align-items: center;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
       transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
     }
     .day-chip-btn.active {
-      background: linear-gradient(145deg, rgba(46, 90, 68, 0.45), rgba(28, 32, 38, 0.95));
+      background: linear-gradient(145deg, rgba(226, 166, 84, 0.28), rgba(28, 36, 50, 0.95));
       border-color: var(--amber);
       color: var(--text-main);
-      box-shadow: 0 4px 14px rgba(216, 156, 72, 0.15);
+      box-shadow: var(--shadow-glow);
       transform: translateY(-2px);
     }
     .day-chip-num {
       font-family: var(--font-mono);
       font-weight: 700;
-      font-size: 13px;
+      font-size: 13.5px;
       color: var(--amber);
     }
     .day-chip-date {
@@ -387,7 +372,7 @@
     }
 
     /* =========================================================
-       垂直和風時間軸卡片 (Vertical Wa-Style Timeline)
+       垂直和風時間軸卡片（支援點擊展開/收合完整資訊）
        ========================================================= */
     .timeline-container {
       padding: 0 16px;
@@ -397,33 +382,34 @@
       content: '';
       position: absolute;
       left: 31px;
-      top: 10px;
-      bottom: 10px;
+      top: 14px;
+      bottom: 14px;
       width: 1px;
-      background: linear-gradient(180deg, var(--amber) 0%, rgba(216, 156, 72, 0.2) 80%, transparent 100%);
+      background: linear-gradient(180deg, var(--amber) 0%, rgba(226, 166, 84, 0.2) 80%, transparent 100%);
     }
 
     .tl-card-item {
       position: relative;
-      margin-bottom: 14px;
+      margin-bottom: 12px;
       padding-left: 34px;
     }
     .tl-node-pin {
       position: absolute;
       left: 11px;
-      top: 14px;
+      top: 16px;
       width: 9px;
       height: 9px;
       border-radius: 50%;
       background: var(--bg-base);
       border: 2px solid var(--amber);
-      box-shadow: 0 0 6px var(--amber-glow);
+      box-shadow: 0 0 8px var(--amber-glow);
       z-index: 2;
+      transition: all 0.2s ease;
     }
     .tl-card-item.flight-item .tl-node-pin {
       border-color: var(--vermilion);
       background: var(--vermilion);
-      box-shadow: 0 0 8px var(--vermilion);
+      box-shadow: 0 0 10px var(--vermilion);
     }
     .tl-card-item.hotel-item .tl-node-pin {
       border-color: #559E7C;
@@ -434,15 +420,19 @@
       background: var(--bg-card);
       border: 1px solid var(--border-sub);
       border-radius: var(--radius-md);
-      padding: 12px 14px;
-      transition: all 0.2s ease;
+      padding: 13px 15px;
+      transition: all 0.22s ease;
       cursor: pointer;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
     }
     .tl-card-inner:hover {
+      background: var(--bg-card-hover);
       border-color: var(--border-brass);
     }
     .tl-card-inner:active {
-      transform: scale(0.985);
+      transform: scale(0.99);
     }
 
     .tl-head-row {
@@ -454,14 +444,14 @@
     }
     .tl-time-badge {
       font-family: var(--font-mono);
-      font-size: 11.5px;
-      font-weight: 600;
+      font-size: 12px;
+      font-weight: 700;
       color: var(--amber);
       letter-spacing: 0.05em;
     }
     .tl-tag-pill {
-      font-size: 10.5px;
-      padding: 1px 6px;
+      font-size: 11px;
+      padding: 1px 7px;
       border-radius: 4px;
       border: 1px solid var(--border-brass);
       color: var(--amber);
@@ -469,34 +459,175 @@
     }
     .tl-card-title {
       font-family: var(--font-serif);
-      font-size: 14.5px;
+      font-size: 15px;
       font-weight: 700;
       color: var(--text-main);
       line-height: 1.4;
       margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
     }
+    .expand-indicator {
+      font-size: 10px;
+      color: var(--amber);
+      font-family: var(--font-mono);
+      transition: transform 0.25s ease;
+    }
+    .tl-card-item.expanded .expand-indicator {
+      transform: rotate(180deg);
+    }
+
     .tl-card-note {
-      font-size: 12px;
+      font-size: 12.5px;
       color: var(--text-sub);
-      line-height: 1.45;
+      line-height: 1.5;
       display: -webkit-box;
       -webkit-line-clamp: 2;
       -webkit-box-orient: vertical;
       overflow: hidden;
+      transition: all 0.25s ease;
     }
     .tl-card-item.expanded .tl-card-note {
       -webkit-line-clamp: unset;
+      color: var(--text-main);
     }
 
     .tl-card-actions {
       display: none;
       margin-top: 10px;
-      padding-top: 8px;
+      padding-top: 9px;
       border-top: 1px dashed var(--border-brass);
-      gap: 6px;
+      justify-content: space-between;
+      align-items: center;
     }
     .tl-card-item.expanded .tl-card-actions {
       display: flex;
+    }
+
+    /* =========================================================
+       記帳分頁（Wallet & Expense）完整保留所有記帳明細
+       ========================================================= */
+    .wallet-hero-box {
+      margin: 0 16px 14px 16px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-brass);
+      border-radius: var(--radius-lg);
+      padding: 16px 18px;
+      box-shadow: var(--shadow-card);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+    }
+    .wallet-total-label {
+      font-size: 12px;
+      color: var(--text-sub);
+      margin-bottom: 4px;
+    }
+    .wallet-grand-twd {
+      font-family: var(--font-mono);
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--amber);
+      letter-spacing: 0.04em;
+    }
+    .wallet-sub-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      color: var(--text-sub);
+      margin-top: 4px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border-sub);
+    }
+
+    .couple-split-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 12px;
+    }
+    .split-col-card {
+      padding: 10px 12px;
+      border-radius: var(--radius-md);
+      background: rgba(18, 24, 34, 0.7);
+      border: 1px solid var(--border-sub);
+    }
+    .split-col-name {
+      font-size: 12px;
+      color: var(--text-sub);
+      margin-bottom: 2px;
+    }
+    .split-col-val {
+      font-family: var(--font-mono);
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    /* 快捷記帳 6 顆膠囊 */
+    .capsule-quick-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin: 0 16px 16px 16px;
+    }
+    .quick-exp-pill {
+      background: var(--bg-card);
+      border: 1px solid var(--border-sub);
+      border-radius: var(--radius-md);
+      padding: 10px 8px;
+      text-align: center;
+      cursor: pointer;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      transition: all 0.2s ease;
+    }
+    .quick-exp-pill:active {
+      transform: scale(0.95);
+      border-color: var(--amber);
+      background: var(--amber-soft);
+    }
+    .quick-pill-icon { font-size: 18px; margin-bottom: 3px; }
+    .quick-pill-name { font-size: 12px; font-weight: 600; color: var(--text-main); }
+    .quick-pill-cost { font-family: var(--font-mono); font-size: 11px; color: var(--amber); margin-top: 2px; }
+
+    /* 記帳條目卡片 */
+    .exp-item-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-sub);
+      border-radius: var(--radius-md);
+      padding: 12px 14px;
+      margin-bottom: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+
+    /* 浮動記帳 FAB */
+    .fab-expense-btn {
+      position: fixed;
+      right: 20px;
+      bottom: calc(88px + env(safe-area-inset-bottom, 16px));
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      background: linear-gradient(145deg, #E2A654, #BF8435);
+      border: 2px solid rgba(255, 255, 255, 0.4);
+      color: #12151A;
+      font-size: 26px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 6px 24px rgba(226, 166, 84, 0.5);
+      cursor: pointer;
+      z-index: 80;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .fab-expense-btn:active {
+      transform: scale(0.92) rotate(45deg);
     }
 
     /* =========================================================
@@ -504,13 +635,15 @@
        ========================================================= */
     .vintage-ticket-card {
       position: relative;
-      background: linear-gradient(135deg, #1C2027 0%, #15191F 100%);
+      background: linear-gradient(135deg, rgba(28, 36, 48, 0.88) 0%, rgba(18, 24, 34, 0.92) 100%);
       border: 1px solid var(--border-brass);
       border-radius: var(--radius-lg);
       padding: 18px 20px;
       margin: 0 16px 16px 16px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+      box-shadow: var(--shadow-card);
       overflow: hidden;
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
     }
     /* 左右剪票凹槽 */
     .vintage-ticket-card::before,
@@ -542,17 +675,17 @@
     }
     .ticket-series {
       font-family: var(--font-serif);
-      font-size: 13px;
+      font-size: 13.5px;
       color: var(--amber);
       letter-spacing: 0.12em;
       font-weight: 700;
     }
     .ticket-train-code {
       font-family: var(--font-mono);
-      font-size: 10.5px;
+      font-size: 11px;
       letter-spacing: 0.08em;
       color: var(--amber);
-      padding: 2px 7px;
+      padding: 2px 8px;
       border: 1px solid var(--border-brass);
       border-radius: var(--radius-sm);
       background: var(--amber-soft);
@@ -614,127 +747,12 @@
 
     .ticket-dashed-foot {
       padding-top: 12px;
-      border-top: 1px dashed rgba(216, 156, 72, 0.35);
+      border-top: 1px dashed rgba(226, 166, 84, 0.35);
       display: flex;
       justify-content: space-between;
       align-items: center;
-      font-size: 11.5px;
-      color: var(--text-sub);
-    }
-    .ticket-action-link {
-      font-family: var(--font-mono);
-      color: var(--amber);
-      text-decoration: none;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 3px;
-    }
-
-    /* =========================================================
-       記帳分頁（Wallet & Expense）
-       ========================================================= */
-    .wallet-hero-box {
-      margin: 0 16px 14px 16px;
-      background: var(--bg-card);
-      border: 1px solid var(--border-brass);
-      border-radius: var(--radius-lg);
-      padding: 16px;
-      box-shadow: var(--shadow-soft);
-    }
-    .wallet-total-label {
       font-size: 12px;
       color: var(--text-sub);
-      margin-bottom: 4px;
-    }
-    .wallet-grand-twd {
-      font-family: var(--font-mono);
-      font-size: 28px;
-      font-weight: 800;
-      color: var(--amber);
-      letter-spacing: 0.04em;
-    }
-    .wallet-sub-row {
-      display: flex;
-      justify-content: space-between;
-      font-size: 11.5px;
-      color: var(--text-sub);
-      margin-top: 4px;
-      padding-bottom: 12px;
-      border-bottom: 1px solid var(--border-sub);
-    }
-
-    .couple-split-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-      margin-top: 12px;
-    }
-    .split-col-card {
-      padding: 10px 12px;
-      border-radius: var(--radius-md);
-      background: rgba(18, 21, 26, 0.6);
-      border: 1px solid var(--border-sub);
-    }
-    .split-col-name {
-      font-size: 12px;
-      color: var(--text-sub);
-      margin-bottom: 2px;
-    }
-    .split-col-val {
-      font-family: var(--font-mono);
-      font-size: 16px;
-      font-weight: 700;
-      color: var(--text-main);
-    }
-
-    /* 快捷記帳 6 顆膠囊 */
-    .capsule-quick-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 8px;
-      margin: 0 16px 16px 16px;
-    }
-    .quick-exp-pill {
-      background: var(--bg-card);
-      border: 1px solid var(--border-sub);
-      border-radius: var(--radius-md);
-      padding: 10px 8px;
-      text-align: center;
-      cursor: pointer;
-      transition: all 0.2s ease;
-    }
-    .quick-exp-pill:active {
-      transform: scale(0.95);
-      border-color: var(--amber);
-      background: var(--amber-soft);
-    }
-    .quick-pill-icon { font-size: 16px; margin-bottom: 2px; }
-    .quick-pill-name { font-size: 12px; font-weight: 600; color: var(--text-main); }
-    .quick-pill-cost { font-family: var(--font-mono); font-size: 10.5px; color: var(--amber); }
-
-    /* 浮動記帳 FAB */
-    .fab-expense-btn {
-      position: fixed;
-      right: 20px;
-      bottom: calc(88px + env(safe-area-inset-bottom, 16px));
-      width: 52px;
-      height: 52px;
-      border-radius: 50%;
-      background: linear-gradient(145deg, #E6A752, #BF8435);
-      border: 2px solid rgba(255, 255, 255, 0.3);
-      color: #12151A;
-      font-size: 24px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 6px 20px rgba(216, 156, 72, 0.45);
-      cursor: pointer;
-      z-index: 80;
-      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-    .fab-expense-btn:active {
-      transform: scale(0.92) rotate(45deg);
     }
 
     /* =========================================================
@@ -749,9 +767,9 @@
       max-width: 480px;
       height: calc(64px + env(safe-area-inset-bottom, 14px));
       padding-bottom: env(safe-area-inset-bottom, 14px);
-      background: rgba(18, 21, 26, 0.92);
-      backdrop-filter: blur(18px);
-      -webkit-backdrop-filter: blur(18px);
+      background: rgba(16, 22, 32, 0.92);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
       border-top: 1px solid var(--border-brass);
       display: flex;
       align-items: center;
@@ -777,11 +795,11 @@
       color: var(--amber);
     }
     .nav-tab-icon {
-      font-size: 18px;
+      font-size: 19px;
     }
     .nav-tab-text {
       font-family: var(--font-serif);
-      font-size: 11.5px;
+      font-size: 12px;
       font-weight: 700;
       letter-spacing: 0.06em;
     }
@@ -798,30 +816,6 @@
       from { opacity: 0; transform: translateY(4px); }
       to { opacity: 1; transform: translateY(0); }
     }
-
-    /* 司機字卡視窗 */
-    .taxi-modal-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.75);
-      backdrop-filter: blur(8px);
-      z-index: 200;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      padding: 16px;
-    }
-    .taxi-modal-overlay.open { display: flex; }
-    .taxi-modal-card {
-      background: #1C2026;
-      border: 1px solid var(--amber);
-      border-radius: var(--radius-lg);
-      padding: 20px;
-      width: 100%;
-      max-width: 380px;
-      box-shadow: var(--shadow-soft);
-      animation: fadeInSlide 0.2s ease;
-    }
   </style>
 </head>
 <body>
@@ -832,26 +826,56 @@
       <div class="capsule-inner">
         <div class="status-capsule">
           <span>❄️ 銀山溫泉</span>
-          <span class="capsule-badge" id="bar-weather">-1°C 晴雪</span>
+          <span class="capsule-badge" id="bar-temp">-1°C 晴雪</span>
           <span class="capsule-divider"></span>
           <span style="color:var(--text-sub);">¥100 ≈</span>
           <span class="capsule-badge" id="bar-rate">NT$ 21.5</span>
         </div>
 
         <div class="capsule-tools">
-          <button type="button" id="fx-toggle-btn" class="tool-icon-btn" title="換匯計算">¥</button>
-          <button type="button" id="haptic-toggle-btn" class="tool-icon-btn" title="身分設定">🏮</button>
+          <button type="button" id="wx-toggle-btn" class="tool-icon-btn" title="查看氣象預報">☀</button>
+          <button type="button" id="fx-toggle-btn" class="tool-icon-btn" title="換匯計算機">¥</button>
+        </div>
+      </div>
+
+      <!-- 點擊 ☀ 展開的 5 天天氣抽屜 -->
+      <div id="wx-drawer" class="top-drawer-panel">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+          <span style="font-size:11px;font-family:var(--font-mono);color:var(--amber);">WEATHER FORECAST · 3/27–3/31</span>
+          <span id="wx-close-btn" style="cursor:pointer;font-size:12px;color:var(--text-sub);">✕</span>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:6px;font-size:12px;">
+          <div style="display:flex;justify-content:space-between;border-bottom:1px solid var(--border-sub);padding-bottom:4px;">
+            <span>Day 1 (3/27) 仙台市區</span>
+            <span style="color:var(--amber);">☀️ 晴朗 · 3°C ~ 12°C · 降雨 10%</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;border-bottom:1px solid var(--border-sub);padding-bottom:4px;">
+            <span>Day 2 (3/28) 松島海岸</span>
+            <span style="color:var(--amber);">⛅ 晴時多雲 · 4°C ~ 11°C · 降雨 20%</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;border-bottom:1px solid var(--border-sub);padding-bottom:4px;">
+            <span>Day 3 (3/29) 銀山溫泉</span>
+            <span style="color:var(--amber);">❄️ 晴雪・夜間點燈 · -2°C ~ 5°C · 降雨 30%</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;border-bottom:1px solid var(--border-sub);padding-bottom:4px;">
+            <span>Day 4 (3/30) 仙台市區</span>
+            <span style="color:var(--amber);">☁️ 多雲時晴 · 5°C ~ 13°C · 降雨 15%</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;">
+            <span>Day 5 (3/31) 仙台機場</span>
+            <span style="color:var(--amber);">☀️ 晴天返台 · 6°C ~ 14°C · 降雨 10%</span>
+          </div>
         </div>
       </div>
 
       <!-- 點擊 ¥ 展開的快速雙幣計算器 -->
-      <div id="fx-mini-drawer" class="fx-mini-drawer">
+      <div id="fx-mini-drawer" class="top-drawer-panel">
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
           <span style="font-size:11px;font-family:var(--font-mono);color:var(--amber);">EXCHANGE CALCULATOR (0.215)</span>
           <span id="fx-close-btn" style="cursor:pointer;font-size:12px;color:var(--text-sub);">✕</span>
         </div>
         <div style="display:flex;gap:8px;align-items:center;">
-          <input type="number" id="fx-quick-input" placeholder="日圓 ¥" value="1000" style="flex:1;background:rgba(0,0,0,0.4);border:1px solid var(--border-brass);color:var(--text-main);padding:8px 10px;border-radius:6px;font-family:var(--font-mono);font-size:14px;outline:none;" />
+          <input type="number" id="fx-quick-input" placeholder="日圓 ¥" value="1000" style="flex:1;background:rgba(0,0,0,0.5);border:1px solid var(--border-brass);color:var(--text-main);padding:8px 10px;border-radius:6px;font-family:var(--font-mono);font-size:14px;outline:none;" />
           <span style="color:var(--amber);">➔</span>
           <div id="fx-quick-output" style="flex:1;font-family:var(--font-mono);color:var(--amber);font-size:15px;font-weight:700;">NT$ 215</div>
         </div>
@@ -860,7 +884,7 @@
 
     <!-- 標題詩意區 -->
     <div class="taisho-hero">
-      <div class="hero-eyebrow">TAISHO ROMANCE · SENDAI & GINZAN</div>
+      <div class="hero-eyebrow">GINZAN ONSEN & SENDAI · 2027</div>
       <div class="hero-title">
         <span>仙台・銀山溫泉</span>
         <span class="hero-days-tag">5天4夜 雙人行</span>
@@ -872,7 +896,7 @@
          ======================================================== -->
     <section id="pane-itinerary" class="tab-section-pane active">
       
-      <!-- 現場智慧感知卡 (Now & Next) -->
+      <!-- 現場智慧感知卡 (Now & Next) - 簡潔圖示導航 -->
       <div class="now-next-card">
         <div class="card-label-row">
           <div class="live-pulse-badge">
@@ -881,17 +905,20 @@
           </div>
           <span style="font-size:11px;color:var(--amber);font-family:var(--font-mono);">Day 3 推薦</span>
         </div>
-        <div class="now-time">11:18 發車倒數・山形新幹線 E8 系</div>
-        <div class="now-title">JR 仙台站 ➔ 大石田站</div>
-        <div class="now-desc">搭乘山形新幹線 TSUBASA 前往大石田，再轉乘「御宿やなだ屋」接駁車或銀山花笠號直達銀山溫泉街。</div>
         
-        <div class="now-action-grid">
-          <a href="https://www.google.com/maps/search/?api=1&query=JR+Sendai+Station" target="_blank" rel="noopener" class="action-btn-gold">
-            <span>🗺️ 車站地圖</span>
+        <div class="now-title-row">
+          <div>
+            <div class="now-title">JR 仙台站 ➔ 大石田站</div>
+            <div class="now-time">11:18 發車 · 山形新幹線 TSUBASA (E8系)</div>
+          </div>
+          <!-- 簡約 Google Maps Icon 導航 -->
+          <a href="https://www.google.com/maps/search/?api=1&query=JR+Sendai+Station" target="_blank" rel="noopener" class="icon-nav-btn" title="開啟車站 Google 地圖">
+            🗺️
           </a>
-          <button type="button" id="open-taxi-sample-btn" class="action-btn-outline">
-            <span>🚖 司機字卡</span>
-          </button>
+        </div>
+        
+        <div class="now-desc" style="margin-top:6px;">
+          搭乘山形新幹線直達大石田站，轉乘「御宿やなだ屋」旅館接駁車或銀山花笠號前往溫泉街。
         </div>
       </div>
 
@@ -919,7 +946,7 @@
         </div>
       </div>
 
-      <!-- 和風時間軸列表 -->
+      <!-- 和風時間軸列表（點擊即可展開/收合完整說明與導航） -->
       <div class="timeline-container" id="timeline-list">
         <!-- 動態渲染行程 -->
       </div>
@@ -935,70 +962,70 @@
         <div class="wallet-total-label">旅程累計支出（折合台幣）</div>
         <div class="wallet-grand-twd" id="wallet-grand-total">NT$ 42,100</div>
         <div class="wallet-sub-row">
-          <span>機票 NT$ 16,500</span>
-          <span>住宿 NT$ 25,600</span>
-          <span>其他 ¥0</span>
+          <span>機票款 NT$ 16,500</span>
+          <span>住宿費 NT$ 25,600</span>
+          <span>其他待補</span>
         </div>
 
         <div class="couple-split-grid">
           <div class="split-col-card">
-            <div class="split-col-name">老公 墊付</div>
+            <div class="split-col-name">老公 已付</div>
             <div class="split-col-val" id="split-husband">NT$ 42,100</div>
           </div>
           <div class="split-col-card">
-            <div class="split-col-name">老婆 墊付</div>
+            <div class="split-col-name">老婆 已付</div>
             <div class="split-col-val" id="split-wife">NT$ 0</div>
           </div>
         </div>
       </div>
 
       <!-- 快速記帳 6 顆膠囊（秒記） -->
-      <div style="padding:0 16px 8px 16px;font-size:12px;font-family:var(--font-mono);color:var(--amber);">⚡ QUICK EXPENSE (ONE TAP)</div>
+      <div style="padding:0 16px 8px 16px;font-size:12px;font-family:var(--font-mono);color:var(--amber);">⚡ QUICK EXPENSE (點選快速記帳)</div>
       <div class="capsule-quick-grid" id="quick-capsules">
         <div class="quick-exp-pill" data-amount="3000" data-cat="美食" data-name="善治郎牛舌套餐">
           <div class="quick-pill-icon">🥩</div>
           <div class="quick-pill-name">仙台牛舌</div>
           <div class="quick-pill-cost">¥3,000</div>
         </div>
-        <div class="quick-exp-pill" data-amount="660" data-cat="交通" data-name="仙台機場Access線">
+        <div class="quick-exp-pill" data-amount="660" data-cat="交通" data-name="仙台機場Access線車票">
           <div class="quick-pill-icon">🚆</div>
           <div class="quick-pill-name">機場快線</div>
           <div class="quick-pill-cost">¥660</div>
         </div>
-        <div class="quick-exp-pill" data-amount="1000" data-cat="交通" data-name="銀山溫泉花笠巴士">
+        <div class="quick-exp-pill" data-amount="1000" data-cat="交通" data-name="銀山花笠號巴士車資">
           <div class="quick-pill-icon">🚌</div>
           <div class="quick-pill-name">銀山巴士</div>
           <div class="quick-pill-cost">¥1,000</div>
         </div>
-        <div class="quick-exp-pill" data-amount="600" data-cat="美食" data-name="毛豆奶昔・茶寮">
+        <div class="quick-exp-pill" data-amount="600" data-cat="美食" data-name="茶寮百日紅毛豆奶昔">
           <div class="quick-pill-icon">🫛</div>
           <div class="quick-pill-name">毛豆奶昔</div>
           <div class="quick-pill-cost">¥600</div>
         </div>
-        <div class="quick-exp-pill" data-amount="1500" data-cat="購物/伴手禮" data-name="萩之月伴手禮">
+        <div class="quick-exp-pill" data-amount="1500" data-cat="購物/伴手禮" data-name="萩之月伴手禮盒">
           <div class="quick-pill-icon">🌕</div>
           <div class="quick-pill-name">萩之月</div>
           <div class="quick-pill-cost">¥1,500</div>
         </div>
-        <div class="quick-exp-pill" data-amount="1200" data-cat="景點/活動" data-name="松島遊船票券">
+        <div class="quick-exp-pill" data-amount="1200" data-cat="景點/活動" data-name="松島海岸遊船乘船券">
           <div class="quick-pill-icon">🚢</div>
           <div class="quick-pill-name">松島遊船</div>
           <div class="quick-pill-cost">¥1,200</div>
         </div>
       </div>
 
-      <!-- 記帳明細清單 -->
-      <div style="padding:0 16px 8px 16px;font-size:12px;font-family:var(--font-mono);color:var(--amber);">📜 RECENT EXPENSES</div>
+      <!-- 記帳完整明細清單（包含預設的機票與三間飯店） -->
+      <div style="padding:0 16px 8px 16px;font-size:12px;font-family:var(--font-mono);color:var(--amber);">📜 ALL EXPENSES (完整記帳明細)</div>
       <div id="wallet-history-list" style="padding:0 16px;">
         <!-- 動態渲染花費明細 -->
       </div>
 
       <!-- 浮動新增記帳鈕 -->
-      <button type="button" class="fab-expense-btn" id="fab-add-exp" title="新增記帳">＋</button>
+      <button type="button" class="fab-expense-btn" id="fab-add-exp" title="手動新增一筆記帳">＋</button>
     </section>
 
     <!-- ========================================================
-         TAB 3: 🎫 票夾與指南 (Pocket & Vintage Transit)
+         TAB 3: 🎫 票券與指南 (Pocket & Vintage Transit)
          ======================================================== -->
     <section id="pane-pocket" class="tab-section-pane">
       
@@ -1024,7 +1051,7 @@
         </div>
         <div class="ticket-dashed-foot">
           <span>2027.03.27 週六 · 2人來回 NT$ 16,500</span>
-          <span class="ticket-action-link">查看電子票券 →</span>
+          <span style="color:var(--amber);font-family:var(--font-mono);">已購買 ✓</span>
         </div>
       </div>
 
@@ -1050,7 +1077,7 @@
         </div>
         <div class="ticket-dashed-foot">
           <span>大石田站轉乘旅館接駁車至銀山溫泉</span>
-          <span class="ticket-action-link" id="ticket-yanadaya-btn">やなだ屋 接駁 →</span>
+          <span style="color:var(--amber);font-family:var(--font-mono);">建議提前劃位</span>
         </div>
       </div>
 
@@ -1075,53 +1102,53 @@
           </div>
         </div>
         <div class="ticket-dashed-foot">
-          <span>2027.03.31 週三 · 請提前 2.5 小時至機場</span>
-          <span class="ticket-action-link">航廈資訊 →</span>
+          <span>2027.03.31 週三 · 提早 2.5 小時至仙台機場</span>
+          <span style="color:var(--amber);font-family:var(--font-mono);">已購買 ✓</span>
         </div>
       </div>
 
-      <!-- 三間精選住宿司機卡 -->
-      <div style="padding:0 16px 8px 16px;font-size:12px;font-family:var(--font-mono);color:var(--amber);">🏨 HOTELS & DRIVER CARDS</div>
+      <!-- 三間精選住宿簡要資訊 -->
+      <div style="padding:0 16px 8px 16px;font-size:12px;font-family:var(--font-mono);color:var(--amber);">🏨 HOTELS & STAY</div>
       <div style="padding:0 16px;display:flex;flex-direction:column;gap:10px;">
-        <div class="tl-card-inner" onclick="showTaxiCard(0)">
+        <div class="tl-card-inner">
           <div class="tl-head-row">
-            <span class="tl-time-badge">Day 1 & Day 2 連住</span>
+            <span class="tl-time-badge">Day 1 & Day 2（連住 2 晚）</span>
             <span class="tl-tag-pill">仙台站東口直通</span>
           </div>
           <div class="tl-card-title">仙台東大都會大飯店</div>
-          <div class="tl-card-note">ホテルメトロポリタン仙台イースト · NT$ 7,800 · 出站即達免淋雨</div>
+          <div class="tl-card-note">〒980-8487 宮城県仙台市青葉区中央1丁目1-1 · NT$ 7,800 · 出站即達免淋雨</div>
         </div>
 
-        <div class="tl-card-inner" onclick="showTaxiCard(1)" style="border-color:var(--amber);">
+        <div class="tl-card-inner" style="border-color:var(--amber);">
           <div class="tl-head-row">
-            <span class="tl-time-badge" style="color:var(--vermilion);">Day 3 銀山溫泉一泊二食</span>
-            <span class="tl-tag-pill">浪漫點燈</span>
+            <span class="tl-time-badge" style="color:var(--vermilion);">Day 3（住宿 1 晚 · 一泊二食）</span>
+            <span class="tl-tag-pill">銀山溫泉</span>
           </div>
           <div class="tl-card-title">銀山溫泉 御宿やなだ屋</div>
-          <div class="tl-card-note">銀山温泉 御宿 やなだ屋 · NT$ 15,000 · 大石田站接駁</div>
+          <div class="tl-card-note">〒999-4333 山形県尾花沢市銀山新畑416 · NT$ 15,000 · 大石田站接駁</div>
         </div>
 
-        <div class="tl-card-inner" onclick="showTaxiCard(2)">
+        <div class="tl-card-inner">
           <div class="tl-head-row">
-            <span class="tl-time-badge">Day 4 仙台西口</span>
-            <span class="tl-tag-pill">青葉通商圈</span>
+            <span class="tl-time-badge">Day 4（住宿 1 晚）</span>
+            <span class="tl-tag-pill">仙台西口</span>
           </div>
           <div class="tl-card-title">大和ROYNET飯店 仙台西口 PREMIER</div>
-          <div class="tl-card-note">ダイワロイネットホテル仙台西口 PREMIER · NT$ 2,800 · 步行4分</div>
+          <div class="tl-card-note">〒980-0021 宮城県仙台市青葉区中央3丁目7-25 · NT$ 2,800 · 步行 4 分</div>
         </div>
       </div>
 
       <!-- 緊急應急資訊 -->
-      <div style="padding:16px 16px 8px 16px;font-size:12px;font-family:var(--font-mono);color:var(--amber);">🚨 EMERGENCY & ESIM</div>
+      <div style="padding:16px 16px 8px 16px;font-size:12px;font-family:var(--font-mono);color:var(--amber);">🚨 EMERGENCY & CONTACTS</div>
       <div style="padding:0 16px;display:flex;flex-direction:column;gap:8px;margin-bottom:20px;">
-        <div style="background:var(--bg-card);border:1px solid var(--border-sub);padding:10px 12px;border-radius:var(--radius-md);display:flex;justify-content:space-between;align-items:center;">
+        <div style="background:var(--bg-card);border:1px solid var(--border-sub);padding:10px 14px;border-radius:var(--radius-md);display:flex;justify-content:space-between;align-items:center;">
           <div>
             <div style="font-size:13px;font-weight:700;">日本警察緊急報案</div>
             <div style="font-size:11px;color:var(--text-sub);">遺失物或事故</div>
           </div>
           <a href="tel:110" style="color:var(--amber);text-decoration:none;font-family:var(--font-mono);font-weight:700;">📞 110</a>
         </div>
-        <div style="background:var(--bg-card);border:1px solid var(--border-sub);padding:10px 12px;border-radius:var(--radius-md);display:flex;justify-content:space-between;align-items:center;">
+        <div style="background:var(--bg-card);border:1px solid var(--border-sub);padding:10px 14px;border-radius:var(--radius-md);display:flex;justify-content:space-between;align-items:center;">
           <div>
             <div style="font-size:13px;font-weight:700;">台北駐日代表處 (東京本處)</div>
             <div style="font-size:11px;color:var(--text-sub);">海外急難救助</div>
@@ -1149,21 +1176,6 @@
       </button>
     </nav>
 
-    <!-- 計程車司機大字卡彈窗 -->
-    <div id="taxi-modal" class="taxi-modal-overlay">
-      <div class="taxi-modal-card">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
-          <span style="font-family:var(--font-serif);color:var(--amber);font-size:14px;font-weight:700;">🚖 計程車司機指引</span>
-          <span id="taxi-close-btn" style="cursor:pointer;color:var(--text-sub);font-size:16px;">✕</span>
-        </div>
-        <div style="font-size:11px;color:var(--text-sub);margin-bottom:4px;">目的地（日文）：</div>
-        <div id="taxi-modal-jp-name" style="font-family:var(--font-serif);font-size:18px;font-weight:700;color:var(--text-main);margin-bottom:8px;"></div>
-        <div style="font-size:11px;color:var(--text-sub);margin-bottom:4px;">請出示給司機看這行：</div>
-        <div id="taxi-modal-phrase" style="font-size:14px;background:rgba(0,0,0,0.5);border:1px solid var(--border-brass);padding:10px;border-radius:8px;color:var(--amber);line-height:1.5;margin-bottom:14px;"></div>
-        <button type="button" id="taxi-copy-btn" class="action-btn-gold" style="width:100%;">📋 複製日文地址與對話</button>
-      </div>
-    </div>
-
   </div>
 
   <script src="./data.js"></script>
@@ -1176,7 +1188,7 @@
         }
       }
 
-      // 分頁切換
+      // 底部主導覽 Tab 切換
       const tabs = document.querySelectorAll('.taisho-nav-tab');
       tabs.forEach(t => {
         t.addEventListener('click', () => {
@@ -1190,7 +1202,7 @@
         });
       });
 
-      // 日期切換
+      // Day 1 ~ Day 5 切換
       let currentDay = 0;
       const dayChips = document.querySelectorAll('.day-chip-btn');
       dayChips.forEach(c => {
@@ -1203,7 +1215,7 @@
         });
       });
 
-      // 渲染時間軸
+      // 渲染時間軸列表
       function renderTimeline() {
         const list = document.getElementById('timeline-list');
         if (!list || !window.HANDBOOK_DATA) return;
@@ -1224,11 +1236,15 @@
                   <span class="tl-time-badge">${item.time || '待定'}</span>
                   ${item.tag ? `<span class="tl-tag-pill">${item.tag}</span>` : ''}
                 </div>
-                <div class="tl-card-title">${item.title}</div>
+                <div class="tl-card-title">
+                  <span>${item.title}</span>
+                  <span class="expand-indicator">▼</span>
+                </div>
                 ${item.note ? `<div class="tl-card-note">${item.note}</div>` : ''}
                 <div class="tl-card-actions">
-                  <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(item.q || item.title)}" target="_blank" rel="noopener" class="action-btn-outline" style="padding:4px 8px;font-size:11px;" onclick="event.stopPropagation()">
-                    🗺️ 地圖導航
+                  <span style="font-size:11px;color:var(--amber);font-family:var(--font-mono);">點擊收合 ▲</span>
+                  <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(item.q || item.title)}" target="_blank" rel="noopener" class="icon-nav-btn" title="開啟 Google 地圖" onclick="event.stopPropagation()">
+                    🗺️
                   </a>
                 </div>
               </div>
@@ -1243,15 +1259,27 @@
         el.classList.toggle('expanded');
       };
 
-      // 換匯計算器
+      // 頂部天氣與換匯抽屜展開切換
+      const wxToggle = document.getElementById('wx-toggle-btn');
+      const wxDrawer = document.getElementById('wx-drawer');
+      const wxClose = document.getElementById('wx-close-btn');
+
       const fxToggle = document.getElementById('fx-toggle-btn');
       const fxDrawer = document.getElementById('fx-mini-drawer');
       const fxClose = document.getElementById('fx-close-btn');
       const fxInput = document.getElementById('fx-quick-input');
       const fxOutput = document.getElementById('fx-quick-output');
 
+      wxToggle.addEventListener('click', () => {
+        triggerHaptic(6);
+        fxDrawer.classList.remove('open');
+        wxDrawer.classList.toggle('open');
+      });
+      wxClose.addEventListener('click', () => wxDrawer.classList.remove('open'));
+
       fxToggle.addEventListener('click', () => {
         triggerHaptic(6);
+        wxDrawer.classList.remove('open');
         fxDrawer.classList.toggle('open');
       });
       fxClose.addEventListener('click', () => fxDrawer.classList.remove('open'));
@@ -1262,21 +1290,28 @@
         fxOutput.textContent = 'NT$ ' + twd.toLocaleString();
       });
 
-      // 記帳明細渲染
+      // 記帳明細渲染（呈現所有預購與新增項目）
       function renderWalletHistory() {
         const box = document.getElementById('wallet-history-list');
         if (!box || !window.HANDBOOK_DATA) return;
         const expenses = window.HANDBOOK_DATA.defaultExpenses || [];
         let html = '';
         expenses.forEach(ex => {
+          const isPending = (ex.amount === 0);
           html += `
-            <div style="background:var(--bg-card);border:1px solid var(--border-sub);padding:10px 12px;border-radius:var(--radius-md);margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;">
-              <div>
-                <div style="font-size:13px;font-weight:700;color:var(--text-main);">${ex.title}</div>
-                <div style="font-size:11px;color:var(--text-sub);margin-top:2px;">${ex.category} · ${ex.payer} 付款</div>
+            <div class="exp-item-card">
+              <div style="flex:1;min-width:0;">
+                <div style="font-size:13.5px;font-weight:700;color:var(--text-main);">${ex.title}</div>
+                <div style="font-size:11.5px;color:var(--text-sub);margin-top:2px;">
+                  ${ex.category} · ${ex.payer} 付款
+                  ${ex.note ? ` · <span style="color:var(--amber);">${ex.note}</span>` : ''}
+                </div>
               </div>
-              <div style="font-family:var(--font-mono);font-size:14px;font-weight:700;color:var(--amber);">
-                ${ex.currency === 'JPY' ? '¥' : 'NT$'} ${Number(ex.amount).toLocaleString()}
+              <div style="text-align:right;">
+                ${isPending ? 
+                  `<span style="font-size:11.5px;color:var(--amber);border:1px solid var(--border-brass);padding:2px 6px;border-radius:4px;">待補金額</span>` : 
+                  `<span style="font-family:var(--font-mono);font-size:14px;font-weight:700;color:var(--amber);">${ex.currency === 'JPY' ? '¥' : 'NT$'} ${Number(ex.amount).toLocaleString()}</span>`
+                }
               </div>
             </div>
           `;
@@ -1291,10 +1326,12 @@
           triggerHaptic(12);
           const name = pill.dataset.name;
           const amt = pill.dataset.amount;
-          alert(`⚡ 已秒記：${name} (¥${amt})！\n已即時存入本地並折算台幣`);
+          alert(`⚡ 已秒記：${name} (¥${amt})！
+已即時存入本地並折算台幣`);
         });
       });
 
+      // 手動新增記帳 FAB
       const fabBtn = document.getElementById('fab-add-exp');
       fabBtn.addEventListener('click', () => {
         triggerHaptic(12);
@@ -1304,32 +1341,6 @@
         if (!amt) return;
         alert(`✓ 記帳成功：${title} ¥${amt}`);
       });
-
-      // 司機字卡視窗
-      const taxiModal = document.getElementById('taxi-modal');
-      const taxiClose = document.getElementById('taxi-close-btn');
-      const taxiJpName = document.getElementById('taxi-modal-jp-name');
-      const taxiPhrase = document.getElementById('taxi-modal-phrase');
-      const taxiCopy = document.getElementById('taxi-copy-btn');
-
-      window.showTaxiCard = function(idx) {
-        triggerHaptic(8);
-        if (!window.HANDBOOK_DATA || !window.HANDBOOK_DATA.tripMeta) return;
-        const hotel = window.HANDBOOK_DATA.tripMeta.hotels[idx];
-        if (!hotel) return;
-        taxiJpName.textContent = hotel.jpName;
-        taxiPhrase.textContent = hotel.driverPhrase;
-        taxiCopy.onclick = () => {
-          triggerHaptic(8);
-          navigator.clipboard.writeText(hotel.jpName + '\n' + hotel.driverPhrase);
-          alert('✓ 已複製日文名稱與乘車對話！');
-        };
-        taxiModal.classList.add('open');
-      };
-
-      document.getElementById('open-taxi-sample-btn').addEventListener('click', () => showTaxiCard(1));
-      document.getElementById('ticket-yanadaya-btn').addEventListener('click', () => showTaxiCard(1));
-      taxiClose.addEventListener('click', () => taxiModal.classList.remove('open'));
 
       // 初始化
       renderTimeline();
