@@ -1,0 +1,24 @@
+{
+  "name": "仙台・銀山溫泉 雙人旅冊｜2027.03.27-03.31",
+  "short_name": "仙台旅冊",
+  "description": "老公與老婆的日本東北仙台、松島海岸、銀山溫泉 5天4夜隨身旅行手冊",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#F4F7F5",
+  "theme_color": "#F4F7F5",
+  "lang": "zh-Hant",
+  "icons": [
+    {
+      "src": "./icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "./icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

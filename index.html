@@ -1,0 +1,1744 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#F4F7F5" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="description" content="老公與老婆的日本東北仙台、松島海岸、銀山溫泉 5天4夜隨身旅行手冊" />
+  <title>仙台・銀山溫泉 雙人旅冊｜2027.03.27–03.31</title>
+  <link rel="icon" type="image/png" href="./icon.png" />
+  <link rel="apple-touch-icon" href="./apple-touch-icon.png" />
+  <link rel="manifest" href="./manifest.json" />
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <!-- 雲端同步提示條 -->
+    <div id="sync-banner" class="sync-banner" role="status">
+      <span id="sync-banner-text">本機已儲存</span>
+      <button type="button" id="sync-banner-close" class="fx-pill">知道了</button>
+    </div>
+
+    <!-- 3.1 頂部 Header（右上角隱藏式換匯 + 天氣，身份與診斷收納於「更多」） -->
+    <header class="top-header">
+      <div class="headtop">
+        <div class="brand-row">
+          <img src="./icon.png" alt="仙台旅冊圖示" class="brand-icon" />
+          <div class="brand-info">
+            <div id="header-eyebrow" class="eyebrow">SENDAI · GINZAN ONSEN</div>
+            <h1 id="header-subtitle" class="header-subtitle" style="margin:0;">仙台・松島・銀山溫泉五日旅</h1>
+          </div>
+        </div>
+        <div class="header-right-actions">
+          <button type="button" id="weather-btn" class="top-icon-btn weather-btn" aria-expanded="false" title="查詢 3/27–3/31 仙台＆銀山溫泉天氣預報" aria-label="天氣預報">
+            <span class="top-btn-icon">☀</span>
+          </button>
+          <button type="button" id="fx-btn" class="top-icon-btn fx-pill-btn" aria-expanded="false" title="日圓 ⇄ 台幣即時換匯計算機" aria-label="換匯計算機">
+            <span class="top-btn-icon">¥</span>
+          </button>
+        </div>
+      </div>
+      <div id="header-cities" class="header-cities">仙台機場 · 仙台車站 · 松島海岸 · 銀山溫泉 · 定禪寺通</div>
+    </header>
+
+    <!-- 天氣展開面板 -->
+    <section id="weather-drawer" class="weather-drawer" aria-label="行程天氣預報">
+      <div style="display:flex;align-items:center;justify-content:space-between;">
+        <span style="font-size:12.5px;font-weight:700;color:var(--text);">3/27–3/31 仙台・松島・銀山溫泉天氣與降雨機率</span>
+        <button type="button" id="weather-close-btn" class="fx-pill">收起</button>
+      </div>
+      <div id="weather-content" style="margin-top:6px;"></div>
+    </section>
+
+    <!-- 3.2 隱藏式換匯面板（點擊右上角「¥」展開） -->
+    <section id="fx-drawer" class="fx-bar" aria-label="日圓台幣匯率換算">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+        <span style="font-size:12px;font-weight:700;color:var(--accent);">日圓 ⇄ 台幣 即時換匯計算機</span>
+        <button type="button" id="fx-close-btn" class="fx-pill">收起</button>
+      </div>
+      <div class="fx-top-row">
+        <div class="fx-input-group">
+          <span id="fx-left-label" class="fx-currency-label">日圓 ¥</span>
+          <input type="number" id="fx-left-input" class="fx-input" value="1000" inputmode="decimal" />
+        </div>
+        <button type="button" id="fx-clear-btn" class="fx-swap-btn" title="清空金額" style="font-size:13px;font-weight:700;">⌫</button>
+        <button type="button" id="fx-swap-btn" class="fx-swap-btn" title="對調日圓與台幣">⇄</button>
+        <div class="fx-input-group">
+          <span id="fx-right-label" class="fx-currency-label">台幣 $</span>
+          <input type="number" id="fx-right-input" class="fx-input" value="215" inputmode="decimal" readonly />
+        </div>
+      </div>
+      <div class="fx-bottom-row">
+        <div id="fx-quick-pills" class="fx-quick-pills"><button type="button" class="fx-pill" data-fx-val="1000">¥1,000</button><button type="button" class="fx-pill" data-fx-val="3000">¥3,000</button><button type="button" class="fx-pill" data-fx-val="5000">¥5,000</button><button type="button" class="fx-pill" data-fx-val="10000">¥10,000</button></div>
+        <div id="fx-rate-info" class="fx-rate-info">1 日圓 ≈ 0.215 台幣</div>
+      </div>
+    </section>
+
+    <!-- ==================== M1 時間表 ==================== -->
+    <main id="pane-tl" class="tab-pane active">
+      <div id="day-tabs" class="day-tabs" role="tablist">
+          <button type="button" class="day-tab active" data-day-idx="0" role="tab" aria-selected="true">
+            <span class="day-tab-top">Day 1</span>
+            <span class="day-tab-sub">3/27 (六)</span>
+          </button>
+        
+          <button type="button" class="day-tab " data-day-idx="1" role="tab" aria-selected="false">
+            <span class="day-tab-top">Day 2</span>
+            <span class="day-tab-sub">3/28 (日)</span>
+          </button>
+        
+          <button type="button" class="day-tab " data-day-idx="2" role="tab" aria-selected="false">
+            <span class="day-tab-top">Day 3</span>
+            <span class="day-tab-sub">3/29 (一)</span>
+          </button>
+        
+          <button type="button" class="day-tab " data-day-idx="3" role="tab" aria-selected="false">
+            <span class="day-tab-top">Day 4</span>
+            <span class="day-tab-sub">3/30 (二)</span>
+          </button>
+        
+          <button type="button" class="day-tab " data-day-idx="4" role="tab" aria-selected="false">
+            <span class="day-tab-top">Day 5</span>
+            <span class="day-tab-sub">3/31 (三)</span>
+          </button>
+        </div>
+      <div id="tl-status-bar" class="tl-status-bar" role="status"></div>
+
+      <button type="button" id="tl-add-trigger" class="add-trigger-btn tl-trigger">
+        <span>＋ 新增這天的行程</span>
+        <span style="font-size:11.5px;color:var(--sub);font-weight:400;">時間 · 地點 · 備註</span>
+      </button>
+
+      <!-- 浮出式新增/編輯行程表單（點鉛筆或新增時彈出，儲存後自動消失） -->
+      <div id="tl-modal-backdrop" class="app-modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="tl-modal-title">
+        <form id="tl-form" class="app-modal-sheet" novalidate>
+          <div class="app-modal-head">
+            <span id="tl-modal-title" class="app-modal-title">＋ 新增行程</span>
+            <button type="button" id="tl-modal-close" class="app-modal-close" aria-label="關閉">✕</button>
+          </div>
+          <input type="hidden" id="tl-edit-id" value="" />
+          <input type="hidden" id="tl-custom-tag" value="" />
+
+          <!-- 1. 地點／事項 -->
+          <div class="form-field">
+            <label class="form-label" for="tl-title-input">地點／事項</label>
+            <input type="text" id="tl-title-input" class="form-input" placeholder="貼上 Google 地圖的名稱或行程" />
+          </div>
+
+          <!-- 2. 活動類型 -->
+          <div class="form-field">
+            <label class="form-label" for="tl-type-select">活動類型（選填）</label>
+            <select id="tl-type-select" class="form-select">
+              <option value="">一般行程</option>
+              <option value="通勤">🚇 通勤・交通移動</option>
+              <option value="住宿">🏨 住宿・飯店／溫泉旅館</option>
+              <option value="航班">✈️ 航班・星宇航空搭機</option>
+            </select>
+            <div id="tl-tag-pills" style="display:none;">
+              <button type="button" class="badge-tag-btn" data-tag="通勤">🚇 通勤</button>
+              <button type="button" class="badge-tag-btn" data-tag="住宿">🏨 住宿</button>
+              <button type="button" class="badge-tag-btn" data-tag="航班">✈️ 航班</button>
+            </div>
+          </div>
+
+          <!-- 3. 時間設定（第1列：時段下拉＋開始時間；第2列：獨立結束時間） -->
+          <div class="form-field">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
+              <label class="form-label" style="margin-bottom:0;">時間設定</label>
+              <button type="button" id="tl-toggle-end-btn" class="time-end-toggle-btn">＋ 設定結束時間</button>
+            </div>
+
+            <!-- 第 1 列：時段下拉（左）＋ 開始時間（右） -->
+            <div class="time-setting-row">
+              <select id="tl-time-preset-select" class="form-select time-preset-select" aria-label="快速時段選單">
+                <option value="">⏱️ 自訂時間</option>
+                <option value="全天">📅 全天</option>
+                <option value="早餐">🍳 早餐 (08:30)</option>
+                <option value="上午">☕ 上午 (10:00)</option>
+                <option value="午餐">🍜 午餐 (12:30)</option>
+                <option value="下午">🍵 下午 (14:30)</option>
+                <option value="傍晚">🌅 傍晚 (17:00)</option>
+                <option value="晚餐">🍱 晚餐 (18:30)</option>
+                <option value="宵夜">🍢 宵夜 (21:30)</option>
+              </select>
+
+              <div id="tl-wheel-area" class="wheel-area-inline">
+                <select id="tl-start-hour" class="wheel-select-sm" aria-label="開始小時"></select>
+                <span class="wheel-colon">:</span>
+                <select id="tl-start-min" class="wheel-select-sm" aria-label="開始分鐘"></select>
+              </div>
+            </div>
+
+            <!-- 第 2 列：獨立的結束時間列（點擊＋結束時間後展開，完全不擠） -->
+            <div id="tl-end-wheel-wrap" class="time-setting-end-row" style="display:none;">
+              <div class="time-end-tag">↳ 結束時間至</div>
+              <div class="time-end-wheel-group">
+                <select id="tl-end-hour" class="wheel-select-sm" aria-label="結束小時"></select>
+                <span class="wheel-colon">:</span>
+                <select id="tl-end-min" class="wheel-select-sm" aria-label="結束分鐘"></select>
+              </div>
+              <button type="button" id="tl-remove-end-btn" class="time-end-remove-btn" title="拿掉結束時間">✕ 拿掉</button>
+            </div>
+
+            <div id="tl-token-preview" class="time-token-preview"></div>
+            <div id="tl-token-pills" style="display:none;"></div>
+          </div>
+
+          <!-- 4. 備註 -->
+          <div class="form-field">
+            <label class="form-label" for="tl-note-input">備註（選填）</label>
+            <textarea id="tl-note-input" class="form-textarea" rows="2" placeholder="交通方式、預約時間或注意事項"></textarea>
+          </div>
+
+          <div id="tl-form-error" class="form-error"></div>
+          <button type="submit" id="tl-submit-btn" class="btn-primary">儲存行程</button>
+          <button type="button" id="tl-cancel-btn" class="btn-secondary">取消</button>
+          <button type="button" id="tl-delete-btn" class="btn-danger-outline" style="display:none;">刪除此筆行程</button>
+          <button type="button" id="tl-restore-day-btn" class="btn-secondary" style="margin-top:8px;color:var(--sub);">恢復本日預設行程</button>
+        </form>
+      </div>
+
+      <!-- 行程卡片清單 -->
+      <div id="tl-list" class="tl-list">
+            <div class="tl-card is-flight" data-item-id="d1-1">
+              <div class="tl-card-main">
+                <div class="tl-time-row">
+                  <span class="tl-time">11:50–16:00</span>
+                  <span class="tl-flight-badge">✈️ 航班</span>
+                </div>
+                <div class="tl-title">去程航班 星宇航空 JX862 抵達仙台機場 (SDJ)</div>
+                <div class="tl-note">星宇航空 JX862（桃園 TPE 11:50 起飛 ➔ 仙台 SDJ 16:00 抵達，實際時刻依電子機票為準）。預留入境審查、領行李與前往 2F 連通鐵路車站時間。</div>
+              </div>
+              <div class="tl-actions">
+                <button type="button" class="tl-icon-btn tl-edit-btn" data-id="d1-1" title="編輯行程" aria-label="編輯行程">
+                  <svg width="13.5" height="13.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+                </button>
+                <div class="tl-drag-handle" tabindex="0" role="button" aria-label="按住六點拖曳排序" title="按住六點上下移動或拖到其他天" data-id="d1-1">
+                  <svg width="12" height="15" viewBox="0 0 14 16" fill="currentColor">
+                    <circle cx="4" cy="3" r="1.4"/><circle cx="10" cy="3" r="1.4"/>
+                    <circle cx="4" cy="8" r="1.4"/><circle cx="10" cy="8" r="1.4"/>
+                    <circle cx="4" cy="13" r="1.4"/><circle cx="10" cy="13" r="1.4"/>
+                  </svg>
+                </div>
+                <a href="https://www.google.com/maps/search/?api=1&query=%E4%BB%99%E5%8F%B0%E7%A9%BA%E6%B8%AF%20Sendai%20Airport" target="_blank" rel="noopener" class="tl-icon-btn tl-map-btn" title="在 Google 地圖開啟" aria-label="開啟地圖">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                </a>
+              </div>
+            </div>
+          
+            <div class="tl-card is-commute" data-item-id="d1-2">
+              <div class="tl-card-main">
+                <div class="tl-time-row">
+                  <span class="tl-time">16:45–17:15</span>
+                  <span class="tl-commute-badge">🚇 通勤</span>
+                </div>
+                <div class="tl-title">搭乘仙台機場 Access 線前往 JR 仙台站</div>
+                <div class="tl-note">由仙台機場站搭乘「仙台空港アクセス線」直達 JR 仙台站（快速約 17 分鐘、普通約 25 分鐘，單程 ¥660，可刷 Suica / ICOCA）。</div>
+              </div>
+              <div class="tl-actions">
+                <button type="button" class="tl-icon-btn tl-edit-btn" data-id="d1-2" title="編輯行程" aria-label="編輯行程">
+                  <svg width="13.5" height="13.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+                </button>
+                <div class="tl-drag-handle" tabindex="0" role="button" aria-label="按住六點拖曳排序" title="按住六點上下移動或拖到其他天" data-id="d1-2">
+                  <svg width="12" height="15" viewBox="0 0 14 16" fill="currentColor">
+                    <circle cx="4" cy="3" r="1.4"/><circle cx="10" cy="3" r="1.4"/>
+                    <circle cx="4" cy="8" r="1.4"/><circle cx="10" cy="8" r="1.4"/>
+                    <circle cx="4" cy="13" r="1.4"/><circle cx="10" cy="13" r="1.4"/>
+                  </svg>
+                </div>
+                <a href="https://www.google.com/maps/dir/?api=1&origin=%E4%BB%99%E5%8F%B0%E7%A9%BA%E6%B8%AF%20Sendai%20Airport&destination=%E3%83%9B%E3%83%86%E3%83%AB%E3%83%A1%E3%83%88%E3%83%AD%E3%83%9D%E3%83%AA%E3%82%BF%E3%83%B3%E4%BB%99%E5%8F%B0%E3%82%A4%E3%83%BC%E3%82%B9%E3%83%88%20Hotel%20Metropolitan%20Sendai%20East&travelmode=transit" target="_blank" rel="noopener" class="tl-icon-btn tl-map-btn" title="在 Google 地圖開啟" aria-label="開啟地圖">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                </a>
+              </div>
+            </div>
+          
+            <div class="tl-card is-hotel" data-item-id="d1-3">
+              <div class="tl-card-main">
+                <div class="tl-time-row">
+                  <span class="tl-time">17:15–17:45</span>
+                  <span class="tl-hotel-badge">🏨 住宿</span>
+                </div>
+                <div class="tl-title">仙台東大都會大飯店 Check-in 辦理入住</div>
+                <div class="tl-note">連住兩晚（Day 1–Day 2，NT$7,800）。飯店與 JR 仙台站東口 3 樓直接連通，出剪票口步行 1 分鐘即達，放妥行李後輕鬆出門。</div>
+              </div>
+              <div class="tl-actions">
+                <button type="button" class="tl-icon-btn tl-edit-btn" data-id="d1-3" title="編輯行程" aria-label="編輯行程">
+                  <svg width="13.5" height="13.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+                </button>
+                <div class="tl-drag-handle" tabindex="0" role="button" aria-label="按住六點拖曳排序" title="按住六點上下移動或拖到其他天" data-id="d1-3">
+                  <svg width="12" height="15" viewBox="0 0 14 16" fill="currentColor">
+                    <circle cx="4" cy="3" r="1.4"/><circle cx="10" cy="3" r="1.4"/>
+                    <circle cx="4" cy="8" r="1.4"/><circle cx="10" cy="8" r="1.4"/>
+                    <circle cx="4" cy="13" r="1.4"/><circle cx="10" cy="13" r="1.4"/>
+                  </svg>
+                </div>
+                <a href="https://www.google.com/maps/search/?api=1&query=%E3%83%9B%E3%83%86%E3%83%AB%E3%83%A1%E3%83%88%E3%83%AD%E3%83%9D%E3%83%AA%E3%82%BF%E3%83%B3%E4%BB%99%E5%8F%B0%E3%82%A4%E3%83%BC%E3%82%B9%E3%83%88%20Hotel%20Metropolitan%20Sendai%20East" target="_blank" rel="noopener" class="tl-icon-btn tl-map-btn" title="在 Google 地圖開啟" aria-label="開啟地圖">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                </a>
+              </div>
+            </div>
+          
+            <div class="tl-card " data-item-id="d1-4">
+              <div class="tl-card-main">
+                <div class="tl-time-row">
+                  <span class="tl-time">18:00–19:30</span>
+                  
+                </div>
+                <div class="tl-title">【暫定 TBD】晚餐：仙台站 3F 牛舌通（善治郎／伊達の牛たん／利久）</div>
+                <div class="tl-note">TBD 暫定推薦行程：於仙台站 3 樓「牛たん通り」享用炭火厚切牛舌定食＋毛豆奶昔（ずんだシェイク），可隨時點鉛筆修改！</div>
+              </div>
+              <div class="tl-actions">
+                <button type="button" class="tl-icon-btn tl-edit-btn" data-id="d1-4" title="編輯行程" aria-label="編輯行程">
+                  <svg width="13.5" height="13.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+                </button>
+                <div class="tl-drag-handle" tabindex="0" role="button" aria-label="按住六點拖曳排序" title="按住六點上下移動或拖到其他天" data-id="d1-4">
+                  <svg width="12" height="15" viewBox="0 0 14 16" fill="currentColor">
+                    <circle cx="4" cy="3" r="1.4"/><circle cx="10" cy="3" r="1.4"/>
+                    <circle cx="4" cy="8" r="1.4"/><circle cx="10" cy="8" r="1.4"/>
+                    <circle cx="4" cy="13" r="1.4"/><circle cx="10" cy="13" r="1.4"/>
+                  </svg>
+                </div>
+                <a href="https://www.google.com/maps/search/?api=1&query=%E4%BB%99%E5%8F%B0%E9%A7%85%20%E7%89%9B%E3%81%9F%E3%82%93%E9%80%9A%E3%82%8A%20Gyutan%20Street%20Sendai%20Station" target="_blank" rel="noopener" class="tl-icon-btn tl-map-btn" title="在 Google 地圖開啟" aria-label="開啟地圖">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                </a>
+              </div>
+            </div>
+          
+            <div class="tl-card " data-item-id="d1-5">
+              <div class="tl-card-main">
+                <div class="tl-time-row">
+                  <span class="tl-time">19:30–21:00</span>
+                  
+                </div>
+                <div class="tl-title">【暫定 TBD】AER 31F 免費展望台夜景 ＆ S-PAL 仙台散步</div>
+                <div class="tl-note">TBD 暫定推薦行程：步行至仙台站旁 AER 大樓 31 樓展望台免費俯瞰仙台璀璨夜景，順道逛 S-PAL 東館買宵夜草莓回飯店。</div>
+              </div>
+              <div class="tl-actions">
+                <button type="button" class="tl-icon-btn tl-edit-btn" data-id="d1-5" title="編輯行程" aria-label="編輯行程">
+                  <svg width="13.5" height="13.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+                </button>
+                <div class="tl-drag-handle" tabindex="0" role="button" aria-label="按住六點拖曳排序" title="按住六點上下移動或拖到其他天" data-id="d1-5">
+                  <svg width="12" height="15" viewBox="0 0 14 16" fill="currentColor">
+                    <circle cx="4" cy="3" r="1.4"/><circle cx="10" cy="3" r="1.4"/>
+                    <circle cx="4" cy="8" r="1.4"/><circle cx="10" cy="8" r="1.4"/>
+                    <circle cx="4" cy="13" r="1.4"/><circle cx="10" cy="13" r="1.4"/>
+                  </svg>
+                </div>
+                <a href="https://www.google.com/maps/search/?api=1&query=AER%20%E5%B1%95%E6%9C%9B%E3%83%86%E3%83%A9%E3%82%B9%20Sendai%20AER%20Observation%20Terrace" target="_blank" rel="noopener" class="tl-icon-btn tl-map-btn" title="在 Google 地圖開啟" aria-label="開啟地圖">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                </a>
+              </div>
+            </div>
+          </div>
+    </main>
+
+    <!-- ==================== M2 記帳（置頂快速記帳 ＋ 總花費統計與分類明細） ==================== -->
+    <section id="pane-exp" class="tab-pane">
+      <!-- My-Bank 閃電快速記帳區（置頂） -->
+      <div class="quick-exp-card">
+        <div class="quick-exp-head">
+          <div class="quick-exp-title">⚡ 快速記帳（點選微調 · 點 ⚡ 一秒秒記）</div>
+          <div class="quick-exp-hint" id="quick-exp-status">預設使用對象：老公＋老婆</div>
+        </div>
+
+        <div class="quick-toggle-bar">
+          <div class="quick-seg" id="quick-payer-seg">
+            <button type="button" class="quick-seg-btn active" data-payer="老公">老公付款</button>
+            <button type="button" class="quick-seg-btn" data-payer="老婆">老婆付款</button>
+          </div>
+          <div class="quick-seg" id="quick-curr-seg">
+            <button type="button" class="quick-seg-btn active" data-curr="JPY">日圓 ¥</button>
+            <button type="button" class="quick-seg-btn" data-curr="TWD">台幣 $</button>
+          </div>
+        </div>
+
+        <!-- 6 顆旅遊常用膠囊 -->
+        <div id="exp-capsule-grid" class="capsule-grid">
+        <div class="capsule-btn" data-cap-idx="0">
+          <div class="cap-left">
+            <span class="cap-icon">🏪</span>
+            <div class="cap-info">
+              <div class="cap-name">超商／零食</div>
+              <div class="cap-price">¥ 800</div>
+            </div>
+          </div>
+          <button type="button" class="zap-btn" data-zap-idx="0" title="一秒快速記帳">⚡</button>
+        </div>
+      
+        <div class="capsule-btn" data-cap-idx="1">
+          <div class="cap-left">
+            <span class="cap-icon">🥩</span>
+            <div class="cap-info">
+              <div class="cap-name">牛舌／定食</div>
+              <div class="cap-price">¥ 3,200</div>
+            </div>
+          </div>
+          <button type="button" class="zap-btn" data-zap-idx="1" title="一秒快速記帳">⚡</button>
+        </div>
+      
+        <div class="capsule-btn" data-cap-idx="2">
+          <div class="cap-left">
+            <span class="cap-icon">🚇</span>
+            <div class="cap-info">
+              <div class="cap-name">地鐵／JR車票</div>
+              <div class="cap-price">¥ 660</div>
+            </div>
+          </div>
+          <button type="button" class="zap-btn" data-zap-idx="2" title="一秒快速記帳">⚡</button>
+        </div>
+      
+        <div class="capsule-btn" data-cap-idx="3">
+          <div class="cap-left">
+            <span class="cap-icon">🛍️</span>
+            <div class="cap-info">
+              <div class="cap-name">藥妝／伴手禮</div>
+              <div class="cap-price">¥ 5,000</div>
+            </div>
+          </div>
+          <button type="button" class="zap-btn" data-zap-idx="3" title="一秒快速記帳">⚡</button>
+        </div>
+      
+        <div class="capsule-btn" data-cap-idx="4">
+          <div class="cap-left">
+            <span class="cap-icon">🧃</span>
+            <div class="cap-info">
+              <div class="cap-name">自動販賣機／毛豆奶昔</div>
+              <div class="cap-price">¥ 450</div>
+            </div>
+          </div>
+          <button type="button" class="zap-btn" data-zap-idx="4" title="一秒快速記帳">⚡</button>
+        </div>
+      
+        <div class="capsule-btn" data-cap-idx="5">
+          <div class="cap-left">
+            <span class="cap-icon">🍶</span>
+            <div class="cap-info">
+              <div class="cap-name">居酒屋／燒肉</div>
+              <div class="cap-price">¥ 8,000</div>
+            </div>
+          </div>
+          <button type="button" class="zap-btn" data-zap-idx="5" title="一秒快速記帳">⚡</button>
+        </div>
+      </div>
+
+        <button type="button" id="exp-add-trigger" class="add-trigger-btn exp-trigger" style="margin-bottom:0;">
+          <span>＋ 手動輸入／自訂記帳</span>
+          <span style="font-size:11.5px;color:var(--sub);font-weight:400;">滑桿微調 · 步進加減 · 分攤設定</span>
+        </button>
+      </div>
+
+      <!-- 浮出式新增/微調帳目視窗（點選膠囊、手動輸入或編輯時彈出，儲存完後自動消失） -->
+      <div id="exp-modal-backdrop" class="exp-modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="exp-modal-title">
+        <form id="exp-form" class="exp-modal-sheet" novalidate>
+          <div class="exp-modal-head">
+            <span id="exp-modal-title" class="exp-modal-title">⚡ 微調／手動記帳</span>
+            <button type="button" id="exp-modal-close" class="exp-modal-close" aria-label="關閉">✕</button>
+          </div>
+          <input type="hidden" id="exp-edit-id" value="" />
+          <input type="hidden" id="exp-capsule-idx" value="" />
+
+          <!-- 1. 項目名稱 -->
+          <div class="form-field">
+            <label class="form-label" for="exp-title-input">項目名稱</label>
+            <input type="text" id="exp-title-input" class="form-input" placeholder="例如：善治郎牛舌、仙台空港車票、萩之月伴手禮" />
+          </div>
+
+          <!-- 2. 精緻舒適的金額卡片（保留滑桿、步進、直接輸入、幣別、歸零、常用面額與即時換算） -->
+          <div class="exp-hero-card">
+            <div class="exp-amount-input-row">
+              <select id="exp-currency-select" class="exp-currency-badge" aria-label="選擇幣別">
+                <option value="JPY">日圓 ¥</option>
+                <option value="TWD">台幣 $</option>
+              </select>
+              <input type="number" id="exp-amount-input" class="exp-hero-input" placeholder="0" inputmode="numeric" min="0" step="1" />
+              <button type="button" id="exp-zero-btn" class="exp-zero-pill" title="金額歸零">⌫ 歸零</button>
+            </div>
+
+            <div class="exp-conversion-row">
+              <div>
+                <span id="exp-live-num" class="exp-live-num" style="display:none;">¥ 2,500</span>
+                <span id="exp-live-conv" class="exp-live-conv">≈ NT$ 538</span>
+              </div>
+              <button type="button" id="exp-pin-default-btn" class="pin-default-btn" style="display:none;">📌 設為預設價</button>
+            </div>
+
+            <div class="exp-slider-wrap">
+              <input type="range" id="exp-price-slider" class="price-slider" min="0" max="20000" step="100" value="2500" />
+            </div>
+
+            <div id="exp-step-row" class="step-row">
+              <button type="button" class="step-btn" data-step="-1000">-1000</button>
+              <button type="button" class="step-btn" data-step="-100">-100</button>
+              <button type="button" class="step-btn" data-step="100">+100</button>
+              <button type="button" class="step-btn" data-step="1000">+1000</button>
+            </div>
+
+            <div class="exp-presets-section">
+              <span class="exp-presets-label">常用面額：</span>
+              <div id="exp-preset-chips" class="preset-chips-row"></div>
+            </div>
+          </div>
+
+          <!-- 3. 類別與誰付的 -->
+          <div class="form-field-grid-2">
+            <div>
+              <label class="form-label" for="exp-category-select">類別</label>
+              <select id="exp-category-select" class="form-select"></select>
+            </div>
+            <div>
+              <label class="form-label" for="exp-payer-select">誰付的</label>
+              <select id="exp-payer-select" class="form-select">
+                <option value="老公">老公</option>
+                <option value="老婆">老婆</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- 4. 使用對象分攤 -->
+          <div class="form-field">
+            <label class="form-label">使用對象（平分或個人）</label>
+            <div id="exp-split-group" class="split-check-row"></div>
+            <div id="exp-preview-line" class="exp-split-preview"></div>
+          </div>
+
+          <!-- 5. 備註 -->
+          <div class="form-field">
+            <label class="form-label" for="exp-note-input">備註（選填）</label>
+            <input type="text" id="exp-note-input" class="form-input" placeholder="例如：刷卡、付現、待補金額" />
+          </div>
+
+          <div id="exp-form-error" class="form-error"></div>
+          <button type="submit" id="exp-submit-btn" class="btn-primary">⚡ 儲存這筆帳</button>
+          <button type="button" id="exp-cancel-btn" class="btn-secondary">取消</button>
+          <button type="button" id="exp-delete-btn" class="btn-danger-outline" style="display:none;">刪除此筆帳目</button>
+        </form>
+      </div>
+
+      <!-- 旅程總花費統計卡（嚴格禁止顯示夫妻誰欠誰錢的結算功能） -->
+      <div class="exp-summary-card">
+        <div class="section-label" style="margin-top:0;">旅程總花費統計（折合台幣）</div>
+        <div class="exp-total-row">
+          <div>
+            <div id="exp-total-twd" class="exp-total-num">NT$ 0</div>
+            <div id="exp-total-sub" style="font-size:12px;color:var(--sub);">台幣小計 NT$ 0 ＋ 日圓小計 ¥0</div>
+          </div>
+          <button type="button" id="exp-reset-filter-btn" class="fx-pill" style="display:none;">顯示全部分類</button>
+        </div>
+
+        <div class="exp-payer-grid">
+          <div class="exp-payer-box">
+            <div class="exp-payer-name">老公 已付總額</div>
+            <div id="exp-paid-husband" class="exp-payer-val">NT$ 42,100</div>
+          </div>
+          <div class="exp-payer-box">
+            <div class="exp-payer-name">老婆 已付總額</div>
+            <div id="exp-paid-wife" class="exp-payer-val">NT$ 0</div>
+          </div>
+        </div>
+
+        <div class="section-label" style="margin:6px 0;">分類花費佔比與明細（點選可篩選）</div>
+        <div id="exp-cat-bar" class="exp-cat-bar"><div style="width:39.19239904988123%;background:#26435F;" title="機票: NT$16,500"></div><div style="width:60.80760095011877%;background:#A67C38;" title="住宿: NT$25,600"></div></div>
+        <div id="exp-cat-grid" class="exp-cat-grid">
+        <div class="exp-cat-item " data-cat="美食">
+          <span><span class="exp-cat-dot" style="background:#B0432E;"></span>美食</span>
+          <span>NT$ 0 <small style="color:var(--muted);">(0%)</small></span>
+        </div>
+      
+        <div class="exp-cat-item " data-cat="機票">
+          <span><span class="exp-cat-dot" style="background:#26435F;"></span>機票</span>
+          <span>NT$ 16,500 <small style="color:var(--muted);">(39%)</small></span>
+        </div>
+      
+        <div class="exp-cat-item " data-cat="住宿">
+          <span><span class="exp-cat-dot" style="background:#A67C38;"></span>住宿</span>
+          <span>NT$ 25,600 <small style="color:var(--muted);">(61%)</small></span>
+        </div>
+      
+        <div class="exp-cat-item " data-cat="景點/活動">
+          <span><span class="exp-cat-dot" style="background:#2E5A44;"></span>景點/活動</span>
+          <span>NT$ 0 <small style="color:var(--muted);">(0%)</small></span>
+        </div>
+      
+        <div class="exp-cat-item " data-cat="交通">
+          <span><span class="exp-cat-dot" style="background:#6E5A4F;"></span>交通</span>
+          <span>NT$ 0 <small style="color:var(--muted);">(0%)</small></span>
+        </div>
+      
+        <div class="exp-cat-item " data-cat="購物/伴手禮">
+          <span><span class="exp-cat-dot" style="background:#9A5B6E;"></span>購物/伴手禮</span>
+          <span>NT$ 0 <small style="color:var(--muted);">(0%)</small></span>
+        </div>
+      
+        <div class="exp-cat-item " data-cat="網卡/雜支">
+          <span><span class="exp-cat-dot" style="background:#4E7268;"></span>網卡/雜支</span>
+          <span>NT$ 0 <small style="color:var(--muted);">(0%)</small></span>
+        </div>
+      
+        <div class="exp-cat-item " data-cat="其他">
+          <span><span class="exp-cat-dot" style="background:#7D7870;"></span>其他</span>
+          <span>NT$ 0 <small style="color:var(--muted);">(0%)</small></span>
+        </div>
+      </div>
+      </div>
+
+      <div id="exp-list">
+        <div class="exp-item-card" style="border-left:3px solid #6E5A4F;">
+          <div style="flex:1;min-width:0;">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:2px;gap:6px;">
+              <div style="display:flex;align-items:center;gap:5px;flex-wrap:wrap;">
+                <span style="font-size:11px;color:#6E5A4F;border:1px solid #6E5A4F;border-radius:3px;padding:0 5px;">交通</span>
+                <span style="font-size:11.5px;color:var(--sub);">老公 付款 · 老公、老婆</span>
+              </div>
+              <span style="font-size:11px;color:var(--muted);white-space:nowrap;">10/9 08:53</span>
+            </div>
+            <div style="font-size:14px;font-weight:700;color:var(--text);word-break:break-word;">東北交通票券（JR Pass／新幹線／仙台空港車票）</div>
+            <div style="font-size:12px;color:var(--sub);margin-top:2px;">待購買・點鉛筆即可填入實際金額</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;flex-shrink:0;text-align:right;">
+            <div><span style="color:var(--accent);font-size:12.5px;font-weight:700;">金額待補（點鉛筆填入）</span></div>
+            <button type="button" class="tl-icon-btn exp-edit-btn" data-id="exp-init-jrpass" title="修改或填入金額" aria-label="修改帳目">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+            </button>
+          </div>
+        </div>
+      
+        <div class="exp-item-card" style="border-left:3px solid #4E7268;">
+          <div style="flex:1;min-width:0;">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:2px;gap:6px;">
+              <div style="display:flex;align-items:center;gap:5px;flex-wrap:wrap;">
+                <span style="font-size:11px;color:#4E7268;border:1px solid #4E7268;border-radius:3px;padding:0 5px;">網卡/雜支</span>
+                <span style="font-size:11.5px;color:var(--sub);">老公 付款 · 老公、老婆</span>
+              </div>
+              <span style="font-size:11px;color:var(--muted);white-space:nowrap;">10/9 08:53</span>
+            </div>
+            <div style="font-size:14px;font-weight:700;color:var(--text);word-break:break-word;">日本東北旅遊 eSIM 網卡（5天）</div>
+            <div style="font-size:12px;color:var(--sub);margin-top:2px;">待購買・點鉛筆即可填入實際金額</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;flex-shrink:0;text-align:right;">
+            <div><span style="color:var(--accent);font-size:12.5px;font-weight:700;">金額待補（點鉛筆填入）</span></div>
+            <button type="button" class="tl-icon-btn exp-edit-btn" data-id="exp-init-esim" title="修改或填入金額" aria-label="修改帳目">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+            </button>
+          </div>
+        </div>
+      
+        <div class="exp-item-card" style="border-left:3px solid #A67C38;">
+          <div style="flex:1;min-width:0;">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:2px;gap:6px;">
+              <div style="display:flex;align-items:center;gap:5px;flex-wrap:wrap;">
+                <span style="font-size:11px;color:#A67C38;border:1px solid #A67C38;border-radius:3px;padding:0 5px;">住宿</span>
+                <span style="font-size:11.5px;color:var(--sub);">老公 付款 · 老公、老婆</span>
+              </div>
+              <span style="font-size:11px;color:var(--muted);white-space:nowrap;">10/9 08:53</span>
+            </div>
+            <div style="font-size:14px;font-weight:700;color:var(--text);word-break:break-word;">Day 4 大和ROYNET飯店 仙台西口 PREMIER（住宿 1 晚）</div>
+            <div style="font-size:12px;color:var(--sub);margin-top:2px;">3/30–3/31 一晚住宿（ダイワロイネットホテル仙台西口 PREMIER）</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;flex-shrink:0;text-align:right;">
+            <div><div style="font-size:14px;font-weight:700;color:var(--text);">NT$ 2,800</div></div>
+            <button type="button" class="tl-icon-btn exp-edit-btn" data-id="exp-init-hotel-d4" title="修改或填入金額" aria-label="修改帳目">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+            </button>
+          </div>
+        </div>
+      
+        <div class="exp-item-card" style="border-left:3px solid #A67C38;">
+          <div style="flex:1;min-width:0;">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:2px;gap:6px;">
+              <div style="display:flex;align-items:center;gap:5px;flex-wrap:wrap;">
+                <span style="font-size:11px;color:#A67C38;border:1px solid #A67C38;border-radius:3px;padding:0 5px;">住宿</span>
+                <span style="font-size:11.5px;color:var(--sub);">老公 付款 · 老公、老婆</span>
+              </div>
+              <span style="font-size:11px;color:var(--muted);white-space:nowrap;">10/9 08:53</span>
+            </div>
+            <div style="font-size:14px;font-weight:700;color:var(--text);word-break:break-word;">Day 3 銀山溫泉 御宿やなだ屋（住宿 1 晚）</div>
+            <div style="font-size:12px;color:var(--sub);margin-top:2px;">3/29–3/30 銀山溫泉一泊二食（銀山温泉 御宿 やなだ屋）</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;flex-shrink:0;text-align:right;">
+            <div><div style="font-size:14px;font-weight:700;color:var(--text);">NT$ 15,000</div></div>
+            <button type="button" class="tl-icon-btn exp-edit-btn" data-id="exp-init-hotel-d3" title="修改或填入金額" aria-label="修改帳目">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+            </button>
+          </div>
+        </div>
+      
+        <div class="exp-item-card" style="border-left:3px solid #A67C38;">
+          <div style="flex:1;min-width:0;">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:2px;gap:6px;">
+              <div style="display:flex;align-items:center;gap:5px;flex-wrap:wrap;">
+                <span style="font-size:11px;color:#A67C38;border:1px solid #A67C38;border-radius:3px;padding:0 5px;">住宿</span>
+                <span style="font-size:11.5px;color:var(--sub);">老公 付款 · 老公、老婆</span>
+              </div>
+              <span style="font-size:11px;color:var(--muted);white-space:nowrap;">10/9 08:53</span>
+            </div>
+            <div style="font-size:14px;font-weight:700;color:var(--text);word-break:break-word;">Day 1–2 仙台東大都會大飯店（連住 2 晚）</div>
+            <div style="font-size:12px;color:var(--sub);margin-top:2px;">3/27–3/29 兩晚住宿（ホテルメトロポリタン仙台イースト，JR仙台站東口直通）</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;flex-shrink:0;text-align:right;">
+            <div><div style="font-size:14px;font-weight:700;color:var(--text);">NT$ 7,800</div></div>
+            <button type="button" class="tl-icon-btn exp-edit-btn" data-id="exp-init-hotel-d1d2" title="修改或填入金額" aria-label="修改帳目">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+            </button>
+          </div>
+        </div>
+      
+        <div class="exp-item-card" style="border-left:3px solid #26435F;">
+          <div style="flex:1;min-width:0;">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:2px;gap:6px;">
+              <div style="display:flex;align-items:center;gap:5px;flex-wrap:wrap;">
+                <span style="font-size:11px;color:#26435F;border:1px solid #26435F;border-radius:3px;padding:0 5px;">機票</span>
+                <span style="font-size:11.5px;color:var(--sub);">老公 付款 · 老公、老婆</span>
+              </div>
+              <span style="font-size:11px;color:var(--muted);white-space:nowrap;">10/9 08:53</span>
+            </div>
+            <div style="font-size:14px;font-weight:700;color:var(--text);word-break:break-word;">星宇航空 台北⇄仙台來回機票（去程 JX862／回程 JX863）</div>
+            <div style="font-size:12px;color:var(--sub);margin-top:2px;">星宇航空 JX862 / JX863（已預訂付款 NTD 16,500）</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;flex-shrink:0;text-align:right;">
+            <div><div style="font-size:14px;font-weight:700;color:var(--text);">NT$ 16,500</div></div>
+            <button type="button" class="tl-icon-btn exp-edit-btn" data-id="exp-init-flights" title="修改或填入金額" aria-label="修改帳目">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== M3 美食景點 ==================== -->
+    <section id="pane-pl" class="tab-pane">
+      <div id="pl-filter-pills" class="filter-pills">
+        <button type="button" class="filter-pill active" data-tag="全部">全部</button>
+      
+        <button type="button" class="filter-pill " data-tag="牛舌">牛舌</button>
+      
+        <button type="button" class="filter-pill " data-tag="仙台必吃">仙台必吃</button>
+      
+        <button type="button" class="filter-pill " data-tag="燒肉">燒肉</button>
+      
+        <button type="button" class="filter-pill " data-tag="晚餐候選">晚餐候選</button>
+      
+        <button type="button" class="filter-pill " data-tag="甜點">甜點</button>
+      
+        <button type="button" class="filter-pill " data-tag="伴手禮">伴手禮</button>
+      
+        <button type="button" class="filter-pill " data-tag="海鮮">海鮮</button>
+      
+        <button type="button" class="filter-pill " data-tag="松島">松島</button>
+      
+        <button type="button" class="filter-pill " data-tag="銀山溫泉">銀山溫泉</button>
+      
+        <button type="button" class="filter-pill " data-tag="拉麵/麵食">拉麵/麵食</button>
+      
+        <button type="button" class="filter-pill " data-tag="景點">景點</button>
+      
+        <button type="button" class="filter-pill " data-tag="住宿">住宿</button>
+      </div>
+
+      <button type="button" id="pl-add-trigger" class="add-trigger-btn pl-trigger">
+        <span>＋ 推薦店家／景點</span>
+        <span style="font-size:11.5px;color:var(--sub);font-weight:400;">收藏口袋名單 · 隨時導航</span>
+      </button>
+
+      <!-- 浮出式推薦店家/景點表單 -->
+      <div id="pl-modal-backdrop" class="app-modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="pl-modal-title">
+        <form id="pl-form" class="app-modal-sheet" novalidate>
+          <div class="app-modal-head">
+            <span id="pl-modal-title" class="app-modal-title">＋ 收藏推薦店家／景點</span>
+            <button type="button" id="pl-modal-close" class="app-modal-close" aria-label="關閉">✕</button>
+          </div>
+          <input type="hidden" id="pl-edit-id" value="" />
+
+          <div class="form-field">
+            <label class="form-label" for="pl-name-input">店名／景點</label>
+            <input type="text" id="pl-name-input" class="form-input" placeholder="貼上 Google 地圖的店名或景點" />
+          </div>
+          <div class="form-field">
+            <label class="form-label" for="pl-tag-input">分類</label>
+            <input type="text" id="pl-tag-input" class="form-input" placeholder="例如：牛舌、燒肉、甜點、海鮮、銀山溫泉、伴手禮" />
+          </div>
+          <div class="form-field">
+            <label class="form-label" for="pl-note-input">一句話特色</label>
+            <input type="text" id="pl-note-input" class="form-input" placeholder="例如：老婆想喝的毛豆奶昔、仙台站必買伴手禮" />
+          </div>
+          <div id="pl-form-error" class="form-error"></div>
+          <button type="submit" id="pl-submit-btn" class="btn-primary">加入口袋名單</button>
+          <button type="button" id="pl-cancel-btn" class="btn-secondary">取消</button>
+          <button type="button" id="pl-delete-btn" class="btn-danger-outline" style="display:none;">刪除此景點</button>
+        </form>
+      </div>
+
+      <div id="pl-list">
+        <div class="place-card">
+          <div class="place-top">
+            <div style="font-size:15px;font-weight:700;color:var(--text);">たんや善治郎 仙台站 牛舌通店 (Tanya Zenjiro)</div>
+            <div style="display:flex;gap:4px;flex-wrap:wrap;justify-content:flex-end;">
+              <span class="place-tag">牛舌</span><span class="place-tag">仙台必吃</span>
+            </div>
+          </div>
+          <div style="font-size:13px;color:var(--sub);margin-bottom:8px;">仙台站 3F 牛舌通超人氣名店，手工鹽味熟成厚切「真中たん」爽脆多汁，附牛尾湯與麥飯。</div>
+          <div class="place-btn-row" style="display:grid;grid-template-columns:1fr auto auto;gap:6px;">
+            <a href="https://www.google.com/maps/search/?api=1&query=%E3%81%9F%E3%82%93%E3%82%84%E5%96%84%E6%B2%BB%E9%83%8E%20%E4%BB%99%E5%8F%B0%E9%A7%85%20%E7%89%9B%E3%81%9F%E3%82%93%E9%80%9A%E3%82%8A%E5%BA%97%20Sendai%20Station" target="_blank" rel="noopener" class="btn-secondary" style="text-align:center;text-decoration:none;margin:0;padding:7px 10px;">🗺️ Google 地圖</a>
+            <button type="button" class="btn-secondary pl-add-to-tl-btn" data-name="たんや善治郎 仙台站 牛舌通店 (Tanya Zenjiro)" data-note="仙台站 3F 牛舌通超人氣名店，手工鹽味熟成厚切「真中たん」爽脆多汁，附牛尾湯與麥飯。" style="margin:0;padding:7px 10px;white-space:nowrap;">＋ 排入行程</button>
+            <button type="button" class="btn-secondary pl-edit-btn" data-pl-id="pl-1" style="margin:0;padding:7px 10px;white-space:nowrap;">✏️ 編輯</button>
+          </div>
+          
+        </div>
+      
+        <div class="place-card">
+          <div class="place-top">
+            <div style="font-size:15px;font-weight:700;color:var(--text);">味太助 本店 (Aji Tasuke)</div>
+            <div style="display:flex;gap:4px;flex-wrap:wrap;justify-content:flex-end;">
+              <span class="place-tag">牛舌</span><span class="place-tag">仙台必吃</span>
+            </div>
+          </div>
+          <div style="font-size:13px;color:var(--sub);margin-bottom:8px;">仙台炭烤牛舌發源初代老舖，僅賣牛舌定食與牛尾湯，炭香濃郁道地（近勾當台公園站／一番町）。</div>
+          <div class="place-btn-row" style="display:grid;grid-template-columns:1fr auto auto;gap:6px;">
+            <a href="https://www.google.com/maps/search/?api=1&query=%E6%97%A8%E5%91%B3%E5%A4%AA%E5%8A%A9%20%E4%BB%99%E5%8F%B0%E5%B8%82%E9%9D%92%E8%91%89%E5%8C%BA%E4%B8%80%E7%95%AA%E7%94%BA4-4-13" target="_blank" rel="noopener" class="btn-secondary" style="text-align:center;text-decoration:none;margin:0;padding:7px 10px;">🗺️ Google 地圖</a>
+            <button type="button" class="btn-secondary pl-add-to-tl-btn" data-name="味太助 本店 (Aji Tasuke)" data-note="仙台炭烤牛舌發源初代老舖，僅賣牛舌定食與牛尾湯，炭香濃郁道地（近勾當台公園站／一番町）。" style="margin:0;padding:7px 10px;white-space:nowrap;">＋ 排入行程</button>
+            <button type="button" class="btn-secondary pl-edit-btn" data-pl-id="pl-2" style="margin:0;padding:7px 10px;white-space:nowrap;">✏️ 編輯</button>
+          </div>
+          
+        </div>
+      
+        <div class="place-card">
+          <div class="place-top">
+            <div style="font-size:15px;font-weight:700;color:var(--text);">閣 (Kaku) 電力ビル店／ブランドーム本店</div>
+            <div style="display:flex;gap:4px;flex-wrap:wrap;justify-content:flex-end;">
+              <span class="place-tag">牛舌</span><span class="place-tag">仙台必吃</span>
+            </div>
+          </div>
+          <div style="font-size:13px;color:var(--sub);margin-bottom:8px;">榮獲米其林必比登推薦的傳奇牛舌店，外酥內粉嫩多汁，招牌「牛舌刺身／生牛舌」入口即化。</div>
+          <div class="place-btn-row" style="display:grid;grid-template-columns:1fr auto auto;gap:6px;">
+            <a href="https://www.google.com/maps/search/?api=1&query=%E7%89%9B%E3%81%9F%E3%82%93%E6%96%99%E7%90%86%20%E9%96%A3%20%E3%83%96%E3%83%A9%E3%83%B3%E3%83%89%E3%83%BC%E3%83%A0%E6%9C%AC%E5%BA%97%20%E4%BB%99%E5%8F%B0%E5%B8%82%E9%9D%92%E8%91%89%E5%8C%BA%E4%B8%80%E7%95%AA%E7%94%BA3-8-14" target="_blank" rel="noopener" class="btn-secondary" style="text-align:center;text-decoration:none;margin:0;padding:7px 10px;">🗺️ Google 地圖</a>
+            <button type="button" class="btn-secondary pl-add-to-tl-btn" data-name="閣 (Kaku) 電力ビル店／ブランドーム本店" data-note="榮獲米其林必比登推薦的傳奇牛舌店，外酥內粉嫩多汁，招牌「牛舌刺身／生牛舌」入口即化。" style="margin:0;padding:7px 10px;white-space:nowrap;">＋ 排入行程</button>
+            <button type="button" class="btn-secondary pl-edit-btn" data-pl-id="pl-3" style="margin:0;padding:7px 10px;white-space:nowrap;">✏️ 編輯</button>
+          </div>
+          
+        </div>
+      
+        <div class="place-card">
+          <div class="place-top">
+            <div style="font-size:15px;font-weight:700;color:var(--text);">米澤牛燒肉 仔虎 仙台站前店 (Yakiniku Kotora)</div>
+            <div style="display:flex;gap:4px;flex-wrap:wrap;justify-content:flex-end;">
+              <span class="place-tag">燒肉</span><span class="place-tag">晚餐候選</span>
+            </div>
+          </div>
+          <div style="font-size:13px;color:var(--sub);margin-bottom:8px;">位於仙台站西口 HERB SENDAI 8F，可一次品嚐頂級米澤牛、仙台牛與山形牛，環境高雅適合夫妻約會晚餐（建議預約）。</div>
+          <div class="place-btn-row" style="display:grid;grid-template-columns:1fr auto auto;gap:6px;">
+            <a href="https://www.google.com/maps/search/?api=1&query=%E7%B1%B3%E6%B2%A2%E7%89%9B%E7%84%BC%E8%82%89%20%E4%BB%94%E8%99%8E%20%E4%BB%99%E5%8F%B0%E9%A7%85%E5%89%8D%E5%BA%97%20%E4%BB%99%E5%8F%B0%E5%B8%82%E9%9D%92%E8%91%89%E5%8C%BA%E4%B8%AD%E5%A4%AE1-6-1" target="_blank" rel="noopener" class="btn-secondary" style="text-align:center;text-decoration:none;margin:0;padding:7px 10px;">🗺️ Google 地圖</a>
+            <button type="button" class="btn-secondary pl-add-to-tl-btn" data-name="米澤牛燒肉 仔虎 仙台站前店 (Yakiniku Kotora)" data-note="位於仙台站西口 HERB SENDAI 8F，可一次品嚐頂級米澤牛、仙台牛與山形牛，環境高雅適合夫妻約會晚餐（建議預約）。" style="margin:0;padding:7px 10px;white-space:nowrap;">＋ 排入行程</button>
+            <button type="button" class="btn-secondary pl-edit-btn" data-pl-id="pl-4" style="margin:0;padding:7px 10px;white-space:nowrap;">✏️ 編輯</button>
+          </div>
+          
+        </div>
+      
+        <div class="place-card">
+          <div class="place-top">
+            <div style="font-size:15px;font-weight:700;color:var(--text);">ずんだ茶寮 (Zunda Saryo) 仙台站毛豆奶昔</div>
+            <div style="display:flex;gap:4px;flex-wrap:wrap;justify-content:flex-end;">
+              <span class="place-tag">甜點</span><span class="place-tag">伴手禮</span>
+            </div>
+          </div>
+          <div style="font-size:13px;color:var(--sub);margin-bottom:8px;">仙台三大名物之一！香濃香草奶昔融合顆粒感毛豆泥，微甜不膩，出仙台站必喝一杯。</div>
+          <div class="place-btn-row" style="display:grid;grid-template-columns:1fr auto auto;gap:6px;">
+            <a href="https://www.google.com/maps/search/?api=1&query=%E3%81%9A%E3%82%93%E3%81%A0%E8%8C%B6%E5%AF%AE%20%E4%BB%99%E5%8F%B0%E9%A7%85%E3%81%9A%E3%82%93%E3%81%A0%E5%B0%8F%E5%BE%84%E5%BA%97%20Sendai%20Station" target="_blank" rel="noopener" class="btn-secondary" style="text-align:center;text-decoration:none;margin:0;padding:7px 10px;">🗺️ Google 地圖</a>
+            <button type="button" class="btn-secondary pl-add-to-tl-btn" data-name="ずんだ茶寮 (Zunda Saryo) 仙台站毛豆奶昔" data-note="仙台三大名物之一！香濃香草奶昔融合顆粒感毛豆泥，微甜不膩，出仙台站必喝一杯。" style="margin:0;padding:7px 10px;white-space:nowrap;">＋ 排入行程</button>
+            <button type="button" class="btn-secondary pl-edit-btn" data-pl-id="pl-5" style="margin:0;padding:7px 10px;white-space:nowrap;">✏️ 編輯</button>
+          </div>
+          
+        </div>
+      
+        <div class="place-card">
+          <div class="place-top">
+            <div style="font-size:15px;font-weight:700;color:var(--text);">松島さかな市場 (松島魚市場) ＆ 牡蠣小屋</div>
+            <div style="display:flex;gap:4px;flex-wrap:wrap;justify-content:flex-end;">
+              <span class="place-tag">海鮮</span><span class="place-tag">松島</span>
+            </div>
+          </div>
+          <div style="font-size:13px;color:var(--sub);margin-bottom:8px;">超過 1,500 種海鮮料理，3 月底必吃熱騰騰炭烤松島帶殼牡蠣、松島牡蠣漢堡與特選海鮮丼。</div>
+          <div class="place-btn-row" style="display:grid;grid-template-columns:1fr auto auto;gap:6px;">
+            <a href="https://www.google.com/maps/search/?api=1&query=%E6%9D%BE%E5%B3%B6%E3%81%95%E3%81%8B%E3%81%AA%E5%B8%82%E5%A0%B4%20%E5%AE%AE%E5%9F%8E%E7%9C%8C%E5%AE%AE%E5%9F%8E%E9%83%A1%E6%9D%BE%E5%B3%B6%E7%94%BA%E6%9D%BE%E5%B3%B6%E6%99%AE%E8%B3%A2%E5%A0%824-10" target="_blank" rel="noopener" class="btn-secondary" style="text-align:center;text-decoration:none;margin:0;padding:7px 10px;">🗺️ Google 地圖</a>
+            <button type="button" class="btn-secondary pl-add-to-tl-btn" data-name="松島さかな市場 (松島魚市場) ＆ 牡蠣小屋" data-note="超過 1,500 種海鮮料理，3 月底必吃熱騰騰炭烤松島帶殼牡蠣、松島牡蠣漢堡與特選海鮮丼。" style="margin:0;padding:7px 10px;white-space:nowrap;">＋ 排入行程</button>
+            <button type="button" class="btn-secondary pl-edit-btn" data-pl-id="pl-6" style="margin:0;padding:7px 10px;white-space:nowrap;">✏️ 編輯</button>
+          </div>
+          
+        </div>
+      
+        <div class="place-card">
+          <div class="place-top">
+            <div style="font-size:15px;font-weight:700;color:var(--text);">銀山溫泉 野川とうふや (野川豆腐屋)</div>
+            <div style="display:flex;gap:4px;flex-wrap:wrap;justify-content:flex-end;">
+              <span class="place-tag">甜點</span><span class="place-tag">銀山溫泉</span>
+            </div>
+          </div>
+          <div style="font-size:13px;color:var(--sub);margin-bottom:8px;">銀山川足湯旁百年手作豆腐老店，必吃現點現炸的「生揚豆腐（立ち食い豆腐）」與香滑嫩豆腐，泡著足湯享用超幸福。</div>
+          <div class="place-btn-row" style="display:grid;grid-template-columns:1fr auto auto;gap:6px;">
+            <a href="https://www.google.com/maps/search/?api=1&query=%E9%87%8E%E5%B7%9D%E3%81%A8%E3%81%86%E3%81%B5%E3%82%84%20%E5%B1%B1%E5%BD%A2%E7%9C%8C%E5%B0%BE%E8%8A%B1%E6%B2%A2%E5%B8%82%E9%8A%80%E5%B1%B1%E6%96%B0%E7%95%91427" target="_blank" rel="noopener" class="btn-secondary" style="text-align:center;text-decoration:none;margin:0;padding:7px 10px;">🗺️ Google 地圖</a>
+            <button type="button" class="btn-secondary pl-add-to-tl-btn" data-name="銀山溫泉 野川とうふや (野川豆腐屋)" data-note="銀山川足湯旁百年手作豆腐老店，必吃現點現炸的「生揚豆腐（立ち食い豆腐）」與香滑嫩豆腐，泡著足湯享用超幸福。" style="margin:0;padding:7px 10px;white-space:nowrap;">＋ 排入行程</button>
+            <button type="button" class="btn-secondary pl-edit-btn" data-pl-id="pl-7" style="margin:0;padding:7px 10px;white-space:nowrap;">✏️ 編輯</button>
+          </div>
+          
+        </div>
+      
+        <div class="place-card">
+          <div class="place-top">
+            <div style="font-size:15px;font-weight:700;color:var(--text);">銀山溫泉 伊豆の華（蕎麥麵＆炸茄子蕎麥）</div>
+            <div style="display:flex;gap:4px;flex-wrap:wrap;justify-content:flex-end;">
+              <span class="place-tag">拉麵/麵食</span><span class="place-tag">銀山溫泉</span>
+            </div>
+          </div>
+          <div style="font-size:13px;color:var(--sub);margin-bottom:8px;">銀山溫泉街人氣古民家食堂，招牌「揚げ茄子おろしそば（炸茄子蘿蔔泥尾花澤蕎麥麵）」與溫泉布丁極受好評。</div>
+          <div class="place-btn-row" style="display:grid;grid-template-columns:1fr auto auto;gap:6px;">
+            <a href="https://www.google.com/maps/search/?api=1&query=%E4%BC%8A%E8%B1%86%E3%81%AE%E8%8F%AF%20%E5%B1%B1%E5%BD%A2%E7%9C%8C%E5%B0%BE%E8%8A%B1%E6%B2%A2%E5%B8%82%E9%8A%80%E5%B1%B1%E6%96%B0%E7%95%91440" target="_blank" rel="noopener" class="btn-secondary" style="text-align:center;text-decoration:none;margin:0;padding:7px 10px;">🗺️ Google 地圖</a>
+            <button type="button" class="btn-secondary pl-add-to-tl-btn" data-name="銀山溫泉 伊豆の華（蕎麥麵＆炸茄子蕎麥）" data-note="銀山溫泉街人氣古民家食堂，招牌「揚げ茄子おろしそば（炸茄子蘿蔔泥尾花澤蕎麥麵）」與溫泉布丁極受好評。" style="margin:0;padding:7px 10px;white-space:nowrap;">＋ 排入行程</button>
+            <button type="button" class="btn-secondary pl-edit-btn" data-pl-id="pl-8" style="margin:0;padding:7px 10px;white-space:nowrap;">✏️ 編輯</button>
+          </div>
+          
+        </div>
+      
+        <div class="place-card">
+          <div class="place-top">
+            <div style="font-size:15px;font-weight:700;color:var(--text);">仙台朝市（齊藤惣菜店ころっけや ＆ 朝市海鮮丼）</div>
+            <div style="display:flex;gap:4px;flex-wrap:wrap;justify-content:flex-end;">
+              <span class="place-tag">海鮮</span><span class="place-tag">景點</span>
+            </div>
+          </div>
+          <div style="font-size:13px;color:var(--sub);margin-bottom:8px;">距離 Day 4 大和ROYNET飯店西口步行僅 4 分鐘！必吃現炸北海道男爵馬鈴薯可樂餅與超澎湃海鮮生魚片丼。</div>
+          <div class="place-btn-row" style="display:grid;grid-template-columns:1fr auto auto;gap:6px;">
+            <a href="https://www.google.com/maps/search/?api=1&query=%E4%BB%99%E5%8F%B0%E6%9C%9D%E5%B8%82%20%E5%AE%AE%E5%9F%8E%E7%9C%8C%E4%BB%99%E5%8F%B0%E5%B8%82%E9%9D%92%E8%91%89%E5%8C%BA%E4%B8%AD%E5%A4%AE4-3-28" target="_blank" rel="noopener" class="btn-secondary" style="text-align:center;text-decoration:none;margin:0;padding:7px 10px;">🗺️ Google 地圖</a>
+            <button type="button" class="btn-secondary pl-add-to-tl-btn" data-name="仙台朝市（齊藤惣菜店ころっけや ＆ 朝市海鮮丼）" data-note="距離 Day 4 大和ROYNET飯店西口步行僅 4 分鐘！必吃現炸北海道男爵馬鈴薯可樂餅與超澎湃海鮮生魚片丼。" style="margin:0;padding:7px 10px;white-space:nowrap;">＋ 排入行程</button>
+            <button type="button" class="btn-secondary pl-edit-btn" data-pl-id="pl-9" style="margin:0;padding:7px 10px;white-space:nowrap;">✏️ 編輯</button>
+          </div>
+          
+        </div>
+      
+        <div class="place-card">
+          <div class="place-top">
+            <div style="font-size:15px;font-weight:700;color:var(--text);">菓匠三全「萩の月」＆ 喜久水庵「喜久福」</div>
+            <div style="display:flex;gap:4px;flex-wrap:wrap;justify-content:flex-end;">
+              <span class="place-tag">甜點</span><span class="place-tag">伴手禮</span>
+            </div>
+          </div>
+          <div style="font-size:13px;color:var(--sub);margin-bottom:8px;">S-PAL 仙台 B1 必買伴手禮雙冠王：鬆軟蛋糕包覆濃郁卡士達的「萩之月」，以及冷凍生奶油毛豆大福「喜久福」。</div>
+          <div class="place-btn-row" style="display:grid;grid-template-columns:1fr auto auto;gap:6px;">
+            <a href="https://www.google.com/maps/search/?api=1&query=%E3%82%A8%E3%82%B9%E3%83%91%E3%83%AB%E4%BB%99%E5%8F%B0%20%E6%9C%AC%E9%A4%A8%20B1F%20%E4%BB%99%E5%8F%B0%E3%81%8A%E3%81%BF%E3%82%84%E3%81%92%E5%87%A6" target="_blank" rel="noopener" class="btn-secondary" style="text-align:center;text-decoration:none;margin:0;padding:7px 10px;">🗺️ Google 地圖</a>
+            <button type="button" class="btn-secondary pl-add-to-tl-btn" data-name="菓匠三全「萩の月」＆ 喜久水庵「喜久福」" data-note="S-PAL 仙台 B1 必買伴手禮雙冠王：鬆軟蛋糕包覆濃郁卡士達的「萩之月」，以及冷凍生奶油毛豆大福「喜久福」。" style="margin:0;padding:7px 10px;white-space:nowrap;">＋ 排入行程</button>
+            <button type="button" class="btn-secondary pl-edit-btn" data-pl-id="pl-10" style="margin:0;padding:7px 10px;white-space:nowrap;">✏️ 編輯</button>
+          </div>
+          
+        </div>
+      
+        <div class="place-card">
+          <div class="place-top">
+            <div style="font-size:15px;font-weight:700;color:var(--text);">仙台東大都會大飯店 (Hotel Metropolitan Sendai East)</div>
+            <div style="display:flex;gap:4px;flex-wrap:wrap;justify-content:flex-end;">
+              <span class="place-tag">住宿</span>
+            </div>
+          </div>
+          <div style="font-size:13px;color:var(--sub);margin-bottom:8px;">Day 1–Day 2 下榻飯店（已付 NTD 7,800），JR 仙台站東口 3F 直結，房間寬敞且衛浴乾濕分離。</div>
+          <div class="place-btn-row" style="display:grid;grid-template-columns:1fr auto auto;gap:6px;">
+            <a href="https://www.google.com/maps/search/?api=1&query=%E3%83%9B%E3%83%86%E3%83%AB%E3%83%A1%E3%83%88%E3%83%AD%E3%83%9D%E3%83%AA%E3%82%BF%E3%83%B3%E4%BB%99%E5%8F%B0%E3%82%A4%E3%83%BC%E3%82%B9%E3%83%88%20Hotel%20Metropolitan%20Sendai%20East" target="_blank" rel="noopener" class="btn-secondary" style="text-align:center;text-decoration:none;margin:0;padding:7px 10px;">🗺️ Google 地圖</a>
+            <button type="button" class="btn-secondary pl-add-to-tl-btn" data-name="仙台東大都會大飯店 (Hotel Metropolitan Sendai East)" data-note="Day 1–Day 2 下榻飯店（已付 NTD 7,800），JR 仙台站東口 3F 直結，房間寬敞且衛浴乾濕分離。" style="margin:0;padding:7px 10px;white-space:nowrap;">＋ 排入行程</button>
+            <button type="button" class="btn-secondary pl-edit-btn" data-pl-id="pl-11" style="margin:0;padding:7px 10px;white-space:nowrap;">✏️ 編輯</button>
+          </div>
+          
+        </div>
+      
+        <div class="place-card">
+          <div class="place-top">
+            <div style="font-size:15px;font-weight:700;color:var(--text);">銀山溫泉 御宿やなだ屋 (Oyado Yanadaya)</div>
+            <div style="display:flex;gap:4px;flex-wrap:wrap;justify-content:flex-end;">
+              <span class="place-tag">住宿</span><span class="place-tag">銀山溫泉</span>
+            </div>
+          </div>
+          <div style="font-size:13px;color:var(--sub);margin-bottom:8px;">Day 3 下榻溫泉旅館（已付 NTD 15,000），坐落銀山溫泉街核心河畔，一泊二食尾花澤牛會席與源泉掛流湯。</div>
+          <div class="place-btn-row" style="display:grid;grid-template-columns:1fr auto auto;gap:6px;">
+            <a href="https://www.google.com/maps/search/?api=1&query=%E9%8A%80%E5%B1%B1%E6%B8%A9%E6%B3%89%20%E5%BE%A1%E5%AE%BF%20%E3%82%84%E3%81%AA%E3%81%A0%E5%B1%8B%20Yamagata%20Obanazawa%20Ginzan%20Onsen" target="_blank" rel="noopener" class="btn-secondary" style="text-align:center;text-decoration:none;margin:0;padding:7px 10px;">🗺️ Google 地圖</a>
+            <button type="button" class="btn-secondary pl-add-to-tl-btn" data-name="銀山溫泉 御宿やなだ屋 (Oyado Yanadaya)" data-note="Day 3 下榻溫泉旅館（已付 NTD 15,000），坐落銀山溫泉街核心河畔，一泊二食尾花澤牛會席與源泉掛流湯。" style="margin:0;padding:7px 10px;white-space:nowrap;">＋ 排入行程</button>
+            <button type="button" class="btn-secondary pl-edit-btn" data-pl-id="pl-12" style="margin:0;padding:7px 10px;white-space:nowrap;">✏️ 編輯</button>
+          </div>
+          
+        </div>
+      
+        <div class="place-card">
+          <div class="place-top">
+            <div style="font-size:15px;font-weight:700;color:var(--text);">大和ROYNET飯店 仙台西口 PREMIER</div>
+            <div style="display:flex;gap:4px;flex-wrap:wrap;justify-content:flex-end;">
+              <span class="place-tag">住宿</span>
+            </div>
+          </div>
+          <div style="font-size:13px;color:var(--sub);margin-bottom:8px;">Day 4 下榻飯店（已付 NTD 2,800），仙台站西口步行 4 分鐘，近仙台朝市與一番町商圈。</div>
+          <div class="place-btn-row" style="display:grid;grid-template-columns:1fr auto auto;gap:6px;">
+            <a href="https://www.google.com/maps/search/?api=1&query=%E3%83%80%E3%82%A4%E3%83%AF%E3%83%AD%E3%82%A4%E3%83%8D%E3%83%83%E3%83%88%E3%83%9B%E3%83%86%E3%83%AB%E4%BB%99%E5%8F%B0%E8%A5%BF%E5%8F%A3%20PREMIER%20Daiwa%20Roynet%20Hotel%20Sendai%20Nishiguchi%20Premier" target="_blank" rel="noopener" class="btn-secondary" style="text-align:center;text-decoration:none;margin:0;padding:7px 10px;">🗺️ Google 地圖</a>
+            <button type="button" class="btn-secondary pl-add-to-tl-btn" data-name="大和ROYNET飯店 仙台西口 PREMIER" data-note="Day 4 下榻飯店（已付 NTD 2,800），仙台站西口步行 4 分鐘，近仙台朝市與一番町商圈。" style="margin:0;padding:7px 10px;white-space:nowrap;">＋ 排入行程</button>
+            <button type="button" class="btn-secondary pl-edit-btn" data-pl-id="pl-13" style="margin:0;padding:7px 10px;white-space:nowrap;">✏️ 編輯</button>
+          </div>
+          
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== M4 小卡 ==================== -->
+    <section id="pane-card" class="tab-pane">
+      <div style="font-size:12px;color:var(--sub);margin-bottom:8px;">
+        點選任一張小卡可<strong>全螢幕放大給日本店員或司機看</strong>，並支援日文語音朗讀與一鍵複製。讀音皆為台灣人好念的近似諧音。
+      </div>
+      <div id="card-filter-pills" class="filter-pills">
+        <button type="button" class="filter-pill active" data-cat="全部">全部</button>
+      
+        <button type="button" class="filter-pill " data-cat="問候">問候</button>
+      
+        <button type="button" class="filter-pill " data-cat="點餐">點餐</button>
+      
+        <button type="button" class="filter-pill " data-cat="購物">購物</button>
+      
+        <button type="button" class="filter-pill " data-cat="交通">交通</button>
+      
+        <button type="button" class="filter-pill " data-cat="住宿">住宿</button>
+      
+        <button type="button" class="filter-pill " data-cat="身體不適">身體不適</button>
+      </div>
+
+      <button type="button" id="card-add-trigger" class="add-trigger-btn pl-trigger" style="margin-bottom:12px;">
+        <span>＋ 新增自訂日文小卡</span>
+        <span style="font-size:11.5px;color:var(--sub);font-weight:400;">點餐 · 飲食偏好 · 旅程備忘</span>
+      </button>
+
+      <!-- 自訂小卡浮出式表單 -->
+      <div id="custom-card-modal-backdrop" class="app-modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="custom-card-modal-title">
+        <form id="custom-card-form" class="app-modal-sheet" novalidate>
+          <div class="app-modal-head">
+            <span id="custom-card-modal-title" class="app-modal-title">＋ 新增自訂日文小卡</span>
+            <button type="button" id="custom-card-modal-close" class="app-modal-close" aria-label="關閉">✕</button>
+          </div>
+          <div class="form-field">
+            <label class="form-label" for="custom-card-jp">日文句子</label>
+            <input type="text" id="custom-card-jp" class="form-input" placeholder="例如：ネギ抜きでお願いします（麻煩不要加蔥）" />
+          </div>
+          <div class="form-field">
+            <label class="form-label" for="custom-card-zh">中文意思</label>
+            <input type="text" id="custom-card-zh" class="form-input" placeholder="例如：麻煩不要加蔥，謝謝" />
+          </div>
+          <div class="form-field">
+            <label class="form-label" for="custom-card-pron">發音／諧音（選填）</label>
+            <input type="text" id="custom-card-pron" class="form-input" placeholder="例如：內gi 奴ki 爹 歐內嘎以希媽斯" />
+          </div>
+          <div class="form-field">
+            <label class="form-label" for="custom-card-cat">分類（選填）</label>
+            <input type="text" id="custom-card-cat" class="form-input" placeholder="例如：點餐、購物、備忘" value="自訂" />
+          </div>
+          <div id="custom-card-error" class="form-error"></div>
+          <button type="submit" class="btn-primary">儲存小卡</button>
+          <button type="button" id="custom-card-cancel" class="btn-secondary">取消</button>
+        </form>
+      </div>
+
+      <div id="card-list" class="phrase-grid">
+        <div class="phrase-card" data-card-id="c-1">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:2px;">
+            <div class="phrase-cat">問候 · 點選放大給店員看</div>
+            
+          </div>
+          <div class="phrase-jp">すみません、ちょっとお聞きしてもいいですか？</div>
+          <div class="phrase-zh">不好意思，請問可以請教一下嗎？</div>
+          <div class="phrase-pron">近似讀音：斯咪媽線，秋偷 歐ki-ki 希貼摸 いい爹斯咖？</div>
+          
+        </div>
+      
+        <div class="phrase-card" data-card-id="c-2">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:2px;">
+            <div class="phrase-cat">問候 · 點選放大給店員看</div>
+            
+          </div>
+          <div class="phrase-jp">ありがとうございます。とても美味しかったです！</div>
+          <div class="phrase-zh">非常謝謝您，真的非常好吃！</div>
+          <div class="phrase-pron">近似讀音：阿哩嘎偷 勾扎以媽斯。偷貼摸 歐以希卡塔 爹斯！</div>
+          
+        </div>
+      
+        <div class="phrase-card" data-card-id="c-3">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:2px;">
+            <div class="phrase-cat">點餐 · 點選放大給店員看</div>
+            
+          </div>
+          <div class="phrase-jp">2名（にめい）です。予約（よやく）していません。</div>
+          <div class="phrase-zh">我們兩位，沒有預約。請問還有位子嗎？</div>
+          <div class="phrase-pron">近似讀音：尼妹 爹斯。優呀哭 希貼 以媽線。</div>
+          
+        </div>
+      
+        <div class="phrase-card" data-card-id="c-4">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:2px;">
+            <div class="phrase-cat">點餐 · 點選放大給店員看</div>
+            
+          </div>
+          <div class="phrase-jp">おすすめの厚切り牛たん定食（あつぎりぎゅうたんていしょく）はどれですか？</div>
+          <div class="phrase-zh">請問推薦的「厚切牛舌定食」是哪一個？</div>
+          <div class="phrase-pron">近似讀音：歐斯斯妹 諾 阿茲gi哩 牛嘆 貼休哭 挖 兜咧爹斯咖？</div>
+          
+        </div>
+      
+        <div class="phrase-card" data-card-id="c-5">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:2px;">
+            <div class="phrase-cat">點餐 · 點選放大給店員看</div>
+            
+          </div>
+          <div class="phrase-jp">お水（みず）を2つお願いします。</div>
+          <div class="phrase-zh">麻煩給我們兩杯冰水，謝謝。</div>
+          <div class="phrase-pron">近似讀音：歐咪茲 歐 夫塔茲 歐內嘎以希媽斯。</div>
+          
+        </div>
+      
+        <div class="phrase-card" data-card-id="c-6">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:2px;">
+            <div class="phrase-cat">點餐 · 點選放大給店員看</div>
+            
+          </div>
+          <div class="phrase-jp">お会計（かいけい）をお願いします。カードで払えますか？</div>
+          <div class="phrase-zh">麻煩結帳。請問可以刷信用卡嗎？</div>
+          <div class="phrase-pron">近似讀音：歐開K 歐 歐內嘎以希媽斯。卡兜 爹 哈拉欸媽斯咖？</div>
+          
+        </div>
+      
+        <div class="phrase-card" data-card-id="c-7">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:2px;">
+            <div class="phrase-cat">購物 · 點選放大給店員看</div>
+            
+          </div>
+          <div class="phrase-jp">免税（めんぜい）手続きはここでできますか？</div>
+          <div class="phrase-zh">請問可以在這邊辦理退稅（免稅）嗎？</div>
+          <div class="phrase-pron">近似讀音：免賊 貼茲茲ki 挖 摳摳爹 爹ki媽斯咖？</div>
+          
+        </div>
+      
+        <div class="phrase-card" data-card-id="c-8">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:2px;">
+            <div class="phrase-cat">購物 · 點選放大給店員看</div>
+            
+          </div>
+          <div class="phrase-jp">常温（じょうおん）で持ち帰れるお土産はどれですか？</div>
+          <div class="phrase-zh">請問哪一個是可以「常溫帶回國」的伴手禮？</div>
+          <div class="phrase-pron">近似讀音：揪翁 爹 摸七卡欸咧嚕 歐咪呀給 挖 兜咧爹斯咖？</div>
+          
+        </div>
+      
+        <div class="phrase-card" data-card-id="c-9">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:2px;">
+            <div class="phrase-cat">交通 · 點選放大給店員看</div>
+            
+          </div>
+          <div class="phrase-jp">仙台空港アクセス線の乗り場はどこですか？</div>
+          <div class="phrase-zh">請問「仙台機場 Access 線」的搭車月台在哪裡？</div>
+          <div class="phrase-pron">近似讀音：先代哭摳 Access 線 諾 諾哩巴 挖 兜摳爹斯咖？</div>
+          
+        </div>
+      
+        <div class="phrase-card" data-card-id="c-10">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:2px;">
+            <div class="phrase-cat">交通 · 點選放大給店員看</div>
+            
+          </div>
+          <div class="phrase-jp">銀山温泉（ぎんざんおんせん）行きのバス／送迎車乗り場はここですか？</div>
+          <div class="phrase-zh">請問往「銀山溫泉」的巴士／接駁車是在這裡搭嗎？</div>
+          <div class="phrase-pron">近似讀音：銀山翁線 以ki 諾 巴斯／搜給蝦 諾哩巴 挖 摳摳爹斯咖？</div>
+          
+        </div>
+      
+        <div class="phrase-card" data-card-id="c-11">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:2px;">
+            <div class="phrase-cat">住宿 · 點選放大給店員看</div>
+            
+          </div>
+          <div class="phrase-jp">チェックイン前ですが、荷物を預かってもらえますか？</div>
+          <div class="phrase-zh">還沒到入住時間，請問可以先寄放行李嗎？</div>
+          <div class="phrase-pron">近似讀音：Check-in 媽欸 爹斯嘎，尼摸茲 歐 阿茲卡貼 摸拉欸媽斯咖？</div>
+          
+        </div>
+      
+        <div class="phrase-card" data-card-id="c-12">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:2px;">
+            <div class="phrase-cat">住宿 · 點選放大給店員看</div>
+            
+          </div>
+          <div class="phrase-jp">明日の大石田駅（おおいしだえき）までの送迎バスを予約したいです。</div>
+          <div class="phrase-zh">我們想預約明天前往「大石田站」的旅館送迎巴士。</div>
+          <div class="phrase-pron">近似讀音：阿希塔 諾 歐歐以希達欸ki 媽爹諾 搜給巴斯 歐 優呀哭 希泰爹斯。</div>
+          
+        </div>
+      
+        <div class="phrase-card" data-card-id="c-13">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:2px;">
+            <div class="phrase-cat">身體不適 · 點選放大給店員看</div>
+            
+          </div>
+          <div class="phrase-jp">風邪薬（かぜぐすり）や胃薬（いぐすり）はどこにありますか？</div>
+          <div class="phrase-zh">請問感冒藥或腸胃藥放在哪一區？</div>
+          <div class="phrase-pron">近似讀音：卡賊辜斯哩 呀 以辜斯哩 挖 兜摳尼 阿哩媽斯咖？</div>
+          
+        </div>
+      
+        <div class="phrase-card" data-card-id="c-14">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:2px;">
+            <div class="phrase-cat">身體不適 · 點選放大給店員看</div>
+            
+          </div>
+          <div class="phrase-jp">少し気分が悪いです。ここで少し休んでもいいですか？</div>
+          <div class="phrase-zh">我有一點不舒服，請問可以在這裡稍微休息一下嗎？</div>
+          <div class="phrase-pron">近似讀音：斯摳希 ki奔 嘎 哇嚕以爹斯。摳摳爹 斯摳希 呀孫爹摸 いい爹斯咖？</div>
+          
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== M5 更多（7 大區塊手風琴摺疊，預設全收合） ==================== -->
+    <section id="pane-more" class="tab-pane">
+      <!-- 1. 行前清單（可摺疊） -->
+      <div class="accordion-header collapsed" data-target="more-chk-wrap" style="margin-top:0;">
+        <span class="acc-title">1 · 雙人行前準備清單</span>
+        <div style="display:flex;align-items:center;gap:6px;">
+          <span id="chk-progress-badge" class="accordion-badge">0%</span>
+          <span class="accordion-arrow">▾</span>
+        </div>
+      </div>
+      <div id="more-chk-wrap" class="card accordion-body collapsed">
+        <div style="display:flex;align-items:center;justify-content:space-between;font-size:12px;color:var(--sub);margin-bottom:6px;">
+          <span>老公 ＆ 老婆 合計完成進度</span>
+          <strong id="chk-progress-text" style="color:var(--green);">0%</strong>
+        </div>
+        <div class="progress-track" style="margin-bottom:10px;">
+          <div id="chk-progress-fill" class="progress-fill" style="width:0%;"></div>
+        </div>
+        <div id="chk-list">
+          <div class="checklist-item">
+            <div class="checklist-left" data-chk-id="chk-1">
+              <span class="check-box "></span>
+              <span style="font-size:13px;color:var(--text);">中華民國護照（效期滿 6 個月以上）</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:4px;flex-shrink:0;font-size:11px;color:var(--sub);">
+              <span style="">老公</span>
+              <span>·</span>
+              <span style="">老婆</span>
+              <span style="margin-left:2px;">(0/2)</span>
+              <button type="button" class="chk-del-btn" data-del-id="chk-1" title="刪除此項目" aria-label="刪除此項目">✕</button>
+            </div>
+          </div>
+        
+          <div class="checklist-item">
+            <div class="checklist-left" data-chk-id="chk-2">
+              <span class="check-box "></span>
+              <span style="font-size:13px;color:var(--text);">Visit Japan Web 入境＆海關 QR Code 截圖</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:4px;flex-shrink:0;font-size:11px;color:var(--sub);">
+              <span style="">老公</span>
+              <span>·</span>
+              <span style="">老婆</span>
+              <span style="margin-left:2px;">(0/2)</span>
+              <button type="button" class="chk-del-btn" data-del-id="chk-2" title="刪除此項目" aria-label="刪除此項目">✕</button>
+            </div>
+          </div>
+        
+          <div class="checklist-item">
+            <div class="checklist-left" data-chk-id="chk-3">
+              <span class="check-box "></span>
+              <span style="font-size:13px;color:var(--text);">星宇航空 去程 JX862 ／ 回程 JX863 電子機票（已買 NTD 16,500）</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:4px;flex-shrink:0;font-size:11px;color:var(--sub);">
+              <span style="">老公</span>
+              <span>·</span>
+              <span style="">老婆</span>
+              <span style="margin-left:2px;">(0/2)</span>
+              <button type="button" class="chk-del-btn" data-del-id="chk-3" title="刪除此項目" aria-label="刪除此項目">✕</button>
+            </div>
+          </div>
+        
+          <div class="checklist-item">
+            <div class="checklist-left" data-chk-id="chk-4">
+              <span class="check-box "></span>
+              <span style="font-size:13px;color:var(--text);">Day 1–2 仙台東大都會大飯店 訂房確認單（已訂 NTD 7,800）</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:4px;flex-shrink:0;font-size:11px;color:var(--sub);">
+              <span style="">老公</span>
+              <span>·</span>
+              <span style="">老婆</span>
+              <span style="margin-left:2px;">(0/2)</span>
+              <button type="button" class="chk-del-btn" data-del-id="chk-4" title="刪除此項目" aria-label="刪除此項目">✕</button>
+            </div>
+          </div>
+        
+          <div class="checklist-item">
+            <div class="checklist-left" data-chk-id="chk-5">
+              <span class="check-box "></span>
+              <span style="font-size:13px;color:var(--text);">Day 3 銀山溫泉「御宿やなだ屋」訂房單 ＆ 大石田站接駁預約確認（已訂 NTD 15,000）</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:4px;flex-shrink:0;font-size:11px;color:var(--sub);">
+              <span style="">老公</span>
+              <span>·</span>
+              <span style="">老婆</span>
+              <span style="margin-left:2px;">(0/2)</span>
+              <button type="button" class="chk-del-btn" data-del-id="chk-5" title="刪除此項目" aria-label="刪除此項目">✕</button>
+            </div>
+          </div>
+        
+          <div class="checklist-item">
+            <div class="checklist-left" data-chk-id="chk-6">
+              <span class="check-box "></span>
+              <span style="font-size:13px;color:var(--text);">Day 4 大和ROYNET飯店 仙台西口 PREMIER 訂房確認單（已訂 NTD 2,800）</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:4px;flex-shrink:0;font-size:11px;color:var(--sub);">
+              <span style="">老公</span>
+              <span>·</span>
+              <span style="">老婆</span>
+              <span style="margin-left:2px;">(0/2)</span>
+              <button type="button" class="chk-del-btn" data-del-id="chk-6" title="刪除此項目" aria-label="刪除此項目">✕</button>
+            </div>
+          </div>
+        
+          <div class="checklist-item">
+            <div class="checklist-left" data-chk-id="chk-7">
+              <span class="check-box "></span>
+              <span style="font-size:13px;color:var(--text);">日本東北 eSIM 網卡開通綁定</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:4px;flex-shrink:0;font-size:11px;color:var(--sub);">
+              <span style="">老公</span>
+              <span>·</span>
+              <span style="">老婆</span>
+              <span style="margin-left:2px;">(0/2)</span>
+              <button type="button" class="chk-del-btn" data-del-id="chk-7" title="刪除此項目" aria-label="刪除此項目">✕</button>
+            </div>
+          </div>
+        
+          <div class="checklist-item">
+            <div class="checklist-left" data-chk-id="chk-8">
+              <span class="check-box "></span>
+              <span style="font-size:13px;color:var(--text);">JR 東日本車票／Suica 或 ICOCA 儲值準備</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:4px;flex-shrink:0;font-size:11px;color:var(--sub);">
+              <span style="">老公</span>
+              <span>·</span>
+              <span style="">老婆</span>
+              <span style="margin-left:2px;">(0/2)</span>
+              <button type="button" class="chk-del-btn" data-del-id="chk-8" title="刪除此項目" aria-label="刪除此項目">✕</button>
+            </div>
+          </div>
+        
+          <div class="checklist-item">
+            <div class="checklist-left" data-chk-id="chk-9">
+              <span class="check-box "></span>
+              <span style="font-size:13px;color:var(--text);">日圓現金（銀山溫泉小店與巴士多收現金）＆ 海外高回饋信用卡</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:4px;flex-shrink:0;font-size:11px;color:var(--sub);">
+              <span style="">老公</span>
+              <span>·</span>
+              <span style="">老婆</span>
+              <span style="margin-left:2px;">(0/2)</span>
+              <button type="button" class="chk-del-btn" data-del-id="chk-9" title="刪除此項目" aria-label="刪除此項目">✕</button>
+            </div>
+          </div>
+        
+          <div class="checklist-item">
+            <div class="checklist-left" data-chk-id="chk-10">
+              <span class="check-box "></span>
+              <span style="font-size:13px;color:var(--text);">行動電源（須隨身攜帶不可托運）＆ 充電線</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:4px;flex-shrink:0;font-size:11px;color:var(--sub);">
+              <span style="">老公</span>
+              <span>·</span>
+              <span style="">老婆</span>
+              <span style="margin-left:2px;">(0/2)</span>
+              <button type="button" class="chk-del-btn" data-del-id="chk-10" title="刪除此項目" aria-label="刪除此項目">✕</button>
+            </div>
+          </div>
+        
+          <div class="checklist-item">
+            <div class="checklist-left" data-chk-id="chk-11">
+              <span class="check-box "></span>
+              <span style="font-size:13px;color:var(--text);">保暖防風外套、發熱衣、防滑好走的鞋（3月底銀山溫泉仍有殘雪且夜晚約 0°C）</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:4px;flex-shrink:0;font-size:11px;color:var(--sub);">
+              <span style="">老公</span>
+              <span>·</span>
+              <span style="">老婆</span>
+              <span style="margin-left:2px;">(0/2)</span>
+              <button type="button" class="chk-del-btn" data-del-id="chk-11" title="刪除此項目" aria-label="刪除此項目">✕</button>
+            </div>
+          </div>
+        
+          <div class="checklist-item">
+            <div class="checklist-left" data-chk-id="chk-12">
+              <span class="check-box "></span>
+              <span style="font-size:13px;color:var(--text);">個人常備藥品（腸胃藥、止痛藥、暈車藥、護唇膏與保濕乳液）</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:4px;flex-shrink:0;font-size:11px;color:var(--sub);">
+              <span style="">老公</span>
+              <span>·</span>
+              <span style="">老婆</span>
+              <span style="margin-left:2px;">(0/2)</span>
+              <button type="button" class="chk-del-btn" data-del-id="chk-12" title="刪除此項目" aria-label="刪除此項目">✕</button>
+            </div>
+          </div>
+        </div>
+        <div style="display:flex;gap:6px;margin-top:12px;">
+          <input type="text" id="chk-new-input" class="form-input" placeholder="新增自訂行前準備項目..." style="padding:7px 10px;" />
+          <button type="button" id="chk-add-btn" class="btn-secondary" style="width:auto;margin:0;white-space:nowrap;padding:7px 12px;">新增</button>
+        </div>
+      </div>
+
+      <!-- 2. 外部連結、仙台＆銀山溫泉飯店卡 ＆ 電子票券資料夾（可摺疊） -->
+      <div class="accordion-header collapsed" data-target="more-links-wrap">
+        <span class="acc-title">2 · 票券夾、仙台＆銀山飯店卡 ＆ 實用連結</span>
+        <span class="accordion-arrow">▾</span>
+      </div>
+      <div id="more-links-wrap" class="card accordion-body collapsed" style="display:flex;flex-direction:column;gap:8px;">
+          <div class="hotel-summary-card">
+            <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px;">
+              <div style="flex:1;min-width:0;">
+                <div style="font-size:11px;font-weight:700;color:var(--green);letter-spacing:0.04em;margin-bottom:2px;">🏨 Day 1–2（3/27–3/29 連住 2 晚）</div>
+                <div style="font-size:14px;font-weight:700;color:var(--text);">仙台東大都會大飯店 (Hotel Metropolitan Sendai East)</div>
+                <div style="font-size:12px;color:var(--sub);margin-top:2px;">〒980-8487 宮城県仙台市青葉区中央1丁目1-1</div>
+                <div style="font-size:11.5px;color:var(--accent);margin-top:2px;">📍 JR 仙台站東口直通（3F 設專用連通口，出站即達免淋雨）</div>
+              </div>
+              <button type="button" class="fx-pill hotel-taxi-card-btn" data-hotel-idx="0" style="white-space:nowrap;padding:6px 10px;border-color:var(--accent);color:var(--accent);font-weight:700;background:var(--accent-soft);">🚖 司機字卡</button>
+            </div>
+          </div>
+        
+          <div class="hotel-summary-card">
+            <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px;">
+              <div style="flex:1;min-width:0;">
+                <div style="font-size:11px;font-weight:700;color:var(--green);letter-spacing:0.04em;margin-bottom:2px;">🏨 Day 3（3/29–3/30 住宿 1 晚・一泊二食）</div>
+                <div style="font-size:14px;font-weight:700;color:var(--text);">銀山溫泉 御宿やなだ屋 (Oyado Yanadaya)</div>
+                <div style="font-size:12px;color:var(--sub);margin-top:2px;">〒999-4333 山形県尾花沢市銀山新畑416</div>
+                <div style="font-size:11.5px;color:var(--accent);margin-top:2px;">📍 JR 大石田站轉乘旅館接駁車或銀山花笠號巴士（約 35–40 分鐘）</div>
+              </div>
+              <button type="button" class="fx-pill hotel-taxi-card-btn" data-hotel-idx="1" style="white-space:nowrap;padding:6px 10px;border-color:var(--accent);color:var(--accent);font-weight:700;background:var(--accent-soft);">🚖 司機字卡</button>
+            </div>
+          </div>
+        
+          <div class="hotel-summary-card">
+            <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px;">
+              <div style="flex:1;min-width:0;">
+                <div style="font-size:11px;font-weight:700;color:var(--green);letter-spacing:0.04em;margin-bottom:2px;">🏨 Day 4（3/30–3/31 住宿 1 晚）</div>
+                <div style="font-size:14px;font-weight:700;color:var(--text);">大和ROYNET飯店 仙台西口 PREMIER</div>
+                <div style="font-size:12px;color:var(--sub);margin-top:2px;">〒980-0021 宮城県仙台市青葉区中央3丁目7-25</div>
+                <div style="font-size:11.5px;color:var(--accent);margin-top:2px;">📍 JR 仙台站西口步行約 4 分鐘（地下鐵仙台站南 1 出口步行 1 分鐘）</div>
+              </div>
+              <button type="button" class="fx-pill hotel-taxi-card-btn" data-hotel-idx="2" style="white-space:nowrap;padding:6px 10px;border-color:var(--accent);color:var(--accent);font-weight:700;background:var(--accent-soft);">🚖 司機字卡</button>
+            </div>
+          </div>
+        
+          <a href="https://www.senat.co.jp/timetable" target="_blank" rel="noopener" style="display:flex;align-items:center;justify-content:space-between;padding:9px 10px;background:var(--bg);border:1px solid var(--line);border-radius:4px;text-decoration:none;color:var(--text);">
+            <div>
+              <div style="font-size:13px;font-weight:700;">仙台機場 Access 線 時刻表與票價指南</div>
+              <div style="font-size:11.5px;color:var(--sub);">仙台機場 SDJ ⇄ JR 仙台站最快 17 分鐘直達</div>
+            </div>
+            <span style="color:var(--sub);">↗</span>
+          </a>
+        
+          <a href="https://www.yanadaya.com/" target="_blank" rel="noopener" style="display:flex;align-items:center;justify-content:space-between;padding:9px 10px;background:var(--bg);border:1px solid var(--line);border-radius:4px;text-decoration:none;color:var(--text);">
+            <div>
+              <div style="font-size:13px;font-weight:700;">銀山溫泉「御宿やなだ屋」官方網站</div>
+              <div style="font-size:11.5px;color:var(--sub);">確認一泊二食須知與大石田站接駁資訊</div>
+            </div>
+            <span style="color:var(--sub);">↗</span>
+          </a>
+        
+          <a href="https://www.hanagasa-bus-taisho.com/ontime/" target="_blank" rel="noopener" style="display:flex;align-items:center;justify-content:space-between;padding:9px 10px;background:var(--bg);border:1px solid var(--line);border-radius:4px;text-decoration:none;color:var(--text);">
+            <div>
+              <div style="font-size:13px;font-weight:700;">銀山はながさ号（大石田站 ⇄ 銀山溫泉巴士時刻表）</div>
+              <div style="font-size:11.5px;color:var(--sub);">尾花澤市營巴士時刻與票價查詢（單程 ¥1,000）</div>
+            </div>
+            <span style="color:var(--sub);">↗</span>
+          </a>
+        
+          <a href="https://loople-sendai.jp/tw/" target="_blank" rel="noopener" style="display:flex;align-items:center;justify-content:space-between;padding:9px 10px;background:var(--bg);border:1px solid var(--line);border-radius:4px;text-decoration:none;color:var(--text);">
+            <div>
+              <div style="font-size:13px;font-weight:700;">盧葡兒仙台 (Loople Sendai) 觀光巴士路線與時刻表</div>
+              <div style="font-size:11.5px;color:var(--sub);">串聯瑞鳳殿、仙台城跡、大崎八幡宮、定禪寺通</div>
+            </div>
+            <span style="color:var(--sub);">↗</span>
+          </a>
+        
+        <div style="margin-top:4px;">
+          <button type="button" id="toggle-ticket-url-btn" class="fx-pill" style="width:100%;padding:6px;">
+            ＋ 設定電子票券資料夾網址（Google Drive / Notion）
+          </button>
+          <div id="ticket-url-form" style="display:none;margin-top:8px;">
+            <input type="url" id="ticket-url-input" class="form-input" placeholder="貼上雲端資料夾網址 https://..." value="" style="margin-bottom:6px;" />
+            <button type="button" id="save-ticket-url-btn" class="btn-primary" style="margin:0;">儲存票券資料夾網址</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. 天氣說明（可摺疊） -->
+      <div class="accordion-header collapsed" data-target="more-wx-body">
+        <span class="acc-title">3 · 3月下旬仙台・松島・銀山溫泉氣候指南</span>
+        <span class="accordion-arrow">▾</span>
+      </div>
+      <div id="more-wx-body" class="card accordion-body collapsed">
+        <div style="font-size:13.5px;font-weight:700;margin-bottom:4px;">仙台市區（青葉通・松島）＆ 山形縣尾花澤（銀山溫泉）</div>
+        <p style="font-size:12.5px;color:var(--sub);margin-bottom:8px;">
+          3 月底東北正值冬春交替之際，仙台市區白天約 10°C–14°C、早晚約 2°C–5°C；而 Day 3 前往山形「銀山溫泉」山區氣溫約 -1°C–7°C，河畔夜晚點燈時體感寒冷且地面可能有殘雪或濕滑，建議採用「洋蔥式穿搭（發熱衣＋毛衣/刷毛層＋防風保暖大衣或羽絨外套）」並穿防滑好走的鞋子。即時氣溫與降雨機率請按右上角「☀ 天氣」。
+        </p>
+        <button type="button" id="more-open-weather-btn" class="btn-secondary" style="margin:0;">查看右上角即時天氣預報</button>
+      </div>
+
+      <!-- 4. 關鍵提醒（可摺疊） -->
+      <div class="accordion-header collapsed" data-target="more-reminders-wrap">
+        <span class="acc-title">4 · 交通與行程關鍵提醒</span>
+        <span class="accordion-arrow">▾</span>
+      </div>
+      <div id="more-reminders-wrap" class="accordion-body collapsed" style="display:flex;flex-direction:column;gap:8px;">
+        <div id="more-reminders" style="display:flex;flex-direction:column;gap:8px;">
+        <div class="card">
+          <div style="font-size:13.5px;font-weight:700;color:var(--accent);margin-bottom:4px;">三間飯店完美銜接＆銀山溫泉輕裝攻略</div>
+          <div style="font-size:12.5px;color:var(--text);margin-bottom:4px;">Day 1–2「仙台東大都會大飯店」直通仙台站東口 3F；Day 4「大和ROYNET仙台西口 PREMIER」在西口步行 4 分鐘。</div>
+          <div style="font-size:12.5px;color:var(--sub);">Day 3 前往「銀山溫泉 御宿やなだ屋」強烈建議將大件行李寄放於仙台站或先拿去 Day 4 大和ROYNET寄放，只帶一晚輕便背包搭車去大石田站！</div>
+        </div>
+      
+        <div class="card">
+          <div style="font-size:13.5px;font-weight:700;color:var(--accent);margin-bottom:4px;">星宇 JX862 / JX863 轉乘 ＆ 銀山溫泉接駁提醒</div>
+          <div style="font-size:12.5px;color:var(--text);margin-bottom:4px;">去程 JX862 抵達仙台機場後，走 2F 連通道搭 Access 線約 17–25 分鐘即達仙台站；回程 JX863 請預留 2.5 小時前抵達仙台機場。</div>
+          <div style="font-size:12.5px;color:var(--sub);">銀山溫泉「御宿やなだ屋」如有預約大石田站接駁，請再次核對抵達大石田站的 JR 班次時間；溫泉街小店多僅收日圓現金，記得備妥零錢與千元鈔。</div>
+        </div>
+      </div>
+      </div>
+
+      <!-- 5. 緊急聯絡（可摺疊） -->
+      <div class="accordion-header collapsed" data-target="more-emergency-wrap">
+        <span class="acc-title">5 · 緊急聯絡電話</span>
+        <span class="accordion-arrow">▾</span>
+      </div>
+      <div id="more-emergency-wrap" class="card accordion-body collapsed" style="display:flex;flex-direction:column;gap:8px;">
+        <div id="more-emergency" style="display:flex;flex-direction:column;gap:8px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;padding-bottom:8px;border-bottom:1px solid var(--line);">
+          <div>
+            <div style="font-size:13px;font-weight:700;">日本警察局（緊急報案）</div>
+            <div style="font-size:11.5px;color:var(--sub);">發生事故、遺失物報案</div>
+          </div>
+          <a href="tel:110" class="fx-pill" style="text-decoration:none;color:var(--accent);font-weight:700;white-space:nowrap;">📞 110</a>
+        </div>
+      
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;padding-bottom:8px;border-bottom:1px solid var(--line);">
+          <div>
+            <div style="font-size:13px;font-weight:700;">日本救護車／消防局</div>
+            <div style="font-size:11.5px;color:var(--sub);">急病、受傷需救護車支援</div>
+          </div>
+          <a href="tel:119" class="fx-pill" style="text-decoration:none;color:var(--accent);font-weight:700;white-space:nowrap;">📞 119</a>
+        </div>
+      
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;padding-bottom:8px;border-bottom:1px solid var(--line);">
+          <div>
+            <div style="font-size:13px;font-weight:700;">台北駐日經濟文化代表處（東京本處・轄東北）</div>
+            <div style="font-size:11.5px;color:var(--sub);">急難救助專線：+81-80-1009-7179 ／ +81-80-1009-7436</div>
+          </div>
+          <a href="tel:+81-3-3280-7811" class="fx-pill" style="text-decoration:none;color:var(--accent);font-weight:700;white-space:nowrap;">📞 +81-3-3280-7811</a>
+        </div>
+      
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;padding-bottom:8px;border-bottom:1px solid var(--line);">
+          <div>
+            <div style="font-size:13px;font-weight:700;">外交部旅外國人急難救助專線</div>
+            <div style="font-size:11.5px;color:var(--sub);">日本當地撥打全球免付費：001-800-0885-0885</div>
+          </div>
+          <a href="tel:+886-800-085-095" class="fx-pill" style="text-decoration:none;color:var(--accent);font-weight:700;white-space:nowrap;">📞 +886-800-085-095</a>
+        </div>
+      
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;padding-bottom:8px;border-bottom:1px solid var(--line);">
+          <div>
+            <div style="font-size:13px;font-weight:700;">日本政府觀光局 (JNTO) 24小時醫療熱線</div>
+            <div style="font-size:11.5px;color:var(--sub);">提供中文電話口譯與東北就醫指引</div>
+          </div>
+          <a href="tel:050-3816-2787" class="fx-pill" style="text-decoration:none;color:var(--accent);font-weight:700;white-space:nowrap;">📞 050-3816-2787</a>
+        </div>
+      </div>
+      </div>
+
+      <!-- 6. Supabase 雲端同步與唯讀診斷（可摺疊） -->
+      <div class="accordion-header collapsed" data-target="more-supa-wrap">
+        <span class="acc-title">6 · SUPABASE 雲端同步與診斷</span>
+        <span class="accordion-arrow">▾</span>
+      </div>
+      <div id="more-supa-wrap" class="card accordion-body collapsed">
+        <div class="supa-status-card">
+          <div class="supa-status-row">
+            <div class="supa-status-info">
+              <span class="sync-dot-live" id="sync-dot-live"></span>
+              <span id="sync-text-live" style="font-size:13px;font-weight:700;color:var(--text);">雲端連線正常</span>
+            </div>
+            <button type="button" id="header-sync-status" class="fx-pill" style="font-weight:700;color:var(--accent);border-color:var(--accent);background:var(--accent-soft);">🔍 立即診斷連線</button>
+          </div>
+          <div style="font-size:11.5px;color:var(--sub);margin-top:6px;">
+            專屬旅冊房間：<code>sendai_2027_couple</code>（與越南 main、大阪 osaka_2026_couple 完全隔離）
+          </div>
+        </div>
+
+        <div style="font-size:13px;font-weight:700;margin-bottom:4px;">雙人手機即時同步（已預設連接共用 Supabase）</div>
+        <p style="font-size:12px;color:var(--sub);margin-bottom:8px;">
+          已自動連通您的 Supabase 後台（資料表 <code>trip_store</code>，專屬隔離代號 <code>id="sendai_2027_couple"</code>），與越南專案（<code>id="main"</code>）及大阪專案（<code>id="osaka_2026_couple"</code>）100% 獨立互不干擾，打開即可雙向同步！
+        </p>
+        <button type="button" id="diag-test-btn" class="btn-secondary">立即測試同步（唯讀診斷，不寫入資料）</button>
+        <div id="diag-result-box" style="font-size:12px;color:var(--sub);margin:6px 0 10px 0;padding:8px;background:var(--bg);border:1px solid var(--line);border-radius:4px;display:none;"></div>
+
+        <button type="button" id="supa-toggle-config-btn" class="btn-secondary" style="margin-bottom:0;">展開／檢視 Supabase 連線設定 ＆ 備份碼</button>
+        <div id="supa-config-panel" style="display:none;margin-top:10px;padding-top:10px;border-top:1px solid var(--line);">
+          <div class="form-field">
+            <label class="form-label" for="supa-url-input">Supabase Project URL</label>
+            <input type="url" id="supa-url-input" class="form-input" placeholder="https://xxxx.supabase.co" />
+          </div>
+          <div class="form-field">
+            <label class="form-label" for="supa-key-input">Supabase Anon Public Key</label>
+            <input type="text" id="supa-key-input" class="form-input" placeholder="eyJhbGciOiJIUzI1NiIsInR5..." />
+          </div>
+          <div class="form-field">
+            <label class="form-label" for="supa-room-input">專屬旅冊代號（與越南/大阪完全隔離）</label>
+            <input type="text" id="supa-room-input" class="form-input" value="sendai_2027_couple" />
+          </div>
+          <button type="submit" id="supa-save-btn" class="btn-primary">儲存並立即連線同步</button>
+          <button type="button" id="supa-copy-sql-btn" class="btn-secondary">📋 一鍵複製 Supabase 建表 SQL 語法</button>
+          <div style="margin-top:10px;padding-top:10px;border-top:1px dashed var(--line);">
+            <div style="font-size:12px;font-weight:700;margin-bottom:6px;">免後端快速傳送：一鍵複製／貼上旅冊資料碼</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;">
+              <button type="button" id="export-json-btn" class="btn-secondary" style="margin:0;">複製目前資料碼</button>
+              <button type="button" id="import-json-btn" class="btn-secondary" style="margin:0;">貼上對方資料碼</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 7. 身份與匯率設定（可摺疊） -->
+      <div class="accordion-header collapsed" data-target="more-id-wrap">
+        <span class="acc-title">7 · 身份與匯率設定</span>
+        <span class="accordion-arrow">▾</span>
+      </div>
+      <div id="more-id-wrap" class="card accordion-body collapsed">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+          <span style="font-size:13px;">目前這支手機的身份：<strong id="more-current-user" style="color:var(--accent);">未選擇</strong></span>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;">
+          <button type="button" id="switch-to-husband-btn" class="btn-secondary" style="margin:0;padding:10px;">切換為 老公</button>
+          <button type="button" id="switch-to-wife-btn" class="btn-secondary" style="margin:0;padding:10px;">切換為 老婆</button>
+        </div>
+        <div id="switch-user-msg" class="form-error" style="margin-bottom:8px;"></div>
+        <button type="button" id="refresh-fx-btn" class="btn-secondary" style="margin:0;">重新整理即時日圓匯率</button>
+      </div>
+    </section>
+  </div>
+
+  <!-- 仙台＆銀山溫泉飯店計程車大字卡浮出視窗 -->
+  <div id="hotel-modal-backdrop" class="app-modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="hotel-modal-title">
+    <div class="app-modal-sheet" style="max-width:440px;">
+      <div class="app-modal-head">
+        <span id="hotel-modal-title" class="app-modal-title">🚖 飯店計程車卡・地址導航</span>
+        <button type="button" id="hotel-modal-close" class="app-modal-close" aria-label="關閉">✕</button>
+      </div>
+      <div class="taxi-box">
+        <div id="hotel-modal-nights" style="font-size:11.5px;font-weight:700;color:var(--green);margin-bottom:4px;"></div>
+        <div style="font-size:11.5px;color:var(--sub);margin-bottom:3px;">飯店日文名稱：</div>
+        <div class="taxi-jp-name" id="hotel-jp-name">ホテルメトロポリタン仙台イースト</div>
+        <div style="font-size:11.5px;color:var(--sub);margin-bottom:2px;">飯店日文地址：</div>
+        <div class="taxi-jp-addr" id="hotel-full-addr">〒980-8487 宮城県仙台市青葉区中央1丁目1-1</div>
+        <div style="font-size:11.5px;color:var(--sub);margin-bottom:4px;">請直接出示這行給日本司機或站務員看：</div>
+        <div class="taxi-driver-phrase" id="hotel-driver-phrase">「JR仙台駅東口直結の『ホテルメトロポリタン仙台イースト』までお願いします。」</div>
+      </div>
+      <div style="display:flex;gap:8px;">
+        <button type="button" id="hotel-copy-addr-btn" class="btn-primary" style="margin:0;">📋 複製日文地址</button>
+        <a id="hotel-map-link" href="https://www.google.com/maps/search/?api=1&query=%E3%83%9B%E3%83%86%E3%83%AB%E3%83%A1%E3%83%88%E3%83%AD%E3%83%9D%E3%83%AA%E3%82%BF%E3%83%B3%E4%BB%99%E5%8F%B0%E3%82%A4%E3%83%BC%E3%82%B9%E3%83%88" target="_blank" rel="noopener" class="btn-secondary" style="margin:0;display:inline-flex;align-items:center;justify-content:center;text-decoration:none;">🗺️ 開啟 Google 地圖</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- 口袋名單加入行程浮出視窗 -->
+  <div id="pl-to-tl-modal-backdrop" class="app-modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="pl-to-tl-title">
+    <form id="pl-to-tl-form" class="app-modal-sheet" style="max-width:420px;" novalidate>
+      <div class="app-modal-head">
+        <span id="pl-to-tl-title" class="app-modal-title">＋ 將景點排入行程</span>
+        <button type="button" id="pl-to-tl-close" class="app-modal-close" aria-label="關閉">✕</button>
+      </div>
+      <input type="hidden" id="pl-to-tl-name" value="" />
+      <input type="hidden" id="pl-to-tl-note" value="" />
+      <div style="font-size:14.5px;font-weight:700;color:var(--text);margin-bottom:10px;" id="pl-to-tl-target-name"></div>
+      <div class="form-field">
+        <label class="form-label" for="pl-to-tl-day">選擇排在哪一天</label>
+        <select id="pl-to-tl-day" class="form-select">
+          <option value="0">Day 1 · 3/27 (六) 抵達仙台・入住仙台東大都會</option>
+          <option value="1">Day 2 · 3/28 (日) 仙台・松島海岸（續住東大都會）</option>
+          <option value="2">Day 3 · 3/29 (一) 銀山溫泉・入住御宿やなだ屋</option>
+          <option value="3">Day 4 · 3/30 (二) 返回仙台・入住大和ROYNET西口</option>
+          <option value="4">Day 5 · 3/31 (三) 仙台朝市・採買・JX863返台</option>
+        </select>
+      </div>
+      <div class="form-field">
+        <label class="form-label" for="pl-to-tl-time">預計時間</label>
+        <input type="text" id="pl-to-tl-time" class="form-input" value="12:00" placeholder="例如：12:00 或 18:30" />
+      </div>
+      <button type="submit" class="btn-primary">排入時間表</button>
+      <button type="button" id="pl-to-tl-cancel" class="btn-secondary">取消</button>
+    </form>
+  </div>
+
+  <!-- 3.3 第一次開啟全螢幕選擇「我是誰」 -->
+  <div id="identity-modal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="id-modal-title">
+    <div class="card" style="width:100%;max-width:360px;padding:20px 16px;text-align:center;">
+      <div class="eyebrow" style="margin-bottom:6px;">SENDAI · GINZAN ONSEN · 2027.03.27–03.31</div>
+      <h2 id="id-modal-title" style="font-size:17px;margin-bottom:6px;">請問這支手機是誰在使用？</h2>
+      <p style="font-size:12.5px;color:var(--sub);margin-bottom:16px;">
+        選好後會鎖定在這支手機，方便記錄各自的行前打勾與記帳付款人（之後可在「更多」分頁查看或切換）。
+      </p>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+        <button type="button" class="btn-primary id-select-btn" data-member="老公" style="margin:0;padding:14px 10px;font-size:15px;">我是 老公</button>
+        <button type="button" class="btn-primary id-select-btn" data-member="老婆" style="margin:0;padding:14px 10px;font-size:15px;background:var(--accent);border-color:var(--accent);">我是 老婆</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- M4 小卡全螢幕放大層 -->
+  <div id="phrase-modal" class="modal-overlay" role="dialog" aria-modal="true">
+    <div class="phrase-zoom-box">
+      <div style="display:flex;align-items:center;justify-content:space-between;">
+        <span id="zoom-cat" class="place-tag">點餐</span>
+        <button type="button" id="zoom-close-btn" class="btn-secondary" style="width:auto;margin:0;padding:5px 12px;font-weight:700;">✕ 關閉</button>
+      </div>
+      <div>
+        <div style="font-size:11.5px;color:var(--sub);">請給店員或司機看這行日文：</div>
+        <div id="zoom-jp" class="zoom-jp"></div>
+        <div id="zoom-zh" class="zoom-zh"></div>
+        <div id="zoom-pron" class="zoom-pron"></div>
+      </div>
+      <div>
+        <div id="zoom-feedback" style="font-size:12px;color:var(--green);min-height:18px;margin-bottom:6px;text-align:center;"></div>
+        <button type="button" id="zoom-speak-btn" class="btn-primary">🔊 念給店員聽（日文語音）</button>
+        <button type="button" id="zoom-copy-btn" class="btn-secondary" style="margin-bottom:0;">📋 複製這句日文</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 底部五分頁固定導覽列 -->
+  <nav class="bottom-nav" aria-label="主導覽列">
+    <div class="bottom-nav-inner">
+      <button type="button" class="nav-tab active" data-tab="tl">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        <span>時間表</span>
+      </button>
+      <button type="button" class="nav-tab" data-tab="exp">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+        <span>記帳</span>
+      </button>
+      <button type="button" class="nav-tab" data-tab="pl">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        <span>美食</span>
+      </button>
+      <button type="button" class="nav-tab" data-tab="card">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        <span>小卡</span>
+      </button>
+      <button type="button" class="nav-tab" data-tab="more">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/><circle cx="5" cy="12" r="1.5"/></svg>
+        <span>更多</span>
+      </button>
+    </div>
+  </nav>
+
+  <script src="./data.js"></script>
+  <script src="./app.js"></script>
+</body>
+</html>
