@@ -359,9 +359,9 @@
   };
 
   // 推送至雲端 (Upsert)
-  window.pushToSupabaseAsync = async function () {
+  window.pushToSupabaseAsync = async function (silent = false) {
     const cfg = getSupaConfig();
-    if (!cfg.url || !cfg.key) return;
+    if (!cfg.url || !cfg.key) return { ok: false, msg: '尚未設定 Supabase URL 或 Key' };
     const safeRoom = sanitizeRoomId(cfg.room);
     const cleanPayload = sanitizeStateForCloud(C.getState());
     const endpoint = `${cfg.url.replace(/\/$/, '')}/rest/v1/trip_store?on_conflict=id`;
@@ -381,10 +381,14 @@
       });
       if (!res.ok) throw new Error('HTTP ' + res.status);
       if (window.updateSyncStatusUI) window.updateSyncStatusUI(true, '雲端已連線');
+      return { ok: true, msg: `已成功同步上傳至雲端房間 (${safeRoom})` };
     } catch (err) {
       console.warn('雲端同步推播暫時離線', err);
       if (window.updateSyncStatusUI) window.updateSyncStatusUI(false, '本機儲存中');
-      C.showSyncBanner('雲端暫時無法連線，已安全保存在這支手機');
+      if (!silent) {
+        C.showSyncBanner('雲端暫時無法連線，已安全保存在本機');
+      }
+      return { ok: false, msg: `上傳失敗 (${err.message})` };
     }
   };
 
@@ -399,19 +403,23 @@
     const endpoint = `${cfg.url.replace(/\/$/, '')}/rest/v1/trip_store?id=eq.${encodeURIComponent(safeRoom)}&select=id,data`;
     try {
       const res = await fetch(endpoint, {
+        method: 'GET',
         headers: {
           'apikey': cfg.key,
           'Authorization': `Bearer ${cfg.key}`
         },
         cache: 'no-store'
       });
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      if (!res.ok) {
+        if (window.updateSyncStatusUI) window.updateSyncStatusUI(false, '雲端回應異常');
+        return { ok: false, msg: `雲端回應狀態碼 HTTP ${res.status}（請檢查資料表 trip_store 或 RLS 權限）` };
+      }
       const rows = await res.json();
       if (window.updateSyncStatusUI) window.updateSyncStatusUI(true, '雲端已連線');
 
       if (isDiagnosticOnly) {
         if (!rows || rows.length === 0) {
-          return { ok: true, msg: `唯讀診斷成功：Supabase (trip_store / id="${safeRoom}") 連線正常！雲端尚無初始紀錄，未寫入任何資料，且與越南 (main)、大阪 (osaka_2026_couple) 100% 獨立隔離。` };
+          return { ok: true, msg: `唯讀診斷成功：Supabase (trip_store / id="${safeRoom}") 連線正常！雲端尚無初始紀錄，點「🔄 立即雙向同步」即可將本機初始行程推上雲端。` };
         }
         const updTime = rows[0].data && rows[0].data.upd ? new Date(rows[0].data.upd).toLocaleString('zh-TW') : '已同步';
         return { ok: true, msg: `唯讀診斷成功：Supabase (trip_store / id="${safeRoom}") 連線正常！最後更新：${updTime}` };
@@ -422,15 +430,26 @@
         C.setState(merged);
         C.saveLocalState(false);
         if (window.renderAll) window.renderAll();
-        return { ok: true, msg: '雲端同步成功！已載入最新仙台旅冊資料' };
+        return { ok: true, msg: '✓ 雲端同步成功！已合併最新仙台旅冊資料' };
       }
-      // 若該房間尚無遠端紀錄，先將本機資料推上
-      await window.pushToSupabaseAsync();
-      return { ok: true, msg: '已成功在雲端初始化仙台專屬旅冊！' };
+      return { ok: true, empty: true, msg: '雲端連線正常（尚無遠端紀錄）' };
     } catch (err) {
       if (window.updateSyncStatusUI) window.updateSyncStatusUI(false, '本機離線中');
-      return { ok: false, msg: `連線失敗，目前處於離線快取模式 (${err.message})` };
+      const isSandbox = (location.protocol === 'about:' || location.protocol === 'file:' || location.protocol === 'blob:');
+      const hint = isSandbox
+        ? '目前在內嵌預覽沙盒中（沙盒限制外部網路連線），請在正式瀏覽器開啟或使用下方「資料碼複製/貼上」功能。'
+        : '請確認網路連線，或檢查 Supabase 後台專案 (vkczkibsqppyrivvafjk) 是否因免費版超過 7 天未活動而進入 Paused 休眠狀態（至 Supabase 點 Restore project 即可喚醒）。';
+      return { ok: false, msg: `無法連線至 Supabase (${err.message})。${hint}` };
     }
+  };
+
+  // 一鍵雙向同步（先拉取合併，再推送最新狀態上雲端）
+  window.syncNowBidirectionalAsync = async function () {
+    const pullRes = await window.pullFromSupabaseAsync(false);
+    if (!pullRes.ok) return pullRes;
+    const pushRes = await window.pushToSupabaseAsync(true);
+    if (!pushRes.ok) return pushRes;
+    return { ok: true, msg: '✓ 雙向同步完成！已拉取最新資料並將本機變更上傳至 sendai_2027_couple' };
   };
 
   // 3.1 頂部眉題與副標（依日本時間計算倒數，保持極簡乾淨）
@@ -3197,6 +3216,26 @@ create policy "Allow anon read write trip_store"
         window.renderMoreSection();
       });
     });
+
+    const syncNowBtn = document.getElementById('sync-now-btn');
+    if (syncNowBtn) {
+      syncNowBtn.addEventListener('click', async () => {
+        const box = document.getElementById('diag-result-box');
+        if (box) {
+          box.style.display = 'block';
+          box.textContent = '正在與 Supabase 執行雙向同步（拉取最新資料並上傳本機變更）...';
+        }
+        const res = await window.syncNowBidirectionalAsync();
+        const st = C.getState();
+        if (box) {
+          box.innerHTML = `
+            <div><strong>本機狀態：</strong>正常（共 ${st.expenses.length} 筆帳目、${st.places.length} 筆景點美食）</div>
+            <div style="margin-top:3px;"><strong>同步結果：</strong>${esc(res.msg)}</div>
+          `;
+        }
+        C.showSyncBanner(res.msg);
+      });
+    }
 
     document.getElementById('diag-test-btn').addEventListener('click', async () => {
       const box = document.getElementById('diag-result-box');
