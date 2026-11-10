@@ -1075,7 +1075,7 @@
             <span class="pulse-dot"></span>
             <span>NOW & NEXT · 現場即時引導</span>
           </div>
-          <span style="font-size:11px;color:var(--amber);font-family:var(--font-mono);">旅程進行中</span>
+          <span style="font-size:11px;color:var(--amber);font-family:var(--font-mono);" id="now-day-label">旅程進行中</span>
         </div>
         
         <div class="now-title-row">
@@ -2199,7 +2199,26 @@ window.HANDBOOK_DATA.emergencyContacts = [
       // =========================================================
       // 3 種 Icon 組合動態定義與切換
       // =========================================================
-      let activeIconSet = localStorage.getItem('sendai_icon_set_v26') || 'brass';
+      
+      // 安全 Storage 包裝器（防止在沙盒 iframe 中 localStorage 存取拋錯崩潰）
+      const safeStorage = {
+        get: function(key) {
+          try {
+            return (typeof window !== 'undefined' && window.localStorage) ? window.localStorage.getItem(key) : null;
+          } catch(e) {
+            return null;
+          }
+        },
+        set: function(key, val) {
+          try {
+            if (typeof window !== 'undefined' && window.localStorage) {
+              window.localStorage.setItem(key, val);
+            }
+          } catch(e) {}
+        }
+      };
+
+      let activeIconSet = safeStorage.get('sendai_icon_set_v26') || 'brass';
 
       const ICON_DEFS = {
         brass: {
@@ -2240,7 +2259,7 @@ window.HANDBOOK_DATA.emergencyContacts = [
         btn.addEventListener('click', () => {
           triggerHaptic(8);
           activeIconSet = btn.dataset.set;
-          localStorage.setItem('sendai_icon_set_v26', activeIconSet);
+          safeStorage.set('sendai_icon_set_v26', activeIconSet);
           updateAllIcons();
           renderTimeline();
         });
@@ -2326,7 +2345,7 @@ window.HANDBOOK_DATA.emergencyContacts = [
       let tripDays = [];
 
       try {
-        const savedDays = localStorage.getItem('sendai_itinerary_v24');
+        const savedDays = safeStorage.get('sendai_itinerary_v24');
         if (savedDays) {
           tripDays = JSON.parse(savedDays);
         } else if (window.HANDBOOK_DATA && window.HANDBOOK_DATA.days) {
@@ -2338,7 +2357,7 @@ window.HANDBOOK_DATA.emergencyContacts = [
 
       function saveDays() {
         try {
-          localStorage.setItem('sendai_itinerary_v24', JSON.stringify(tripDays));
+          safeStorage.set('sendai_itinerary_v24', JSON.stringify(tripDays));
         } catch(e) {}
       }
 
@@ -2357,11 +2376,16 @@ window.HANDBOOK_DATA.emergencyContacts = [
         const dayData = tripDays[currentDay];
         if (!dayData || !dayData.items || dayData.items.length === 0) return;
         const firstItem = dayData.items[0];
-        document.getElementById('now-day-label').textContent = dayData.label + ' · ' + (dayData.weekday || '');
-        document.getElementById('now-spot-title').textContent = firstItem.title || '今日旅程';
-        document.getElementById('now-spot-time').textContent = (firstItem.time || '') + (firstItem.tag ? ' · ' + firstItem.tag : '');
-        document.getElementById('now-spot-desc').textContent = firstItem.note || '點擊展開查看完整行程備忘。';
-        document.getElementById('now-map-link').href = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(firstItem.q || firstItem.title)}`;
+        const elLabel = document.getElementById('now-day-label');
+        if (elLabel) elLabel.textContent = (dayData.label || 'Day 1') + ' · ' + (dayData.weekday || '');
+        const elTitle = document.getElementById('now-spot-title');
+        if (elTitle) elTitle.textContent = firstItem.title || '今日旅程';
+        const elTime = document.getElementById('now-spot-time');
+        if (elTime) elTime.textContent = (firstItem.time || '') + (firstItem.tag ? ' · ' + firstItem.tag : '');
+        const elDesc = document.getElementById('now-spot-desc');
+        if (elDesc) elDesc.textContent = firstItem.note || '點擊展開查看完整行程備忘。';
+        const elLink = document.getElementById('now-map-link');
+        if (elLink) elLink.href = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(firstItem.q || firstItem.title)}`;
       }
 
       function renderTimeline() {
@@ -2522,7 +2546,7 @@ window.HANDBOOK_DATA.emergencyContacts = [
       // =========================================================
       let allExpenses = [];
       try {
-        const savedExp = localStorage.getItem('sendai_expenses_v24');
+        const savedExp = safeStorage.get('sendai_expenses_v24');
         if (savedExp) {
           allExpenses = JSON.parse(savedExp);
         } else {
@@ -2570,7 +2594,7 @@ window.HANDBOOK_DATA.emergencyContacts = [
 
       function saveExpenses() {
         try {
-          localStorage.setItem('sendai_expenses_v24', JSON.stringify(allExpenses));
+          safeStorage.set('sendai_expenses_v24', JSON.stringify(allExpenses));
         } catch(e) {}
       }
 
@@ -2762,7 +2786,7 @@ window.HANDBOOK_DATA.emergencyContacts = [
       // =========================================================
       let allTickets = [];
       try {
-        const savedTkts = localStorage.getItem('sendai_tickets_v24');
+        const savedTkts = safeStorage.get('sendai_tickets_v24');
         if (savedTkts) {
           allTickets = JSON.parse(savedTkts);
         } else {
@@ -2797,7 +2821,7 @@ window.HANDBOOK_DATA.emergencyContacts = [
 
       function saveTickets() {
         try {
-          localStorage.setItem('sendai_tickets_v24', JSON.stringify(allTickets));
+          safeStorage.set('sendai_tickets_v24', JSON.stringify(allTickets));
         } catch(e) {}
       }
 
