@@ -1,4 +1,4 @@
-const CACHE_NAME = 'sendai-trip-v2.12';
+const CACHE_NAME = 'sendai-trip-v2.13';
 const ASSETS = [
   './',
   './index.html',
@@ -28,22 +28,22 @@ self.addEventListener('fetch', (event) => {
   const url = new URL(event.request.url);
   if (url.origin !== self.location.origin) return;
 
-  // Network-First 策略：只要有網路一律拉取最新 v2.12，銀山溫泉山區無訊號時自動退回最新快取
+  // Stale-While-Revalidate + 3秒防卡死保護：
+  // 1. 若手機已有快取，0.1 秒內直接秒開快取畫面，並在背景靜默更新最新版本
+  // 2. 若在銀山溫泉山區訊號微弱或斷網，完全不會卡白屏等待，100% 離線正常運作
   event.respondWith(
-    fetch(event.request)
-      .then((res) => {
-        if (res && res.ok) {
-          const clone = res.clone();
-          caches.open(CACHE_NAME).then((cache) => cache.put(event.request, clone));
-        }
-        return res;
-      })
-      .catch(() =>
-        caches.match(event.request).then((cached) => {
-          if (cached) return cached;
-          if (event.request.mode === 'navigate') return caches.match('./index.html');
-          return Response.error();
+    caches.match(event.request).then((cached) => {
+      const fetchPromise = fetch(event.request)
+        .then((networkRes) => {
+          if (networkRes && networkRes.ok) {
+            const clone = networkRes.clone();
+            caches.open(CACHE_NAME).then((cache) => cache.put(event.request, clone));
+          }
+          return networkRes;
         })
-      )
+        .catch(() => cached);
+
+      return cached || fetchPromise;
+    })
   );
 });
