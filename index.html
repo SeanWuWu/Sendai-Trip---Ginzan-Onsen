@@ -6,7 +6,7 @@
   <meta name="theme-color" content="#131922" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
-  <title>仙台・銀山溫泉 雙人旅誌｜大正雲端同步版 v2.15</title>
+  <title>仙台・銀山溫泉 雙人旅誌｜大正雲端同步版 v2.16</title>
   <link rel="manifest" href="./manifest.json" />
   <link rel="icon" type="image/png" href="./icon-192.png" />
   <link rel="apple-touch-icon" href="./apple-touch-icon.png" />
@@ -1642,7 +1642,7 @@
 
     /* 2. 記帳列表底部預留安全空間，避免最後一筆展開時被右下角 + 鈕遮擋 */
     #pane-wallet {
-      padding-bottom: 64px !important;
+      padding-bottom: 92px !important;
     }
 
     /* 4. 記帳分類橫向快篩列 */
@@ -1897,6 +1897,851 @@
       fill-opacity: 0.34;
     }
 
+    /* =========================================================
+       v2.16 大正煤氣燈琥珀金優化樣式（方格導覽・極簡彈窗・古銅清單・置中提示・收合時刻表）
+       ========================================================= */
+    /* 1. 頂部膠囊觸控微互動與最右側大正瓦斯燈號同步按鈕 */
+    .pill-trigger-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      cursor: pointer;
+      padding: 2px 5px;
+      border-radius: 999px;
+      transition: background 0.16s ease;
+    }
+    .pill-trigger-chip:active {
+      background: rgba(226, 166, 84, 0.22);
+    }
+    .sync-dot-btn {
+      width: 32px !important;
+      height: 32px !important;
+      border-radius: 50% !important;
+      padding: 0 !important;
+      background: rgba(25, 33, 46, 0.92) !important;
+      border: 1px solid var(--border-brass) !important;
+      box-shadow: inset 0 1px 0 rgba(255, 232, 184, 0.14), 0 0 12px rgba(226, 166, 84, 0.12) !important;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+    .cloud-led-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: #8B7355;
+      border: 1px solid rgba(255, 232, 184, 0.45);
+      transition: all 0.28s ease;
+      display: block;
+    }
+    /* 已同步：大正瓦斯燈暖琥珀金常亮 */
+    .cloud-led-dot.is-synced {
+      background: var(--amber);
+      border-color: #FFE8B8;
+      box-shadow: 0 0 9px rgba(226, 166, 84, 0.9), 0 0 3px #FFE8B8;
+    }
+    /* 同步中：亮金呼吸脈衝 */
+    .cloud-led-dot.is-syncing {
+      background: #FFD48F;
+      border-color: #FFF4DC;
+      box-shadow: 0 0 11px rgba(255, 212, 143, 0.95);
+      animation: ledPulse 1.1s infinite ease-in-out;
+    }
+    /* 離線快取：溫潤銀山古朱紅 (取代刺眼亮紅) */
+    .cloud-led-dot.is-offline {
+      background: var(--vermilion);
+      border-color: rgba(255, 196, 184, 0.55);
+      box-shadow: 0 0 8px rgba(194, 74, 74, 0.65);
+    }
+    /* 待命未綁定：古銅微光 */
+    .cloud-led-dot.is-idle {
+      background: #8B7355;
+      border-color: rgba(226, 166, 84, 0.35);
+      box-shadow: none;
+    }
+    @keyframes ledPulse {
+      0%, 100% { opacity: 0.45; transform: scale(0.86); }
+      50% { opacity: 1; transform: scale(1.22); }
+    }
+
+    /* 3. 記帳總覽分類佔比條（大正和色系：琥珀金・青葉松綠・古朱紅・深靛藍・古銅褐） */
+    .wallet-hero-compact {
+      flex-direction: column !important;
+      align-items: stretch !important;
+      gap: 9px !important;
+    }
+    .wallet-hero-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+    .wallet-hero-right {
+      text-align: right;
+      flex-shrink: 0;
+    }
+    .wallet-pct-sub {
+      font-size: 10.5px;
+      color: var(--amber);
+      font-family: var(--font-mono);
+      font-weight: 600;
+      margin-top: 1px;
+      white-space: nowrap;
+    }
+    .wallet-breakdown-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      padding-top: 8px;
+      border-top: 1px dashed rgba(226, 166, 84, 0.25);
+    }
+    .wallet-breakdown-bar {
+      width: 100%;
+      height: 7px;
+      border-radius: 4px;
+      background: rgba(12, 16, 24, 0.65);
+      border: 1px solid rgba(226, 166, 84, 0.22);
+      overflow: hidden;
+      display: flex;
+      gap: 1px;
+    }
+    .wallet-breakdown-seg {
+      height: 100%;
+      transition: width 0.3s ease, opacity 0.2s ease;
+      cursor: pointer;
+    }
+    .wallet-breakdown-seg.dimmed {
+      opacity: 0.22;
+    }
+    .wallet-breakdown-legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px 10px;
+      font-size: 10.5px;
+      color: var(--text-sub);
+      font-family: var(--font-mono);
+    }
+    .wallet-legend-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: opacity 0.18s ease;
+    }
+    .wallet-legend-item.dimmed {
+      opacity: 0.38;
+    }
+    .wallet-cat-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 2px;
+      border: 1px solid rgba(255, 232, 184, 0.35);
+      flex-shrink: 0;
+    }
+    .exp-day-badge {
+      display: inline-block;
+      font-family: var(--font-mono);
+      font-size: 10px;
+      font-weight: 700;
+      padding: 1px 5px;
+      border-radius: 4px;
+      background: var(--amber-soft);
+      border: 1px solid var(--border-brass);
+      color: var(--amber);
+      margin-right: 4px;
+      vertical-align: 1px;
+    }
+
+    /* 4. 彈窗精簡化與大正方格按鍵（與步進器 .stepper-btn 完全同調） */
+    .modal-inline-CurrRow {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 5px;
+    }
+    .modal-curr-switch {
+      display: inline-flex;
+      gap: 4px;
+    }
+    .modal-pill-group {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 5px;
+    }
+    .modal-pill-group.cols-6 {
+      grid-template-columns: repeat(6, 1fr);
+    }
+    .modal-seg-pill {
+      padding: 6px 4px;
+      border-radius: var(--radius-sm);
+      background: rgba(18, 24, 34, 0.78);
+      border: 1px solid var(--border-brass);
+      color: var(--text-sub);
+      font-size: 11.5px;
+      font-weight: 600;
+      text-align: center;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.16s ease;
+    }
+    .modal-curr-switch .modal-seg-pill {
+      padding: 3px 9px;
+      font-size: 11px;
+      font-family: var(--font-mono);
+    }
+    .modal-seg-pill.active {
+      background: linear-gradient(145deg, rgba(226, 166, 84, 0.34), rgba(28, 36, 50, 0.95));
+      border: 1.5px solid var(--amber);
+      color: #FFE8B8;
+      font-weight: 800;
+      box-shadow: 0 0 12px rgba(226, 166, 84, 0.28), inset 0 1px 0 rgba(255, 232, 184, 0.35);
+    }
+    .modal-seg-pill:active {
+      transform: scale(0.95);
+    }
+    .modal-amt-reset-btn {
+      padding: 4px 8px;
+      border-radius: 6px;
+      background: rgba(226, 166, 84, 0.12);
+      border: 1px solid var(--border-brass);
+      color: var(--amber);
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+      white-space: nowrap;
+      flex-shrink: 0;
+      margin-left: 6px;
+    }
+    .modal-amt-reset-btn:active {
+      background: var(--amber);
+      color: #12151A;
+    }
+    .modal-q-head-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 4px;
+    }
+    .modal-inline-helper-btn {
+      padding: 2px 8px;
+      border-radius: 6px;
+      background: var(--amber-soft);
+      border: 1px solid var(--border-brass);
+      color: var(--amber);
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .modal-inline-helper-btn:active {
+      background: var(--amber);
+      color: #12151A;
+    }
+
+    /* 5. 票券分頁四段方格導覽列（與 Day 1~5 .day-chip-btn 方格 + 和洋立體 SVG 完全統一） */
+    .pocket-sub-nav {
+      display: flex;
+      gap: clamp(4px, 1.4vw, 8px);
+      padding: 4px clamp(8px, 2.8vw, 16px) 14px clamp(8px, 2.8vw, 16px);
+    }
+    .pocket-sub-tab {
+      flex: 1;
+      min-width: 0;
+      padding: 9px 4px 7px 4px;
+      border-radius: var(--radius-md);
+      background: rgba(20, 27, 38, 0.54);
+      border: 1px solid var(--border-sub);
+      color: var(--text-sub);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      cursor: pointer;
+      white-space: nowrap;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      position: relative;
+      transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .pocket-sub-tab .sub-tab-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--amber);
+      height: 24px;
+    }
+    .pocket-sub-tab .sub-tab-icon .taisho-svg-icon {
+      width: 22px !important;
+      height: 22px !important;
+      stroke-width: 1.85;
+      transition: transform 0.2s ease, filter 0.2s ease;
+    }
+    .pocket-sub-tab .sub-tab-label {
+      font-family: var(--font-serif);
+      font-size: clamp(11px, 2.8vw, 12px);
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      line-height: 1.15;
+    }
+    .pocket-sub-tab.active {
+      background: linear-gradient(145deg, rgba(226, 166, 84, 0.32), rgba(22, 30, 44, 0.82));
+      border: 1.5px solid var(--amber) !important;
+      border-top: 2.5px solid #FFD48F !important;
+      color: var(--text-main);
+      box-shadow: 0 0 16px rgba(226, 166, 84, 0.42), inset 0 1px 0 rgba(255, 255, 255, 0.45);
+      transform: translateY(-2px);
+      z-index: 2;
+    }
+    .pocket-sub-tab.active .sub-tab-icon .taisho-svg-icon {
+      filter: drop-shadow(0 0 6px rgba(226, 166, 84, 0.55));
+      transform: scale(1.05);
+    }
+    .pocket-sub-tab.active .sub-tab-label {
+      color: #FFE8B8;
+    }
+    .pocket-sub-tab:active {
+      transform: scale(0.95);
+    }
+    .pocket-sub-pane {
+      display: none;
+    }
+    .pocket-sub-pane.active {
+      display: block;
+      animation: fadeIn 0.14s ease-out;
+    }
+
+    /* A. 記帳與指差頁「橫向分類快篩列」改為大正微圓角黃銅方格（取代橢圓實心亮黃膠囊） */
+    .cat-filter-chip {
+      background: rgba(18, 24, 34, 0.68) !important;
+      border: 1px solid var(--border-brass) !important;
+      color: var(--text-sub) !important;
+      border-radius: var(--radius-sm) !important;
+      padding: 5px 12px !important;
+      font-size: 11.5px !important;
+      font-weight: 600 !important;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+    .cat-filter-chip.active {
+      background: linear-gradient(145deg, rgba(226, 166, 84, 0.34), rgba(24, 32, 46, 0.92)) !important;
+      border: 1.5px solid var(--amber) !important;
+      border-top: 2px solid #FFD48F !important;
+      color: #FFE8B8 !important;
+      font-weight: 800 !important;
+      box-shadow: 0 0 12px rgba(226, 166, 84, 0.32), inset 0 1px 0 rgba(255, 232, 184, 0.35) !important;
+    }
+
+    /* B. 記帳頁 6 顆常用項目微調記帳：和洋立體 24x24 SVG 圖示（圖示大於文字，視覺重心穩定） */
+    .quick-exp-pill {
+      padding: 11px 6px 9px 6px !important;
+      gap: 4px !important;
+    }
+    .quick-pill-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      height: 26px;
+      color: var(--amber);
+      margin-bottom: 1px;
+    }
+    .quick-pill-icon .taisho-svg-icon {
+      width: 24px !important;
+      height: 24px !important;
+      stroke-width: 1.8;
+      filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.35));
+    }
+    .quick-pill-name {
+      font-family: var(--font-serif);
+      font-size: 12px !important;
+      font-weight: 700 !important;
+      color: var(--text-main);
+    }
+    .quick-pill-amt {
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      font-size: 11px !important;
+      color: var(--amber);
+      font-family: var(--font-mono);
+      font-weight: 700;
+    }
+
+    /* C & D. 全系統分區小標題、雲端方格按鈕、司機卡與緊急聯絡電話卡片 */
+    .taisho-sec-heading {
+      padding: 0 16px 8px 16px;
+      font-size: 12px;
+      font-family: var(--font-mono);
+      color: var(--amber);
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      letter-spacing: 0.03em;
+    }
+    .taisho-sec-heading .taisho-svg-icon {
+      width: 16px !important;
+      height: 16px !important;
+      flex-shrink: 0;
+    }
+    .taisho-brass-btn {
+      padding: 9px 8px;
+      border-radius: var(--radius-sm);
+      background: rgba(18, 24, 34, 0.76);
+      border: 1px solid var(--border-brass);
+      color: var(--amber);
+      font-size: 12px;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.18s ease;
+      backdrop-filter: blur(10px);
+    }
+    .taisho-brass-btn .taisho-svg-icon {
+      width: 15px !important;
+      height: 15px !important;
+      flex-shrink: 0;
+    }
+    .taisho-brass-btn.btn-primary-brass {
+      background: linear-gradient(145deg, rgba(226, 166, 84, 0.34), rgba(26, 35, 50, 0.94));
+      border: 1.5px solid var(--amber);
+      color: #FFE8B8;
+      box-shadow: 0 0 12px rgba(226, 166, 84, 0.25), inset 0 1px 0 rgba(255, 232, 184, 0.3);
+    }
+    .taisho-brass-btn.btn-danger-brass {
+      color: #E58585;
+      border-color: rgba(194, 74, 74, 0.45);
+      background: rgba(194, 74, 74, 0.12);
+    }
+    .taisho-brass-btn:active {
+      transform: scale(0.96);
+    }
+    .driver-card-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      border-radius: var(--radius-sm) !important;
+      padding: 5px 9px !important;
+    }
+    .driver-card-btn .taisho-svg-icon {
+      width: 15px !important;
+      height: 15px !important;
+    }
+    .emergency-call-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 6px 11px;
+      border-radius: var(--radius-sm);
+      background: var(--amber-soft);
+      border: 1px solid var(--border-brass);
+      color: var(--amber);
+      text-decoration: none;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 700;
+      white-space: nowrap;
+      flex-shrink: 0;
+      transition: all 0.18s ease;
+    }
+    .emergency-call-btn.is-urgent {
+      background: rgba(194, 74, 74, 0.18);
+      border-color: rgba(194, 74, 74, 0.55);
+      color: #F08A8A;
+    }
+    .emergency-call-btn .taisho-svg-icon {
+      width: 14px !important;
+      height: 14px !important;
+    }
+
+    /* 6. 日語指差對話卡區＆大字展示彈窗（與 .tl-card-inner 完全同調，修正圖文比例與搜尋提示上下置中） */
+    .phrase-search-wrap {
+      padding: 0 clamp(8px, 2.8vw, 16px) 8px clamp(8px, 2.8vw, 16px);
+    }
+    .taisho-ph-wrap {
+      position: relative;
+      width: 100%;
+    }
+    .taisho-ph-label {
+      position: absolute;
+      inset: 0;
+      padding: 0 11px;
+      display: flex;
+      align-items: center;
+      pointer-events: none;
+      font-family: var(--font-serif) !important;
+      font-size: 11px !important;
+      font-weight: 500 !important;
+      color: rgba(163, 177, 198, 0.58) !important;
+      letter-spacing: 0.02em;
+      line-height: 1;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .taisho-ph-input:not(:placeholder-shown) + .taisho-ph-label {
+      display: none;
+    }
+    .phrase-search-box {
+      -webkit-appearance: none;
+      appearance: none;
+      display: block;
+      width: 100%;
+      height: 36px;
+      background: rgba(16, 22, 32, 0.68);
+      border: 1px solid var(--border-brass);
+      border-radius: var(--radius-sm);
+      color: var(--text-main);
+      font-family: var(--font-serif) !important;
+      padding: 0 11px;
+      font-size: 16px !important;
+      line-height: 1.2;
+      outline: none;
+      backdrop-filter: blur(12px);
+    }
+    .phrase-search-box::-webkit-search-decoration,
+    .phrase-search-box::-webkit-search-cancel-button {
+      -webkit-appearance: none;
+    }
+    .phrase-search-box:focus {
+      border-color: var(--amber);
+      box-shadow: 0 0 12px rgba(226, 166, 84, 0.25);
+    }
+    .phrase-search-box::placeholder,
+    .form-input::placeholder,
+    .form-textarea::placeholder {
+      font-family: var(--font-serif) !important;
+      font-size: 11px !important;
+      font-weight: 500 !important;
+      color: rgba(163, 177, 198, 0.58) !important;
+      letter-spacing: 0.02em;
+      vertical-align: middle;
+    }
+    .form-input,
+    .form-textarea {
+      font-family: var(--font-serif) !important;
+    }
+    /* 彈窗主要送出按鈕（確定記下此筆消費／儲存行程／儲存票券）統一改為大正微透光黃銅方格按鈕 */
+    .btn-submit-primary {
+      width: 100%;
+      padding: 10px 14px !important;
+      border-radius: var(--radius-sm) !important;
+      background: linear-gradient(145deg, rgba(226, 166, 84, 0.36), rgba(22, 30, 44, 0.95)) !important;
+      border: 1.5px solid var(--amber) !important;
+      border-top: 2px solid #FFD48F !important;
+      color: #FFE8B8 !important;
+      font-family: var(--font-serif) !important;
+      font-weight: 800 !important;
+      font-size: 13.5px !important;
+      letter-spacing: 0.05em;
+      cursor: pointer;
+      display: inline-flex !important;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45), 0 0 14px rgba(226, 166, 84, 0.26), inset 0 1px 0 rgba(255, 232, 184, 0.35) !important;
+      margin-top: 8px;
+      transition: all 0.18s ease;
+    }
+    .btn-submit-primary .taisho-svg-icon {
+      width: 16px !important;
+      height: 16px !important;
+      flex-shrink: 0;
+    }
+    .btn-submit-primary:active {
+      transform: scale(0.97);
+    }
+    /* 仙台 ⇄ 大石田站 時刻表可收合面板（預設收起，點擊展開） */
+    .tt-collapsible-card {
+      cursor: pointer;
+      transition: border-color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+    }
+    .tt-collapsible-card.expanded {
+      border-color: rgba(226, 166, 84, 0.52);
+      background: var(--bg-card-hover);
+      box-shadow: var(--shadow-card), 0 0 18px rgba(226, 166, 84, 0.14);
+    }
+    .tt-chevron-btn {
+      pointer-events: none;
+    }
+    .tt-collapsible-card .tt-chevron-btn .taisho-svg-icon {
+      transition: transform 0.24s ease;
+    }
+    .tt-collapsible-card.expanded .tt-chevron-btn .taisho-svg-icon {
+      transform: rotate(180deg);
+    }
+    .transit-timetable-grid {
+      display: none;
+      margin-top: 9px;
+      padding-top: 9px;
+      border-top: 1px dashed rgba(226, 166, 84, 0.28);
+      flex-direction: column;
+      gap: 6px;
+      animation: fadeIn 0.2s ease-out;
+    }
+    .tt-collapsible-card.expanded .transit-timetable-grid {
+      display: flex;
+    }
+    .tt-group-label {
+      font-family: var(--font-serif);
+      font-size: 11.5px;
+      font-weight: 700;
+      color: #FFE8B8;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      margin-top: 2px;
+    }
+    .tt-row {
+      background: rgba(12, 17, 25, 0.56);
+      border: 1px solid rgba(226, 166, 84, 0.22);
+      border-radius: 6px;
+      padding: 6px 9px;
+      font-size: 11px;
+      color: var(--text-sub);
+      line-height: 1.45;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .tt-time-line {
+      font-family: var(--font-mono);
+      font-size: 11.5px;
+      font-weight: 700;
+      color: var(--amber);
+    }
+    .tt-note-line {
+      font-size: 10.5px;
+      color: var(--text-sub);
+    }
+    .phrase-list-container {
+      padding: 0 clamp(8px, 2.8vw, 16px) 20px clamp(8px, 2.8vw, 16px);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .phrase-card-item {
+      background: linear-gradient(145deg, rgba(22, 30, 43, 0.56), rgba(15, 20, 30, 0.62));
+      border: 1px solid rgba(226, 166, 84, 0.28);
+      border-radius: var(--radius-lg);
+      padding: 13px 15px;
+      cursor: pointer;
+      backdrop-filter: blur(14px) saturate(130%);
+      -webkit-backdrop-filter: blur(14px) saturate(130%);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+      transition: all 0.18s ease;
+    }
+    .phrase-card-item:hover,
+    .phrase-card-item:active {
+      border-color: var(--amber);
+      background: var(--bg-card-hover);
+      transform: scale(0.99);
+    }
+    .phrase-head-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 6px;
+    }
+    .phrase-head-row .tl-tag-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 3px 9px !important;
+    }
+    .phrase-head-row .tl-tag-pill .taisho-svg-icon {
+      width: 15px !important;
+      height: 15px !important;
+    }
+    .phrase-zh-txt {
+      font-family: var(--font-serif);
+      font-size: 14.5px;
+      font-weight: 700;
+      color: var(--text-main);
+      line-height: 1.4;
+      text-shadow: 0 1px 3px rgba(0, 0, 0, 0.65);
+    }
+    .phrase-jp-txt {
+      font-family: var(--font-serif);
+      font-size: 13.5px;
+      font-weight: 600;
+      color: var(--amber);
+      margin-top: 4px;
+      line-height: 1.45;
+    }
+    .phrase-pron-txt {
+      font-size: 11.5px;
+      color: var(--text-sub);
+      font-family: var(--font-mono);
+      margin-top: 6px;
+      padding-top: 6px;
+      border-top: 1px dashed rgba(226, 166, 84, 0.25);
+    }
+    .taisho-showcase-box {
+      background: linear-gradient(145deg, rgba(22, 30, 44, 0.88), rgba(14, 19, 28, 0.94));
+      border: 1.5px solid var(--amber);
+      border-top: 2.5px solid #FFD48F;
+      border-radius: var(--radius-md);
+      padding: 18px 15px;
+      margin-bottom: 12px;
+      box-shadow: 0 10px 28px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 232, 184, 0.25);
+    }
+
+    /* 行前檢查清單區（古銅琥珀金勾選章＋和紙卡片同調） */
+    .checklist-progress-card {
+      margin: 0 clamp(8px, 2.8vw, 16px) 12px clamp(8px, 2.8vw, 16px);
+      padding: 12px 15px;
+      border-radius: var(--radius-lg);
+      background: linear-gradient(145deg, rgba(22, 30, 43, 0.56), rgba(15, 20, 30, 0.62));
+      border: 1px solid rgba(226, 166, 84, 0.28);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(14px) saturate(130%);
+      -webkit-backdrop-filter: blur(14px) saturate(130%);
+    }
+    .checklist-progress-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-family: var(--font-serif);
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-bottom: 7px;
+    }
+    .checklist-bar-track {
+      width: 100%;
+      height: 6px;
+      border-radius: 4px;
+      background: rgba(10, 14, 20, 0.65);
+      border: 1px solid rgba(226, 166, 84, 0.22);
+      overflow: hidden;
+    }
+    .checklist-bar-fill {
+      height: 100%;
+      width: 0%;
+      border-radius: 4px;
+      background: linear-gradient(90deg, #B88038, #E2A654, #FFD48F);
+      box-shadow: 0 0 10px rgba(226, 166, 84, 0.45);
+      transition: width 0.28s ease;
+    }
+    .checklist-add-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 0 clamp(8px, 2.8vw, 16px) 10px clamp(8px, 2.8vw, 16px);
+    }
+    .checklist-add-row .taisho-ph-wrap {
+      flex: 1;
+      min-width: 0;
+    }
+    .checklist-add-row .taisho-ph-label {
+      padding: 0 10px;
+    }
+    .checklist-add-row .form-input {
+      -webkit-appearance: none;
+      appearance: none;
+      display: block;
+      width: 100%;
+      height: 32px;
+      padding: 0 10px !important;
+      line-height: 1.2;
+      border: 1px solid var(--border-brass);
+      background: rgba(16, 22, 32, 0.68);
+    }
+    .checklist-add-btn {
+      flex-shrink: 0;
+      height: 32px;
+      padding: 0 9px;
+      border-radius: var(--radius-sm);
+      background: linear-gradient(145deg, rgba(226, 166, 84, 0.28), rgba(22, 30, 44, 0.9));
+      border: 1px solid var(--border-brass);
+      color: #FFE8B8;
+      font-family: var(--font-serif);
+      font-weight: 700;
+      font-size: 11px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 3px;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.18s ease;
+    }
+    .checklist-add-btn:active {
+      transform: scale(0.95);
+    }
+    .checklist-list-container {
+      padding: 0 clamp(8px, 2.8vw, 16px) 20px clamp(8px, 2.8vw, 16px);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .checklist-item-card {
+      background: linear-gradient(145deg, rgba(22, 30, 43, 0.56), rgba(15, 20, 30, 0.62));
+      border: 1px solid rgba(226, 166, 84, 0.26);
+      border-radius: var(--radius-md);
+      padding: 11px 13px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      backdrop-filter: blur(14px) saturate(130%);
+      -webkit-backdrop-filter: blur(14px) saturate(130%);
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+      transition: all 0.18s ease;
+    }
+    .checklist-item-card.done {
+      background: rgba(16, 22, 32, 0.42);
+      border-color: rgba(226, 166, 84, 0.18);
+    }
+    .checklist-check-box {
+      width: 20px;
+      height: 20px;
+      border-radius: 5px;
+      border: 1.5px solid var(--border-brass);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      font-size: 12px;
+      font-weight: 800;
+      color: #12151A;
+      background: rgba(12, 16, 24, 0.55);
+      transition: all 0.18s ease;
+    }
+    .checklist-item-card.done .checklist-check-box {
+      background: linear-gradient(145deg, #F0B865, #C58938);
+      border-color: #FFE4B5;
+      color: #12151A;
+      box-shadow: 0 0 8px rgba(226, 166, 84, 0.45);
+    }
+    .checklist-item-text {
+      flex: 1;
+      min-width: 0;
+      font-size: 13px;
+      color: var(--text-main);
+      line-height: 1.45;
+      word-break: break-word;
+    }
+    .checklist-item-card.done .checklist-item-text {
+      text-decoration: line-through;
+      color: var(--text-muted);
+    }
+    .checklist-del-btn {
+      width: 28px !important;
+      height: 28px !important;
+      flex-shrink: 0;
+    }
+
   </style>
 </head>
 <body>
@@ -1912,28 +2757,24 @@
     <!-- 頂部微型狀態膠囊列（天氣與匯率與古典羅盤相同風格） -->
     <header class="app-top-capsule-bar">
       <div class="top-capsule-pill">
-        <span id="pill-wx-trigger" style="display:inline-flex;align-items:center;gap:4px;cursor:pointer;" title="點擊查看 5 日天氣預報">
+        <span id="pill-wx-trigger" class="pill-trigger-chip" title="點擊查看 5 日天氣預報">
           <span class="dyn-wx-icon" style="display:inline-flex;align-items:center;color:var(--amber);"></span>
           <span>銀山</span>
           <span class="capsule-badge" id="pill-weather-temp">-1°C</span>
         </span>
         <span class="capsule-divider"></span>
-        <span id="pill-fx-trigger" style="display:inline-flex;align-items:center;gap:4px;cursor:pointer;" title="點擊開啟日圓台幣換匯計算機">
+        <span id="pill-fx-trigger" class="pill-trigger-chip" title="點擊開啟日圓台幣換匯計算機">
           <span>¥100≈</span>
           <span class="capsule-badge" id="pill-fx-rate">NT$ 21.5</span>
         </span>
         <span class="capsule-divider"></span>
-        <span style="font-size:10px;font-family:var(--font-mono);color:var(--amber);font-weight:700;white-space:nowrap;">v2.15 雲端版</span>
+        <span style="font-size:10px;font-family:var(--font-mono);color:var(--amber);font-weight:700;white-space:nowrap;">v2.16</span>
       </div>
 
       <div class="capsule-tools">
-        <!-- 古典羅盤同風格：天氣預報按鈕 -->
-        <button type="button" class="tool-icon-btn" id="wx-toggle-btn" title="展開 5 日東北天氣與降雨預報">
-          <span class="dyn-wx-icon" style="display:inline-flex;align-items:center;"></span>
-        </button>
-        <!-- 古典羅盤同風格：雙向換匯與匯率微調按鈕 -->
-        <button type="button" class="tool-icon-btn" id="fx-toggle-btn" title="展開日圓 ⇄ 台幣雙向換匯與匯率微調">
-          <span class="dyn-fx-icon" style="display:inline-flex;align-items:center;"></span>
+        <!-- 極簡雲端同步狀態純燈號按鈕（無文字） -->
+        <button type="button" class="tool-icon-btn sync-dot-btn" id="top-sync-dot-btn" onclick="manualCloudSync()" title="雲端同步狀態（點擊立即同步）" aria-label="雲端同步">
+          <span class="cloud-led-dot is-idle" id="top-cloud-dot"></span>
         </button>
       </div>
     </header>
@@ -2176,13 +3017,22 @@
          ======================================================== -->
     <section id="pane-wallet" class="tab-section-pane">
       
-      <!-- 總花費數據卡（精簡緊湊版＋日圓現金小計） -->
-      <div class="wallet-hero-box wallet-hero-compact">
-        <div>
-          <div class="wallet-total-label">兩人共同旅費累計支出 (折合台幣)</div>
-          <div id="wallet-jpy-sub" style="font-size:11px;color:var(--text-sub);font-family:var(--font-mono);margin-top:2px;">日圓消費累計：¥0</div>
+      <!-- 總花費數據卡（動態分類佔比進度條＋日圓現金小計） -->
+      <div class="wallet-hero-box wallet-hero-compact" id="wallet-hero-box">
+        <div class="wallet-hero-top">
+          <div style="min-width:0;">
+            <div class="wallet-total-label" id="wallet-total-label">兩人共同旅費累計支出 (折合台幣)</div>
+            <div id="wallet-jpy-sub" style="font-size:11px;color:var(--text-sub);font-family:var(--font-mono);margin-top:2px;">日圓消費累計：¥0</div>
+          </div>
+          <div class="wallet-hero-right">
+            <div class="wallet-grand-twd" id="wallet-grand-total">NT$ 42,100</div>
+            <div class="wallet-pct-sub" id="wallet-pct-sub">共 4 筆消費明細</div>
+          </div>
         </div>
-        <div class="wallet-grand-twd" id="wallet-grand-total">NT$ 42,100</div>
+        <div class="wallet-breakdown-wrap" id="wallet-breakdown-wrap">
+          <div class="wallet-breakdown-bar" id="wallet-breakdown-bar"></div>
+          <div class="wallet-breakdown-legend" id="wallet-breakdown-legend"></div>
+        </div>
       </div>
 
       <!-- 右下角懸浮圓形「＋」新增記帳按鈕 -->
@@ -2193,43 +3043,94 @@
         </svg>
       </button>
 
-      <!-- 常用 6 顆生活膠囊（點擊滑出「微調金額鍵盤」） -->
-      <div style="padding:0 16px 8px 16px;font-size:12px;font-family:var(--font-mono);color:var(--amber);">⚡ 常用項目微調記帳（點擊自訂金額）</div>
+      <!-- 常用 6 顆生活膠囊（和洋立體 24x24 雙色金線圖示，點擊滑出「微調金額鍵盤」） -->
+      <div class="taisho-sec-heading">
+        <svg class="taisho-svg-icon" viewBox="0 0 24 24"><polygon class="svg-accent-fill" points="13 2 4 14 11 14 10 22 20 10 13 10 13 2"/><polygon points="13 2 4 14 11 14 10 22 20 10 13 10 13 2"/></svg>
+        <span>常用項目微調記帳（點擊自訂金額）</span>
+      </div>
       <div class="capsule-quick-grid">
         <div class="quick-exp-pill" data-name="早餐" data-amount="800" data-cat="美食">
-          <span class="quick-pill-icon">🍙</span>
+          <span class="quick-pill-icon">
+            <!-- 和洋立體：日式三角御飯糰與海苔 -->
+            <svg class="taisho-svg-icon" viewBox="0 0 24 24">
+              <path d="M12 4C7.5 4 3.5 13.5 4.2 17.5C4.7 20 7.5 20.5 12 20.5C16.5 20.5 19.3 20 19.8 17.5C20.5 13.5 16.5 4 12 4Z" fill="rgba(226,166,84,0.18)"/>
+              <rect x="8.5" y="13.5" width="7" height="7" rx="1" fill="rgba(226,166,84,0.36)"/>
+              <path d="M9.5 9.5h.01M14.5 10h.01M12 7.5h.01"/>
+            </svg>
+          </span>
           <span class="quick-pill-name">早餐</span>
-          <span class="quick-pill-amt">¥800 ✎</span>
+          <span class="quick-pill-amt">¥800</span>
         </div>
         <div class="quick-exp-pill" data-name="午餐" data-amount="2000" data-cat="美食">
-          <span class="quick-pill-icon">🍜</span>
+          <span class="quick-pill-icon">
+            <!-- 和洋立體：日式拉麵丼碗與竹筷 -->
+            <svg class="taisho-svg-icon" viewBox="0 0 24 24">
+              <path d="M3.5 11.5h17a8.5 8.5 0 0 1-17 0Z" fill="rgba(226,166,84,0.22)"/>
+              <path d="M9 20h6M6 4.5l13 2M6 7.5l13-1"/>
+              <path d="M9 7v4.5M12 6.8v4.7"/>
+            </svg>
+          </span>
           <span class="quick-pill-name">午餐</span>
-          <span class="quick-pill-amt">¥2,000 ✎</span>
+          <span class="quick-pill-amt">¥2,000</span>
         </div>
         <div class="quick-exp-pill" data-name="晚餐" data-amount="4500" data-cat="美食">
-          <span class="quick-pill-icon">🥩</span>
+          <span class="quick-pill-icon">
+            <!-- 和洋立體：仙台炭火厚切牛舌與鐵板 -->
+            <svg class="taisho-svg-icon" viewBox="0 0 24 24">
+              <ellipse cx="12" cy="14" rx="8.5" ry="5.5" fill="rgba(226,166,84,0.22)"/>
+              <ellipse cx="12" cy="14" rx="5.5" ry="3.2" fill="rgba(226,166,84,0.28)"/>
+              <path d="M8.5 5c0 1.5 1.5 2 1.5 3.5M12.5 4.5c0 1.5 1.5 2 1.5 3.5M16 5.5c0 1.2 1.2 1.8 1.2 3"/>
+            </svg>
+          </span>
           <span class="quick-pill-name">晚餐</span>
-          <span class="quick-pill-amt">¥4,500 ✎</span>
+          <span class="quick-pill-amt">¥4,500</span>
         </div>
         <div class="quick-exp-pill" data-name="飲料・咖啡" data-amount="500" data-cat="美食">
-          <span class="quick-pill-icon">☕</span>
+          <span class="quick-pill-icon">
+            <!-- 和洋立體：大正浪漫喫茶店咖啡杯 -->
+            <svg class="taisho-svg-icon" viewBox="0 0 24 24">
+              <path d="M5 9h11v5.5a5.5 5.5 0 0 1-11 0V9Z" fill="rgba(226,166,84,0.22)"/>
+              <path d="M16 10.5h2a2 2 0 0 1 0 4h-2"/>
+              <line x1="3.5" y1="20" x2="17.5" y2="20"/>
+              <path d="M8.5 4.5v2M12.5 4.5v2"/>
+            </svg>
+          </span>
           <span class="quick-pill-name">咖啡飲料</span>
-          <span class="quick-pill-amt">¥500 ✎</span>
+          <span class="quick-pill-amt">¥500</span>
         </div>
         <div class="quick-exp-pill" data-name="超商・車票" data-amount="1000" data-cat="交通">
-          <span class="quick-pill-icon">🏪</span>
+          <span class="quick-pill-icon">
+            <!-- 和洋立體：Suica 交通 IC 卡與商店 -->
+            <svg class="taisho-svg-icon" viewBox="0 0 24 24">
+              <rect x="3" y="5.5" width="18" height="13" rx="2.2" fill="rgba(226,166,84,0.2)"/>
+              <line x1="3" y1="10" x2="21" y2="10"/>
+              <rect x="6.5" y="13.5" width="4" height="2.5" rx="0.5" fill="rgba(226,166,84,0.38)"/>
+              <path d="M14.5 14.5h3"/>
+            </svg>
+          </span>
           <span class="quick-pill-name">超商車票</span>
-          <span class="quick-pill-amt">¥1,000 ✎</span>
+          <span class="quick-pill-amt">¥1,000</span>
         </div>
         <div class="quick-exp-pill" data-name="甜點・小吃" data-amount="600" data-cat="美食">
-          <span class="quick-pill-icon">🍡</span>
+          <span class="quick-pill-icon">
+            <!-- 和洋立體：仙台毛豆泥三色糰子串 -->
+            <svg class="taisho-svg-icon" viewBox="0 0 24 24">
+              <line x1="5" y1="19" x2="19" y2="5"/>
+              <circle cx="15.5" cy="8.5" r="2.6" fill="rgba(226,166,84,0.32)"/>
+              <circle cx="12" cy="12" r="2.6" fill="rgba(226,166,84,0.22)"/>
+              <circle cx="8.5" cy="15.5" r="2.6" fill="rgba(226,166,84,0.16)"/>
+            </svg>
+          </span>
           <span class="quick-pill-name">甜點小吃</span>
-          <span class="quick-pill-amt">¥600 ✎</span>
+          <span class="quick-pill-amt">¥600</span>
         </div>
       </div>
 
       <!-- 記帳明細列表與分類快篩 -->
-      <div style="padding:0 16px 6px 16px;font-size:12px;font-family:var(--font-mono);color:var(--amber);">📋 消費明細記錄（點擊任一項目展開修改／刪除）</div>
+      <div class="taisho-sec-heading" style="padding-bottom:6px;">
+        <svg class="taisho-svg-icon" viewBox="0 0 24 24"><rect x="4" y="3.5" width="16" height="17" rx="2" fill="rgba(226,166,84,0.18)"/><line x1="8" y1="8.5" x2="16" y2="8.5"/><line x1="8" y1="12.5" x2="16" y2="12.5"/><line x1="8" y1="16.5" x2="13" y2="16.5"/></svg>
+        <span>消費明細記錄（點擊任一項目展開修改／刪除）</span>
+      </div>
       <div class="wallet-cat-filter-bar" id="wallet-cat-bar">
         <button type="button" class="cat-filter-chip active" data-cat="ALL">全部</button>
         <button type="button" class="cat-filter-chip" data-cat="美食">美食</button>
@@ -2237,6 +3138,8 @@
         <button type="button" class="cat-filter-chip" data-cat="購物/伴手禮">購物</button>
         <button type="button" class="cat-filter-chip" data-cat="住宿">住宿</button>
         <button type="button" class="cat-filter-chip" data-cat="機票">機票</button>
+        <button type="button" class="cat-filter-chip" data-cat="景點/活動">景點</button>
+        <button type="button" class="cat-filter-chip" data-cat="網卡/雜支">網卡</button>
         <button type="button" class="cat-filter-chip" data-cat="其他">其他</button>
       </div>
       <div class="exp-list-container" id="wallet-history-list">
@@ -2246,163 +3149,394 @@
     </section>
 
     <!-- ========================================================
-         TAB 3: 🎫 票券 (Pocket) - 點擊票券才展開修改與刪除
+         TAB 3: 票券與手冊 (Pocket) - 四段方格導覽（與 Day 1~5 方格＋和洋立體 SVG 統一）
          ======================================================== -->
     <section id="pane-pocket" class="tab-section-pane">
-      
-      <div style="padding:0 16px 8px 16px;font-size:12px;font-family:var(--font-mono);color:var(--amber);">🎫 BOARDING PASS & TICKETS（點擊票券展開修改／刪除）</div>
-      
-      <!-- 動態票券清單 -->
-      <div class="tickets-container" id="pocket-tickets-list">
-        <!-- 動態渲染票券 -->
+
+      <!-- 4 段方格導覽列（22x22 和洋立體 SVG Icon ＋ 圓角方格，圖示大於文字） -->
+      <div class="pocket-sub-nav" id="pocket-sub-nav" role="tablist">
+        <button type="button" class="pocket-sub-tab active" data-sub="tickets">
+          <span class="sub-tab-icon">
+            <svg class="taisho-svg-icon" viewBox="0 0 24 24">
+              <path d="M3 6.5a1.5 1.5 0 0 1 1.5-1.5h15A1.5 1.5 0 0 1 21 6.5v3a2.5 2.5 0 0 0 0 5v3a1.5 1.5 0 0 1-1.5 1.5h-15A1.5 1.5 0 0 1 3 17.5v-3a2.5 2.5 0 0 0 0-5z" fill="rgba(226,166,84,0.22)"/>
+              <line x1="9" y1="5.5" x2="9" y2="18.5" stroke-dasharray="2 2"/>
+              <path d="M12.5 10h5M12.5 14h3.5"/>
+            </svg>
+          </span>
+          <span class="sub-tab-label">票券</span>
+        </button>
+        <button type="button" class="pocket-sub-tab" data-sub="guide">
+          <span class="sub-tab-icon">
+            <svg class="taisho-svg-icon" viewBox="0 0 24 24">
+              <polygon points="12 2.5 2 10.5 22 10.5" fill="rgba(226,166,84,0.22)"/>
+              <rect x="4.5" y="10.5" width="15" height="9.5"/>
+              <rect x="9.5" y="14" width="5" height="6" fill="rgba(226,166,84,0.25)"/>
+              <circle cx="18" cy="13.5" r="1.2"/>
+            </svg>
+          </span>
+          <span class="sub-tab-label">住行</span>
+        </button>
+        <button type="button" class="pocket-sub-tab" data-sub="phrases">
+          <span class="sub-tab-icon">
+            <svg class="taisho-svg-icon" viewBox="0 0 24 24">
+              <path d="M4 4.5h16a1.5 1.5 0 0 1 1.5 1.5v10a1.5 1.5 0 0 1-1.5 1.5H9l-4.5 3.5v-3.5H4A1.5 1.5 0 0 1 2.5 16V6A1.5 1.5 0 0 1 4 4.5z" fill="rgba(226,166,84,0.22)"/>
+              <path d="M7.5 9.5h9M7.5 13h5.5"/>
+            </svg>
+          </span>
+          <span class="sub-tab-label">指差</span>
+        </button>
+        <button type="button" class="pocket-sub-tab" data-sub="checklist">
+          <span class="sub-tab-icon">
+            <svg class="taisho-svg-icon" viewBox="0 0 24 24">
+              <rect x="4" y="4" width="16" height="17" rx="2" fill="rgba(226,166,84,0.2)"/>
+              <path d="M9 2.5h6v3H9z" fill="rgba(226,166,84,0.32)"/>
+              <path d="m8.5 12.5 2.3 2.3 4.7-4.8"/>
+              <line x1="8.5" y1="17.5" x2="15.5" y2="17.5"/>
+            </svg>
+          </span>
+          <span class="sub-tab-label">清單</span>
+        </button>
       </div>
 
-      <!-- 票券最下方的「＋ 新增票券 / 憑證」按鈕 -->
-      <button type="button" class="bottom-add-ticket-btn" id="btn-bottom-add-ticket">
-        <svg class="taisho-svg-icon" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-        <span>新增票券／交通乘車券／預約憑證</span>
-      </button>
+      <!-- 子分頁 A：票券與雲端同步 -->
+      <div class="pocket-sub-pane active" id="pocket-sub-tickets">
+        <div class="taisho-sec-heading">
+          <svg class="taisho-svg-icon" viewBox="0 0 24 24"><path d="M3 6.5a1.5 1.5 0 0 1 1.5-1.5h15A1.5 1.5 0 0 1 21 6.5v3a2.5 2.5 0 0 0 0 5v3a1.5 1.5 0 0 1-1.5 1.5h-15A1.5 1.5 0 0 1 3 17.5v-3a2.5 2.5 0 0 0 0-5z" fill="rgba(226,166,84,0.22)"/><line x1="9" y1="5.5" x2="9" y2="18.5" stroke-dasharray="2 2"/><path d="M12.5 10h5M12.5 14h3.5"/></svg>
+          <span>BOARDING PASS & TICKETS（點擊票券展開修改／刪除）</span>
+        </div>
 
-      <!-- 🏨 精選住宿飯店總覽（無差別邊框，配備水滴立體地圖定位針） -->
-      <div style="padding:16px 16px 8px 16px;font-size:12px;font-family:var(--font-mono);color:var(--amber);">🏨 HOTELS & STAY (精選住宿與地圖導航)</div>
-      <div style="padding:0 16px;display:flex;flex-direction:column;gap:10px;">
-        <div class="tl-card-inner">
-          <div class="tl-head-row">
-            <span class="tl-time-badge">Day 1–2 連住2晚</span>
-            <span class="tl-tag-pill"><span class="dyn-hotel-icon" style="display:inline-flex;"></span> 仙台站東口直通</span>
+        <!-- 動態票券清單 -->
+        <div class="tickets-container" id="pocket-tickets-list">
+          <!-- 動態渲染票券 -->
+        </div>
+
+        <!-- 票券最下方的「＋ 新增票券 / 憑證」按鈕 -->
+        <button type="button" class="bottom-add-ticket-btn" id="btn-bottom-add-ticket">
+          <svg class="taisho-svg-icon" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+          <span>新增票券／交通乘車券／預約憑證</span>
+        </button>
+
+        <!-- Google Sheets 雲端即時雙向同步 -->
+        <div style="padding:8px 16px 8px 16px;display:flex;justify-content:space-between;align-items:center;">
+          <span class="taisho-sec-heading" style="padding:0;">
+            <svg class="taisho-svg-icon" viewBox="0 0 24 24"><path d="M17.5 19H7a4.5 4.5 0 0 1-.8-8.9A6 6 0 0 1 18 9.5a4.5 4.5 0 0 1-.5 9.5Z" fill="rgba(226,166,84,0.2)"/></svg>
+            <span>CLOUD SYNC (Google 試算表後台)</span>
+          </span>
+          <span id="cloud-sync-badge" style="font-size:11px;font-family:var(--font-mono);color:var(--text-muted);">尚未綁定</span>
+        </div>
+        <div style="padding:0 16px 24px 16px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;">
+          <button type="button" class="taisho-brass-btn" onclick="configureGasBackend()">
+            <svg class="taisho-svg-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3" fill="rgba(226,166,84,0.25)"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9c.26.6.77 1.05 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+            <span>綁定後台</span>
+          </button>
+          <button type="button" class="taisho-brass-btn btn-primary-brass" onclick="manualCloudSync()">
+            <svg class="taisho-svg-icon" viewBox="0 0 24 24"><path d="M21 12a9 9 0 0 0-15.4-6.4L3 8"/><path d="M3 3v5h5"/><path d="M3 12a9 9 0 0 0 15.4 6.4L21 16"/><path d="M21 21v-5h-5"/></svg>
+            <span>立即同步</span>
+          </button>
+          <button type="button" class="taisho-brass-btn btn-danger-brass" onclick="resetAllTripData()">
+            <svg class="taisho-svg-icon" viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg>
+            <span>恢復預設</span>
+          </button>
+        </div>
+        <div style="padding:0 16px 20px 16px;margin-top:-14px;">
+          <button type="button" class="taisho-brass-btn" style="width:100%;display:none;" id="btn-share-gas-link" onclick="copyPartnerSyncLink()">
+            <svg class="taisho-svg-icon" viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+            <span>複製「雙人免設定自動同步連結」傳給另一半</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- 子分頁 B：精選住宿、交通時刻、穿搭與緊急電話 -->
+      <div class="pocket-sub-pane" id="pocket-sub-guide">
+        <!-- 精選住宿飯店總覽 -->
+        <div class="taisho-sec-heading">
+          <svg class="taisho-svg-icon" viewBox="0 0 24 24"><polygon points="12 2.5 2 10.5 22 10.5" fill="rgba(226,166,84,0.22)"/><rect x="4.5" y="10.5" width="15" height="9.5"/><rect x="9.5" y="14" width="5" height="6" fill="rgba(226,166,84,0.25)"/><circle cx="18" cy="13.5" r="1.2"/></svg>
+          <span>HOTELS & STAY (精選住宿與司機指差卡)</span>
+        </div>
+        <div style="padding:0 16px;display:flex;flex-direction:column;gap:10px;">
+          <div class="tl-card-inner">
+            <div class="tl-head-row">
+              <span class="tl-time-badge">Day 1–2 連住2晚</span>
+              <span class="tl-tag-pill"><span class="dyn-hotel-icon" style="display:inline-flex;"></span> 仙台站東口直通</span>
+            </div>
+            <div class="tl-card-title">
+              <span>仙台東大都會大飯店</span>
+              <div style="display:flex;align-items:center;gap:6px;flex-shrink:0;">
+                <button type="button" class="driver-card-btn" onclick="openDriverModal(0)" title="顯示日文地址給計程車司機看">
+                  <svg class="taisho-svg-icon" viewBox="0 0 24 24"><path d="M5 11l2-5h10l2 5" fill="rgba(226,166,84,0.2)"/><rect x="3" y="11" width="18" height="6" rx="1.8" fill="rgba(226,166,84,0.22)"/><circle cx="7.5" cy="17.5" r="1.8"/><circle cx="16.5" cy="17.5" r="1.8"/><path d="M10 4h4v2h-4z"/></svg>
+                  <span>司機卡</span>
+                </button>
+                <a href="https://www.google.com/maps/search/?api=1&query=Hotel+Metropolitan+Sendai+East" target="_blank" rel="noopener" class="taisho-action-btn" title="開啟 Google 地圖導航">
+                  <span class="dyn-map-icon" style="display:inline-flex;"></span>
+                </a>
+              </div>
+            </div>
+            <div class="tl-card-note">ホテルメトロポリタン仙台イースト · NT$ 7,800 · 出站即達免淋雨 · 仙台市青葉區中央1-1-1</div>
           </div>
-          <div class="tl-card-title">
-            <span>仙台東大都會大飯店</span>
-            <div style="display:flex;align-items:center;gap:6px;flex-shrink:0;">
-              <button type="button" class="driver-card-btn" onclick="openDriverModal(0)" title="顯示日文地址給計程車司機看">🚕 司機卡</button>
-              <a href="https://www.google.com/maps/search/?api=1&query=Hotel+Metropolitan+Sendai+East" target="_blank" rel="noopener" class="taisho-action-btn" title="開啟 Google 地圖導航">
-                <span class="dyn-map-icon" style="display:inline-flex;"></span>
-              </a>
+
+          <div class="tl-card-inner">
+            <div class="tl-head-row">
+              <span class="tl-time-badge">Day 3 一泊二食</span>
+              <span class="tl-tag-pill"><span class="dyn-hotel-icon" style="display:inline-flex;"></span> 銀山溫泉</span>
+            </div>
+            <div class="tl-card-title">
+              <span>銀山溫泉 御宿やなだ屋</span>
+              <div style="display:flex;align-items:center;gap:6px;flex-shrink:0;">
+                <button type="button" class="driver-card-btn" onclick="openDriverModal(1)" title="顯示日文地址給計程車司機看">
+                  <svg class="taisho-svg-icon" viewBox="0 0 24 24"><path d="M5 11l2-5h10l2 5" fill="rgba(226,166,84,0.2)"/><rect x="3" y="11" width="18" height="6" rx="1.8" fill="rgba(226,166,84,0.22)"/><circle cx="7.5" cy="17.5" r="1.8"/><circle cx="16.5" cy="17.5" r="1.8"/><path d="M10 4h4v2h-4z"/></svg>
+                  <span>司機卡</span>
+                </button>
+                <a href="https://www.google.com/maps/search/?api=1&query=%E5%BE%A1%E5%AE%BF%E3%82%84%E3%81%AA%E3%81%A0%E5%B1%8B+%E9%8A%80%E5%B1%B1%E6%B8%A9%E6%B3%89" target="_blank" rel="noopener" class="taisho-action-btn" title="開啟 Google 地圖導航">
+                  <span class="dyn-map-icon" style="display:inline-flex;"></span>
+                </a>
+              </div>
+            </div>
+            <div class="tl-card-note">銀山温泉 御宿 やなだ屋 · NT$ 15,000 · 大石田站接駁 · 山形縣尾花澤市銀山新畑416</div>
+          </div>
+
+          <div class="tl-card-inner">
+            <div class="tl-head-row">
+              <span class="tl-time-badge">Day 4 住宿1晚</span>
+              <span class="tl-tag-pill"><span class="dyn-hotel-icon" style="display:inline-flex;"></span> 仙台西口</span>
+            </div>
+            <div class="tl-card-title">
+              <span>大和ROYNET飯店 仙台西口 PREMIER</span>
+              <div style="display:flex;align-items:center;gap:6px;flex-shrink:0;">
+                <button type="button" class="driver-card-btn" onclick="openDriverModal(2)" title="顯示日文地址給計程車司機看">
+                  <svg class="taisho-svg-icon" viewBox="0 0 24 24"><path d="M5 11l2-5h10l2 5" fill="rgba(226,166,84,0.2)"/><rect x="3" y="11" width="18" height="6" rx="1.8" fill="rgba(226,166,84,0.22)"/><circle cx="7.5" cy="17.5" r="1.8"/><circle cx="16.5" cy="17.5" r="1.8"/><path d="M10 4h4v2h-4z"/></svg>
+                  <span>司機卡</span>
+                </button>
+                <a href="https://www.google.com/maps/search/?api=1&query=Daiwa+Roynet+Hotel+Sendai-Nishiguchi+Premier" target="_blank" rel="noopener" class="taisho-action-btn" title="開啟 Google 地圖導航">
+                  <span class="dyn-map-icon" style="display:inline-flex;"></span>
+                </a>
+              </div>
+            </div>
+            <div class="tl-card-note">ダイワロイネットホテル仙台西口 PREMIER · NT$ 2,800 · 步行 4 分 · 仙台市青葉區中央3-7-25</div>
+          </div>
+        </div>
+
+        <!-- 交通票券與時刻表指南 -->
+        <div class="taisho-sec-heading" style="padding-top:16px;">
+          <svg class="taisho-svg-icon" viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="15" rx="3" fill="rgba(226,166,84,0.22)"/><path d="M4 11h16"/><circle cx="8.5" cy="15" r="1"/><circle cx="15.5" cy="15" r="1"/><path d="M8 18l-2 3M16 18l2 3"/></svg>
+          <span>TRANSIT & OFFICIAL LINKS (交通票券與官方時刻)</span>
+        </div>
+        <div style="padding:0 16px;display:flex;flex-direction:column;gap:9px;">
+          <!-- 仙台站 ⇄ 大石田站 專車與鐵道轉乘時刻表（預設收合，點擊展開） -->
+          <div class="tl-card-inner tt-collapsible-card" id="jr-oishida-tt-card" onclick="toggleTransitTimetable(this)">
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;">
+              <div style="min-width:0;flex:1;">
+                <div style="font-size:13.5px;font-weight:700;color:var(--text-main);">JR 仙台站 ⇄ 大石田站（銀山溫泉門戶）時刻表</div>
+                <div style="font-size:11.5px;color:var(--text-sub);margin-top:2px;">JR 仙山線（仙台⇄山形 約 70 分）＋ 山形新幹線／奧羽本線（山形⇄大石田）</div>
+              </div>
+              <div style="display:flex;align-items:center;gap:6px;flex-shrink:0;">
+                <a href="https://www.jreast-timetable.jp/" target="_blank" rel="noopener" onclick="event.stopPropagation();" class="taisho-action-btn" style="width:28px;height:28px;" title="開啟 JR 東日本官方時刻表">
+                  <svg class="taisho-svg-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5" fill="rgba(226,166,84,0.18)"/><polygon points="15.8 8.2 13.6 13.6 8.2 15.8 10.4 10.4" fill="rgba(226,166,84,0.38)"/><circle cx="12" cy="12" r="1.3" fill="#131922"/></svg>
+                </a>
+                <span class="taisho-action-btn tt-chevron-btn" style="width:28px;height:28px;" aria-hidden="true">
+                  <svg class="taisho-svg-icon" viewBox="0 0 24 24"><path d="M6.5 9.5L12 15l5.5-5.5"/></svg>
+                </span>
+              </div>
+            </div>
+            <div class="transit-timetable-grid">
+              <div class="tt-group-label">
+                <span>▸ 去程（Day 3 仙台 ➔ 山形 ➔ 大石田｜銜接旅館接駁）</span>
+              </div>
+              <div class="tt-row">
+                <div class="tt-time-line">① 09:13 仙台 (仙山線) ➔ 10:29 山形 10:53 (新幹線つばさ129) ➔ 11:24 大石田</div>
+                <div class="tt-note-line">早班推薦：可於大石田站前享用尾花澤手打蕎麥麵，再搭 12:35 路線巴士或 13:40 旅館接駁</div>
+              </div>
+              <div class="tt-row">
+                <div class="tt-time-line">② 10:02 仙台 (仙山線快速) ➔ 11:12 山形 12:47 (奧羽本線) ➔ 13:34 大石田</div>
+                <div class="tt-note-line">午班首選：出站即無縫銜接 13:40「御宿やなだ屋」免費迎送巴士（或搭 13:02 新幹線 13:32 抵）</div>
+              </div>
+              <div class="tt-row">
+                <div class="tt-time-line">③ 12:13 仙台 (仙山線) ➔ 13:27 山形 14:49 (新幹線つばさ139) ➔ 15:19 大石田</div>
+                <div class="tt-note-line">午後班次：銜接 15:45「御宿やなだ屋」第二班迎送車（仙台⇄山形亦可搭山交高速巴士約 65 分）</div>
+              </div>
+              <div class="tt-group-label" style="margin-top:4px;">
+                <span>◂ 回程（Day 4 大石田 ➔ 山形 ➔ 仙台｜10:00 退房送迎）</span>
+              </div>
+              <div class="tt-row">
+                <div class="tt-time-line">① 10:37 大石田 (新幹線つばさ136) ➔ 11:08 山形 11:20 (仙山線快速) ➔ 12:31 仙台</div>
+                <div class="tt-note-line">回程首選：搭旅館 10:00 退房送迎車抵大石田站，轉乘最順暢、中午即返抵仙台站</div>
+              </div>
+              <div class="tt-row">
+                <div class="tt-time-line">② 11:32 大石田 (奧羽本線) ➔ 12:19 山形 12:39 (仙山線) ➔ 13:52 仙台</div>
+                <div class="tt-note-line">悠閒備案：若搭 10:55 銀山巴士下山可接此班，或於山形站東口改搭高速巴士（每 15–20 分一班）</div>
+              </div>
             </div>
           </div>
-          <div class="tl-card-note">ホテルメトロポリタン仙台イースト · NT$ 7,800 · 出站即達免淋雨 · 仙台市青葉區中央1-1-1</div>
+
+          <a href="https://www.senat.co.jp/timetable" target="_blank" rel="noopener" class="tl-card-inner" style="display:flex;justify-content:space-between;align-items:center;text-decoration:none;">
+            <div>
+              <div style="font-size:13.5px;font-weight:700;color:var(--text-main);">仙台機場 Access 線 時刻表與票價指南</div>
+              <div style="font-size:11.5px;color:var(--text-sub);margin-top:2px;">仙台機場 SDJ ⇄ JR 仙台站最快 17 分鐘直達（單程 ¥660 可刷 Suica）</div>
+            </div>
+            <span class="taisho-action-btn" style="width:28px;height:28px;flex-shrink:0;margin-left:8px;pointer-events:none;">
+              <svg class="taisho-svg-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5" fill="rgba(226,166,84,0.18)"/><polygon points="15.8 8.2 13.6 13.6 8.2 15.8 10.4 10.4" fill="rgba(226,166,84,0.38)"/><circle cx="12" cy="12" r="1.3" fill="#131922"/></svg>
+            </span>
+          </a>
+
+          <a href="https://www.yanadaya.com/" target="_blank" rel="noopener" class="tl-card-inner" style="display:flex;justify-content:space-between;align-items:center;text-decoration:none;">
+            <div>
+              <div style="font-size:13.5px;font-weight:700;color:var(--text-main);">銀山溫泉「御宿やなだ屋」官方網站</div>
+              <div style="font-size:11.5px;color:var(--text-sub);margin-top:2px;">確認一泊二食須知與大石田站旅館接駁車預約</div>
+            </div>
+            <span class="taisho-action-btn" style="width:28px;height:28px;flex-shrink:0;margin-left:8px;pointer-events:none;">
+              <svg class="taisho-svg-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5" fill="rgba(226,166,84,0.18)"/><polygon points="15.8 8.2 13.6 13.6 8.2 15.8 10.4 10.4" fill="rgba(226,166,84,0.38)"/><circle cx="12" cy="12" r="1.3" fill="#131922"/></svg>
+            </span>
+          </a>
+
+          <a href="https://www.hanagasa-bus-taisho.com/ontime/" target="_blank" rel="noopener" class="tl-card-inner" style="display:flex;justify-content:space-between;align-items:center;text-decoration:none;">
+            <div>
+              <div style="font-size:13.5px;font-weight:700;color:var(--text-main);">銀山はながさ号（大石田站 ⇄ 銀山溫泉巴士時刻表）</div>
+              <div style="font-size:11.5px;color:var(--text-sub);margin-top:2px;">尾花澤市營巴士時刻與票價查詢（單程 ¥1,000）</div>
+            </div>
+            <span class="taisho-action-btn" style="width:28px;height:28px;flex-shrink:0;margin-left:8px;pointer-events:none;">
+              <svg class="taisho-svg-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5" fill="rgba(226,166,84,0.18)"/><polygon points="15.8 8.2 13.6 13.6 8.2 15.8 10.4 10.4" fill="rgba(226,166,84,0.38)"/><circle cx="12" cy="12" r="1.3" fill="#131922"/></svg>
+            </span>
+          </a>
+
+          <a href="https://loople-sendai.jp/tw/" target="_blank" rel="noopener" class="tl-card-inner" style="display:flex;justify-content:space-between;align-items:center;text-decoration:none;">
+            <div>
+              <div style="font-size:13.5px;font-weight:700;color:var(--text-main);">盧葡兒仙台 (Loople Sendai) 觀光巴士路線與時刻表</div>
+              <div style="font-size:11.5px;color:var(--text-sub);margin-top:2px;">串聯瑞鳳殿、仙台城跡、大崎八幡宮、定禪寺通（一日券 ¥630）</div>
+            </div>
+            <span class="taisho-action-btn" style="width:28px;height:28px;flex-shrink:0;margin-left:8px;pointer-events:none;">
+              <svg class="taisho-svg-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5" fill="rgba(226,166,84,0.18)"/><polygon points="15.8 8.2 13.6 13.6 8.2 15.8 10.4 10.4" fill="rgba(226,166,84,0.38)"/><circle cx="12" cy="12" r="1.3" fill="#131922"/></svg>
+            </span>
+          </a>
         </div>
 
-        <div class="tl-card-inner">
-          <div class="tl-head-row">
-            <span class="tl-time-badge">Day 3 一泊二食</span>
-            <span class="tl-tag-pill"><span class="dyn-hotel-icon" style="display:inline-flex;"></span> 銀山溫泉</span>
-          </div>
-          <div class="tl-card-title">
-            <span>銀山溫泉 御宿やなだ屋</span>
-            <div style="display:flex;align-items:center;gap:6px;flex-shrink:0;">
-              <button type="button" class="driver-card-btn" onclick="openDriverModal(1)" title="顯示日文地址給計程車司機看">🚕 司機卡</button>
-              <a href="https://www.google.com/maps/search/?api=1&query=%E5%BE%A1%E5%AE%BF%E3%82%84%E3%81%AA%E3%81%A0%E5%B1%8B+%E9%8A%80%E5%B1%B1%E6%B8%A9%E6%B3%89" target="_blank" rel="noopener" class="taisho-action-btn" title="開啟 Google 地圖導航">
-                <span class="dyn-map-icon" style="display:inline-flex;"></span>
-              </a>
+        <!-- 3月下旬東北氣候穿搭指南 -->
+        <div class="taisho-sec-heading" style="padding-top:16px;">
+          <svg class="taisho-svg-icon" viewBox="0 0 24 24"><path d="M14 14.76V3.5a2.5 2.5 0 0 0-5 0v11.26a4.5 4.5 0 1 0 5 0z" fill="rgba(226,166,84,0.22)"/><circle cx="11.5" cy="17.5" r="1.5"/></svg>
+          <span>CLIMATE & PACKING (氣候與行前穿搭須知)</span>
+        </div>
+        <div style="padding:0 16px;">
+          <div class="tl-card-inner">
+            <div style="font-size:13.5px;font-weight:700;color:var(--amber);margin-bottom:4px;">洋蔥式保暖穿搭與銀山行李建議</div>
+            <div style="font-size:12.5px;color:var(--text-sub);line-height:1.5;">
+              3 月底仙台白天約 10°C–14°C，早晚約 2°C–5°C；銀山溫泉山區夜晚約 -2°C–5°C 且可能積雪。建議發熱衣＋防風保暖外套，並穿防滑鞋。銀山溫泉街多為石板路與木造台階，拉大行李不便，強烈建議 Day 3 寄放大件行李於仙台站，輕裝前往溫泉旅館。
             </div>
           </div>
-          <div class="tl-card-note">銀山温泉 御宿 やなだ屋 · NT$ 15,000 · 大石田站接駁 · 山形縣尾花澤市銀山新畑416</div>
         </div>
 
-        <div class="tl-card-inner">
-          <div class="tl-head-row">
-            <span class="tl-time-badge">Day 4 住宿1晚</span>
-            <span class="tl-tag-pill"><span class="dyn-hotel-icon" style="display:inline-flex;"></span> 仙台西口</span>
-          </div>
-          <div class="tl-card-title">
-            <span>大和ROYNET飯店 仙台西口 PREMIER</span>
-            <div style="display:flex;align-items:center;gap:6px;flex-shrink:0;">
-              <button type="button" class="driver-card-btn" onclick="openDriverModal(2)" title="顯示日文地址給計程車司機看">🚕 司機卡</button>
-              <a href="https://www.google.com/maps/search/?api=1&query=Daiwa+Roynet+Hotel+Sendai-Nishiguchi+Premier" target="_blank" rel="noopener" class="taisho-action-btn" title="開啟 Google 地圖導航">
-                <span class="dyn-map-icon" style="display:inline-flex;"></span>
-              </a>
+        <!-- 緊急應急電話（統一使用 .tl-card-inner 毛玻璃卡片＋和洋電話 SVG） -->
+        <div class="taisho-sec-heading" style="padding-top:16px;">
+          <svg class="taisho-svg-icon" viewBox="0 0 24 24"><path d="M12 3L4 7v6c0 5 3.4 9.4 8 10.5 4.6-1.1 8-5.5 8-10.5V7l-8-4z" fill="rgba(226,166,84,0.2)"/><path d="M12 8v5M12 16h.01"/></svg>
+          <span>EMERGENCY CONTACTS (緊急聯絡電話)</span>
+        </div>
+        <div style="padding:0 16px;display:flex;flex-direction:column;gap:8px;margin-bottom:24px;">
+          <div class="tl-card-inner" style="padding:11px 14px;display:flex;justify-content:space-between;align-items:center;gap:8px;">
+            <div>
+              <div style="font-size:13px;font-weight:700;color:var(--text-main);">日本報警 (警察局)</div>
+              <div style="font-size:11px;color:var(--text-sub);">緊急事故、防盜與遺失物報案</div>
             </div>
+            <a href="tel:110" class="emergency-call-btn is-urgent">
+              <svg class="taisho-svg-icon" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.8 19.8 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z" fill="rgba(194,74,74,0.25)"/></svg>
+              <span>110</span>
+            </a>
           </div>
-          <div class="tl-card-note">ダイワロイネットホテル仙台西口 PREMIER · NT$ 2,800 · 步行 4 分 · 仙台市青葉區中央3-7-25</div>
-        </div>
-      </div>
-
-      <!-- 🚄 交通票券與時刻表指南（原版格式，放置於住宿下方） -->
-      <div style="padding:16px 16px 8px 16px;font-size:12px;font-family:var(--font-mono);color:var(--amber);">🚄 TRANSIT & OFFICIAL LINKS (交通票券與官方時刻)</div>
-      <div style="padding:0 16px;display:flex;flex-direction:column;gap:9px;">
-        <a href="https://www.senat.co.jp/timetable" target="_blank" rel="noopener" class="tl-card-inner" style="display:flex;justify-content:space-between;align-items:center;text-decoration:none;">
-          <div>
-            <div style="font-size:13.5px;font-weight:700;color:var(--text-main);">仙台機場 Access 線 時刻表與票價指南</div>
-            <div style="font-size:11.5px;color:var(--text-sub);margin-top:2px;">仙台機場 SDJ ⇄ JR 仙台站最快 17 分鐘直達（單程 ¥660 可刷 Suica）</div>
+          <div class="tl-card-inner" style="padding:11px 14px;display:flex;justify-content:space-between;align-items:center;gap:8px;">
+            <div>
+              <div style="font-size:13px;font-weight:700;color:var(--text-main);">救護車 / 消防局</div>
+              <div style="font-size:11px;color:var(--text-sub);">突發急病、火警受傷救援</div>
+            </div>
+            <a href="tel:119" class="emergency-call-btn is-urgent">
+              <svg class="taisho-svg-icon" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.8 19.8 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z" fill="rgba(194,74,74,0.25)"/></svg>
+              <span>119</span>
+            </a>
           </div>
-          <span style="color:var(--amber);font-size:16px;margin-left:8px;">↗</span>
-        </a>
-
-        <a href="https://www.yanadaya.com/" target="_blank" rel="noopener" class="tl-card-inner" style="display:flex;justify-content:space-between;align-items:center;text-decoration:none;">
-          <div>
-            <div style="font-size:13.5px;font-weight:700;color:var(--text-main);">銀山溫泉「御宿やなだ屋」官方網站</div>
-            <div style="font-size:11.5px;color:var(--text-sub);margin-top:2px;">確認一泊二食須知與大石田站旅館接駁車預約</div>
+          <div class="tl-card-inner" style="padding:11px 14px;display:flex;justify-content:space-between;align-items:center;gap:8px;">
+            <div>
+              <div style="font-size:13px;font-weight:700;color:var(--text-main);">台北駐日經濟文化代表處</div>
+              <div style="font-size:11px;color:var(--text-sub);">東京本處急難救助（轄東北）</div>
+            </div>
+            <a href="tel:+81332807811" class="emergency-call-btn">
+              <svg class="taisho-svg-icon" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.8 19.8 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z" fill="rgba(226,166,84,0.22)"/></svg>
+              <span>代表處</span>
+            </a>
           </div>
-          <span style="color:var(--amber);font-size:16px;margin-left:8px;">↗</span>
-        </a>
-
-        <a href="https://www.hanagasa-bus-taisho.com/ontime/" target="_blank" rel="noopener" class="tl-card-inner" style="display:flex;justify-content:space-between;align-items:center;text-decoration:none;">
-          <div>
-            <div style="font-size:13.5px;font-weight:700;color:var(--text-main);">銀山はながさ号（大石田站 ⇄ 銀山溫泉巴士時刻表）</div>
-            <div style="font-size:11.5px;color:var(--text-sub);margin-top:2px;">尾花澤市營巴士時刻與票價查詢（單程 ¥1,000）</div>
+          <div class="tl-card-inner" style="padding:11px 14px;display:flex;justify-content:space-between;align-items:center;gap:8px;">
+            <div>
+              <div style="font-size:13px;font-weight:700;color:var(--text-main);">外交部旅外國人急難救助</div>
+              <div style="font-size:11px;color:var(--text-sub);">日本撥打免付費：001-800-0885-0885</div>
+            </div>
+            <a href="tel:00180008850885" class="emergency-call-btn">
+              <svg class="taisho-svg-icon" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.8 19.8 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z" fill="rgba(226,166,84,0.22)"/></svg>
+              <span>急難熱線</span>
+            </a>
           </div>
-          <span style="color:var(--amber);font-size:16px;margin-left:8px;">↗</span>
-        </a>
-
-        <a href="https://loople-sendai.jp/tw/" target="_blank" rel="noopener" class="tl-card-inner" style="display:flex;justify-content:space-between;align-items:center;text-decoration:none;">
-          <div>
-            <div style="font-size:13.5px;font-weight:700;color:var(--text-main);">盧葡兒仙台 (Loople Sendai) 觀光巴士路線與時刻表</div>
-            <div style="font-size:11.5px;color:var(--text-sub);margin-top:2px;">串聯瑞鳳殿、仙台城跡、大崎八幡宮、定禪寺通（一日券 ¥630）</div>
-          </div>
-          <span style="color:var(--amber);font-size:16px;margin-left:8px;">↗</span>
-        </a>
-      </div>
-
-      <!-- 🧣 3月下旬東北氣候穿搭指南 -->
-      <div style="padding:16px 16px 8px 16px;font-size:12px;font-family:var(--font-mono);color:var(--amber);">🧣 CLIMATE & PACKING (氣候與行前穿搭須知)</div>
-      <div style="padding:0 16px;">
-        <div class="tl-card-inner">
-          <div style="font-size:13.5px;font-weight:700;color:var(--amber);margin-bottom:4px;">洋蔥式保暖穿搭與銀山行李建議</div>
-          <div style="font-size:12.5px;color:var(--text-sub);line-height:1.5;">
-            3 月底仙台白天約 10°C–14°C，早晚約 2°C–5°C；銀山溫泉山區夜晚約 -2°C–5°C 且可能積雪。建議發熱衣＋防風保暖外套，並穿防滑鞋。銀山溫泉街多為石板路與木造台階，拉大行李不便，強烈建議 Day 3 寄放大件行李於仙台站，輕裝前往溫泉旅館。
+          <div class="tl-card-inner" style="padding:11px 14px;display:flex;justify-content:space-between;align-items:center;gap:8px;">
+            <div>
+              <div style="font-size:13px;font-weight:700;color:var(--text-main);">JNTO 24小時醫療熱線</div>
+              <div style="font-size:11px;color:var(--text-sub);">提供中文電話口譯與東北就醫指引</div>
+            </div>
+            <a href="tel:05038162787" class="emergency-call-btn">
+              <svg class="taisho-svg-icon" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.8 19.8 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z" fill="rgba(226,166,84,0.22)"/></svg>
+              <span>醫療指引</span>
+            </a>
           </div>
         </div>
       </div>
 
-      <!-- 🚨 緊急應急電話 -->
-      <div style="padding:16px 16px 8px 16px;font-size:12px;font-family:var(--font-mono);color:var(--amber);">🚨 EMERGENCY CONTACTS (緊急聯絡電話)</div>
-      <div style="padding:0 16px;display:flex;flex-direction:column;gap:8px;margin-bottom:20px;">
-        <div style="background:var(--bg-card);border:1px solid var(--border-sub);padding:10px 14px;border-radius:var(--radius-lg);display:flex;justify-content:space-between;align-items:center;">
-          <div>
-            <div style="font-size:13px;font-weight:700;color:var(--text-main);">日本報警 (警察局)</div>
-            <div style="font-size:11px;color:var(--text-sub);">緊急事故、防盜與遺失物報案</div>
-          </div>
-          <a href="tel:110" style="padding:5px 12px;background:rgba(194,74,74,0.2);border:1px solid var(--vermilion);border-radius:6px;color:#FF7B7B;text-decoration:none;font-family:var(--font-mono);font-weight:700;">📞 110</a>
+      <!-- 子分頁 C：日語指差對話卡 (點卡片放大給店員看) -->
+      <div class="pocket-sub-pane" id="pocket-sub-phrases">
+        <div class="taisho-sec-heading">
+          <svg class="taisho-svg-icon" viewBox="0 0 24 24"><path class="svg-accent-fill" d="M5 5h14a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H10l-4.5 3.5V17H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2z"/><path d="M5 5h14a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H10l-4.5 3.5V17H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2z"/><path d="M8 9.5h8M8 12.5h5"/></svg>
+          <span>POINT & SPEAK CARDS（點擊卡片展開大字展示）</span>
         </div>
-        <div style="background:var(--bg-card);border:1px solid var(--border-sub);padding:10px 14px;border-radius:var(--radius-lg);display:flex;justify-content:space-between;align-items:center;">
-          <div>
-            <div style="font-size:13px;font-weight:700;color:var(--text-main);">救護車 / 消防局</div>
-            <div style="font-size:11px;color:var(--text-sub);">突發急病、火警受傷救援</div>
+        <div class="phrase-search-wrap">
+          <div class="taisho-ph-wrap">
+            <input type="search" id="phrase-search-input" class="phrase-search-box taisho-ph-input" placeholder=" " aria-label="搜尋關鍵字（如：牛舌、免稅、巴士、水）">
+            <span class="taisho-ph-label">搜尋關鍵字（如：牛舌、免稅、巴士、水）...</span>
           </div>
-          <a href="tel:119" style="padding:5px 12px;background:rgba(194,74,74,0.2);border:1px solid var(--vermilion);border-radius:6px;color:#FF7B7B;text-decoration:none;font-family:var(--font-mono);font-weight:700;">📞 119</a>
         </div>
-        <div style="background:var(--bg-card);border:1px solid var(--border-sub);padding:10px 14px;border-radius:var(--radius-lg);display:flex;justify-content:space-between;align-items:center;">
-          <div>
-            <div style="font-size:13px;font-weight:700;color:var(--text-main);">台北駐日經濟文化代表處</div>
-            <div style="font-size:11px;color:var(--text-sub);">東京本處急難救助（轄東北）</div>
-          </div>
-          <a href="tel:+81332807811" style="padding:5px 12px;background:var(--amber-soft);border:1px solid var(--border-brass);border-radius:6px;color:var(--amber);text-decoration:none;font-family:var(--font-mono);font-weight:700;">📞 代表處</a>
+        <div class="wallet-cat-filter-bar" id="phrase-cat-bar">
+          <button type="button" class="cat-filter-chip active" data-pcat="ALL">全部</button>
+          <button type="button" class="cat-filter-chip" data-pcat="點餐">點餐</button>
+          <button type="button" class="cat-filter-chip" data-pcat="交通">交通</button>
+          <button type="button" class="cat-filter-chip" data-pcat="住宿">住宿</button>
+          <button type="button" class="cat-filter-chip" data-pcat="購物">購物</button>
+          <button type="button" class="cat-filter-chip" data-pcat="問候">問候</button>
+          <button type="button" class="cat-filter-chip" data-pcat="身體不適">身體不適</button>
+        </div>
+        <div class="phrase-list-container" id="pocket-phrases-list">
+          <!-- 動態渲染日語指差卡 -->
         </div>
       </div>
 
-      <!-- ☁️ Google Sheets 雲端即時雙向同步 -->
-      <div style="padding:4px 16px 8px 16px;display:flex;justify-content:space-between;align-items:center;">
-        <span style="font-size:12px;font-family:var(--font-mono);color:var(--amber);">☁️ CLOUD SYNC (Google 試算表後台)</span>
-        <span id="cloud-sync-badge" style="font-size:11px;font-family:var(--font-mono);color:var(--text-muted);">尚未綁定</span>
-      </div>
-      <div style="padding:0 16px 24px 16px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;">
-        <button type="button" class="fx-quick-chip" style="padding:9px 6px;font-size:11.5px;text-align:center;" onclick="configureGasBackend()">⚙️ 綁定後台</button>
-        <button type="button" class="fx-quick-chip" style="padding:9px 6px;font-size:11.5px;text-align:center;" onclick="manualCloudSync()">🔄 立即同步</button>
-        <button type="button" class="fx-quick-chip" style="padding:9px 6px;font-size:11.5px;text-align:center;color:#FF8080;border-color:rgba(194,74,74,0.4);" onclick="resetAllTripData()">↺ 恢復預設</button>
-      </div>
-      <div style="padding:0 16px 20px 16px;margin-top:-14px;">
-        <button type="button" class="fx-quick-chip" style="width:100%;padding:8px 10px;font-size:11.5px;text-align:center;display:none;" id="btn-share-gas-link" onclick="copyPartnerSyncLink()">🔗 複製「雙人免設定自動同步連結」傳給另一半</button>
+      <!-- 子分頁 D：行前必備檢查清單 (雙人雲端同步) -->
+      <div class="pocket-sub-pane" id="pocket-sub-checklist">
+        <div class="taisho-sec-heading">
+          <svg class="taisho-svg-icon" viewBox="0 0 24 24"><rect class="svg-accent-fill" x="5" y="4" width="14" height="17" rx="2"/><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4.5h6v2.5H9z"/><path d="M9 12l2 2 4-4M9 16.5h6"/></svg>
+          <span>PRE-TRIP CHECKLIST（行前準備清單・自動同步）</span>
+        </div>
+        <div class="checklist-progress-card">
+          <div class="checklist-progress-head">
+            <span>行前整備進度</span>
+            <span id="checklist-done-count" style="font-family:var(--font-mono);color:var(--amber);">已完成 0 / 12 項 · 0%</span>
+          </div>
+          <div class="checklist-bar-track">
+            <div class="checklist-bar-fill" id="checklist-bar-fill"></div>
+          </div>
+        </div>
+
+        <div class="checklist-add-row">
+          <div class="taisho-ph-wrap">
+            <input type="text" id="checklist-new-input" class="form-input taisho-ph-input" placeholder=" " aria-label="新增待辦或隨身物品（例：暖暖包、轉接頭）">
+            <span class="taisho-ph-label">新增待辦或隨身物品（例：暖暖包、轉接頭）...</span>
+          </div>
+          <button type="button" id="checklist-add-btn" class="checklist-add-btn">
+            <svg class="taisho-svg-icon" style="width:12px!important;height:12px!important;" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+            <span>加入</span>
+          </button>
+        </div>
+
+        <div class="checklist-list-container" id="pocket-checklist-list">
+          <!-- 動態渲染行前檢查清單 -->
+        </div>
       </div>
 
     </section>
@@ -2478,41 +3612,49 @@
         </div>
         <div class="form-group">
           <label class="form-label">類別標籤</label>
-          <select id="modal-tl-tag" class="form-select">
-            <option value="景點">景點</option>
-            <option value="美食">美食</option>
-            <option value="通勤">通勤 / 交通</option>
-            <option value="住宿">住宿</option>
-            <option value="航班">航班</option>
-            <option value="購物">購物</option>
-          </select>
+          <input type="hidden" id="modal-tl-tag" value="景點">
+          <div class="modal-pill-group cols-6" id="modal-tl-tag-pills">
+            <button type="button" class="modal-seg-pill active" data-val="景點">景點</button>
+            <button type="button" class="modal-seg-pill" data-val="美食">美食</button>
+            <button type="button" class="modal-seg-pill" data-val="通勤">通勤</button>
+            <button type="button" class="modal-seg-pill" data-val="住宿">住宿</button>
+            <button type="button" class="modal-seg-pill" data-val="航班">航班</button>
+            <button type="button" class="modal-seg-pill" data-val="購物">購物</button>
+          </div>
         </div>
         <div class="form-group">
           <label class="form-label">備忘筆記／交通指南</label>
           <textarea id="modal-tl-note" class="form-textarea" rows="3" placeholder="輸入行程備忘、排隊須知或轉乘重點..."></textarea>
         </div>
         <div class="form-group">
-          <label class="form-label">Google 地圖搜尋關鍵字 (點擊地圖導航用)</label>
+          <div class="modal-q-head-row">
+            <label class="form-label" style="margin-bottom:0;">Google 地圖搜尋關鍵字</label>
+            <button type="button" class="modal-inline-helper-btn" id="modal-tl-copy-q-btn">帶入標題</button>
+          </div>
           <input type="text" id="modal-tl-q" class="form-input" placeholder="例: 松島さかな市場 或 日本地址">
         </div>
-        <button type="button" class="btn-submit-primary" id="modal-tl-submit">✓ 儲存行程資料</button>
+        <button type="button" class="btn-submit-primary" id="modal-tl-submit">
+          <svg class="taisho-svg-icon" viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="17" height="17" rx="3.5" fill="rgba(226,166,84,0.22)"/><path d="m8 12.2 2.7 2.8L16.2 9.5"/></svg>
+          <span>儲存行程資料</span>
+        </button>
       </div>
     </div>
 
     <!-- ========================================================
-         MODAL 2: 記帳 新增/微調彈窗（帶快速步進小鍵盤）
+         MODAL 2: 記帳 新增/微調彈窗（精簡化大正方格快選＋步進器）
          ======================================================== -->
     <div id="modal-expense" class="app-modal-backdrop">
       <div class="app-modal-sheet">
         <div class="modal-head">
           <div class="modal-title">
-            <span id="modal-exp-title-icon">⚡</span>
+            <span id="modal-exp-title-icon" style="display:inline-flex;align-items:center;"><svg class="taisho-svg-icon" viewBox="0 0 24 24"><path d="M4 9.5h16l1.5 9a2.5 2.5 0 0 1-2.5 2.5H5a2.5 2.5 0 0 1-2.5-2.5z" fill="rgba(226,166,84,0.22)"/><path d="M6 9.5V8a6 6 0 0 1 12 0v1.5"/><path d="M9.8 13.2 12 15.6l2.2-2.4M9.5 15.8h5M12 15.6v3.2"/></svg></span>
             <span id="modal-exp-header-text">快速微調記帳</span>
           </div>
           <div class="modal-close-x" id="modal-exp-close">✕</div>
         </div>
 
         <input type="hidden" id="modal-exp-edit-id">
+        <input type="hidden" id="modal-exp-daytag" value="D1">
 
         <div class="form-group">
           <label class="form-label">消費品名／項目名稱</label>
@@ -2520,14 +3662,22 @@
         </div>
 
         <div class="form-group">
-          <label class="form-label">金額調整（可直接輸入或點下方步進器）</label>
+          <div class="modal-inline-CurrRow">
+            <label class="form-label" style="margin-bottom:0;">金額（點擊自動全選）</label>
+            <input type="hidden" id="modal-exp-currency" value="JPY">
+            <div class="modal-curr-switch" id="modal-exp-curr-pills">
+              <button type="button" class="modal-seg-pill active" data-val="JPY">¥ JPY</button>
+              <button type="button" class="modal-seg-pill" data-val="TWD">NT$ TWD</button>
+            </div>
+          </div>
           <div class="tweak-amount-display">
-            <span style="font-size:18px;font-weight:700;color:var(--amber);" id="modal-exp-curr-sym">¥</span>
-            <input type="number" id="modal-exp-amount" class="tweak-amt-input" value="1000">
-            <span style="font-size:12px;color:var(--text-sub);font-family:var(--font-mono);" id="modal-exp-calc-twd">≈ NT$ 215</span>
+            <span style="font-size:18px;font-weight:700;color:var(--amber);flex-shrink:0;" id="modal-exp-curr-sym">¥</span>
+            <input type="number" id="modal-exp-amount" class="tweak-amt-input" inputmode="decimal" onfocus="this.select()" value="1000" style="min-width:0;flex:1;margin-left:6px;">
+            <span style="font-size:12px;color:var(--text-sub);font-family:var(--font-mono);white-space:nowrap;flex-shrink:0;" id="modal-exp-calc-twd">≈ NT$ 215</span>
+            <button type="button" class="modal-amt-reset-btn" id="modal-exp-reset-btn" title="歸零清空金額">歸零</button>
           </div>
 
-          <div class="stepper-btn-row">
+          <div class="stepper-btn-row" style="margin-bottom:4px;">
             <button type="button" class="stepper-btn" onclick="stepExpAmt(-500)">-500</button>
             <button type="button" class="stepper-btn" onclick="stepExpAmt(-100)">-100</button>
             <button type="button" class="stepper-btn" onclick="stepExpAmt(100)">+100</button>
@@ -2536,25 +3686,18 @@
           </div>
         </div>
 
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;" class="form-group">
-          <div>
-            <label class="form-label">幣別</label>
-            <select id="modal-exp-currency" class="form-select">
-              <option value="JPY">日圓 (¥)</option>
-              <option value="TWD">台幣 (NT$)</option>
-            </select>
-          </div>
-          <div>
-            <label class="form-label">分類</label>
-            <select id="modal-exp-category" class="form-select">
-              <option value="美食">美食</option>
-              <option value="交通">交通</option>
-              <option value="購物/伴手禮">購物/伴手禮</option>
-              <option value="住宿">住宿</option>
-              <option value="機票">機票</option>
-              <option value="景點/活動">景點/活動</option>
-              <option value="其他">其他</option>
-            </select>
+        <div class="form-group">
+          <label class="form-label">消費分類</label>
+          <input type="hidden" id="modal-exp-category" value="美食">
+          <div class="modal-pill-group" id="modal-exp-cat-pills">
+            <button type="button" class="modal-seg-pill active" data-val="美食">美食</button>
+            <button type="button" class="modal-seg-pill" data-val="交通">交通</button>
+            <button type="button" class="modal-seg-pill" data-val="購物/伴手禮">購物</button>
+            <button type="button" class="modal-seg-pill" data-val="住宿">住宿</button>
+            <button type="button" class="modal-seg-pill" data-val="機票">機票</button>
+            <button type="button" class="modal-seg-pill" data-val="景點/活動">景點</button>
+            <button type="button" class="modal-seg-pill" data-val="網卡/雜支">網卡</button>
+            <button type="button" class="modal-seg-pill" data-val="其他">其他</button>
           </div>
         </div>
 
@@ -2563,7 +3706,10 @@
           <input type="text" id="modal-exp-note" class="form-input" placeholder="例: 現金付款、刷信用卡">
         </div>
 
-        <button type="button" class="btn-submit-primary" id="modal-exp-submit">✓ 確定記下此筆消費</button>
+        <button type="button" class="btn-submit-primary" id="modal-exp-submit">
+          <svg class="taisho-svg-icon" viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="17" height="17" rx="3.5" fill="rgba(226,166,84,0.22)"/><path d="m8 12.2 2.7 2.8L16.2 9.5"/></svg>
+          <span>確定記下此筆消費</span>
+        </button>
       </div>
     </div>
 
@@ -2624,29 +3770,64 @@
           <input type="text" id="modal-tkt-footnote" class="form-input" placeholder="例: 2027.03.29 一 · 單程 ¥1,000">
         </div>
 
-        <button type="button" class="btn-submit-primary" id="modal-tkt-submit">✓ 儲存此張票券</button>
+        <button type="button" class="btn-submit-primary" id="modal-tkt-submit">
+          <svg class="taisho-svg-icon" viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="17" height="17" rx="3.5" fill="rgba(226,166,84,0.22)"/><path d="m8 12.2 2.7 2.8L16.2 9.5"/></svg>
+          <span>儲存此張票券</span>
+        </button>
       </div>
     </div>
 
 
     <!-- ========================================================
-         MODAL 4: 🚕 日本計程車司機指差大字卡 (Driver Card)
+         MODAL 4: 日本計程車司機指差大字卡 (Driver Card)
          ======================================================== -->
     <div id="modal-driver" class="app-modal-backdrop">
       <div class="app-modal-sheet" style="text-align:center;">
         <div class="modal-head">
           <div class="modal-title">
-            <span>🚕</span>
+            <span style="display:inline-flex;color:var(--amber);"><svg class="taisho-svg-icon" style="width:20px;height:20px;" viewBox="0 0 24 24"><path d="M5 11l2-5h10l2 5" fill="rgba(226,166,84,0.22)"/><rect x="3" y="11" width="18" height="6" rx="1.8" fill="rgba(226,166,84,0.22)"/><circle cx="7.5" cy="17.5" r="1.8"/><circle cx="16.5" cy="17.5" r="1.8"/><path d="M10 4h4v2h-4z"/></svg></span>
             <span>計程車司機指差對話卡</span>
           </div>
           <div class="modal-close-x" id="modal-driver-close">✕</div>
         </div>
-        <div style="background:rgba(14,18,26,0.9);border:1.5px solid var(--amber);border-radius:14px;padding:18px 14px;margin-bottom:12px;">
+        <div class="taisho-showcase-box">
           <div style="font-size:11.5px;color:var(--amber);font-family:var(--font-mono);margin-bottom:6px;">運転手さんへ（請給司機看此畫面）</div>
           <div id="driver-jp-phrase" style="font-family:var(--font-serif);font-size:20px;font-weight:800;color:#FFF;line-height:1.5;margin-bottom:12px;"></div>
           <div id="driver-jp-addr" style="font-size:13.5px;color:var(--amber);font-family:var(--font-mono);padding-top:10px;border-top:1px dashed rgba(226,166,84,0.3);"></div>
         </div>
-        <button type="button" class="btn-submit-primary" id="btn-copy-driver-addr">📋 複製日文飯店名稱與地址</button>
+        <button type="button" class="taisho-brass-btn btn-primary-brass" id="btn-copy-driver-addr" style="width:100%;padding:12px;font-size:13.5px;">
+          <svg class="taisho-svg-icon" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2" fill="rgba(226,166,84,0.22)"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+          <span>複製日文飯店名稱與地址</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- ========================================================
+         MODAL 6: 日語指差大字對話卡 (Point & Speak)
+         ======================================================== -->
+    <div id="modal-phrase" class="app-modal-backdrop">
+      <div class="app-modal-sheet" style="text-align:center;">
+        <div class="modal-head">
+          <div class="modal-title">
+            <span style="display:inline-flex;color:var(--amber);"><svg class="taisho-svg-icon" style="width:20px;height:20px;" viewBox="0 0 24 24"><path d="M5 5h14a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H10l-4.5 3.5V17H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2z" fill="rgba(226,166,84,0.22)"/><path d="M8 9.5h8M8 12.5h5"/></svg></span>
+            <span id="phrase-modal-cat">日語指差對話卡</span>
+          </div>
+          <div class="modal-close-x" id="modal-phrase-close">✕</div>
+        </div>
+        <div class="taisho-showcase-box">
+          <div style="font-size:11px;color:var(--amber);font-family:var(--font-mono);margin-bottom:8px;">スタッフへ（請將此大字卡展示給店員或站務人員看）</div>
+          <div id="phrase-modal-jp" style="font-family:var(--font-serif);font-size:21px;font-weight:800;color:#FFF;line-height:1.55;margin-bottom:12px;"></div>
+          <div id="phrase-modal-zh" style="font-size:14px;font-weight:700;color:var(--amber);padding-top:10px;border-top:1px dashed rgba(226,166,84,0.3);"></div>
+          <div id="phrase-modal-pron" style="font-size:11.5px;color:var(--text-sub);font-family:var(--font-mono);margin-top:6px;"></div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1.4fr 1fr;gap:8px;">
+          <button type="button" class="taisho-brass-btn" id="phrase-prev-btn" style="padding:11px 6px;font-size:12.5px;">‹ 上一句</button>
+          <button type="button" class="taisho-brass-btn btn-primary-brass" id="phrase-copy-btn" style="padding:11px 6px;font-size:13px;">
+            <svg class="taisho-svg-icon" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2" fill="rgba(226,166,84,0.22)"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            <span>複製日文</span>
+          </button>
+          <button type="button" class="taisho-brass-btn" id="phrase-next-btn" style="padding:11px 6px;font-size:12.5px;">下一句 ›</button>
+        </div>
       </div>
     </div>
 
@@ -2655,11 +3836,13 @@
          ======================================================== -->
     <div id="modal-confirm" class="app-modal-backdrop">
       <div class="app-modal-sheet" style="max-width:360px !important;text-align:center;">
-        <div style="font-size:24px;margin-bottom:6px;">🎐</div>
+        <div style="display:inline-flex;align-items:center;justify-content:center;color:var(--amber);margin-bottom:8px;">
+          <svg class="taisho-svg-icon" style="width:28px !important;height:28px !important;" viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" fill="rgba(226,166,84,0.22)"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+        </div>
         <div id="confirm-modal-msg" style="font-family:var(--font-serif);font-size:15.5px;font-weight:700;color:var(--text-main);line-height:1.5;margin-bottom:18px;"></div>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
-          <button type="button" id="confirm-btn-cancel" class="fx-quick-chip" style="padding:11px;font-size:13.5px;">取消返回</button>
-          <button type="button" id="confirm-btn-ok" class="btn-submit-primary" style="margin-top:0;padding:11px;font-size:13.5px;background:linear-gradient(145deg,#D45B5B,#A63A3A);color:#FFF;">確定執行</button>
+          <button type="button" id="confirm-btn-cancel" class="taisho-brass-btn" style="padding:11px;font-size:13.5px;">取消返回</button>
+          <button type="button" id="confirm-btn-ok" class="taisho-brass-btn btn-danger-brass" style="padding:11px;font-size:13.5px;background:linear-gradient(145deg,rgba(194,74,74,0.42),rgba(130,38,38,0.88));color:#FFE4E1;border-color:#D46A6A;">確定執行</button>
         </div>
       </div>
     </div>
@@ -3342,6 +4525,15 @@ window.HANDBOOK_DATA.emergencyContacts = [
         }
       }
 
+      function escHtml(str) {
+        return String(str == null ? '' : str)
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;')
+          .replace(/'/g, '&#39;');
+      }
+
       // =========================================================
       // 依您指定意象重新生成的三套高質感向量 Icon 組合
       // 每一套皆具備：
@@ -3367,7 +4559,8 @@ window.HANDBOOK_DATA.emergencyContacts = [
           edit: `<svg class="taisho-svg-icon" viewBox="0 0 24 24"><path d="M18.5 2.5a2.12 2.12 0 0 1 3 3L12 15l-4.5 1.5L9 12l9.5-9.5z"/><path d="m15 6 3 3"/><circle cx="11.5" cy="12.5" r="0.8"/><path d="M4 20h16"/></svg>`,
           del: `<svg class="taisho-svg-icon" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>`,
           food: `<svg class="taisho-svg-icon" viewBox="0 0 24 24"><path d="M4 12h16a8 8 0 0 1-16 0z"/><path d="M2 12h20"/><path d="M9 20h6"/><path d="M7 4l13 3"/><path d="M7 7.5 20 5"/></svg>`,
-          spot: `<svg class="taisho-svg-icon" viewBox="0 0 24 24"><path d="M3 6c5 1.5 13 1.5 18 0"/><path d="M5 9.5h14"/><path d="M7 6v15M17 6v15"/><path d="M12 6v3.5"/></svg>`
+          spot: `<svg class="taisho-svg-icon" viewBox="0 0 24 24"><path d="M3 6c5 1.5 13 1.5 18 0"/><path d="M5 9.5h14"/><path d="M7 6v15M17 6v15"/><path d="M12 6v3.5"/></svg>`,
+          wallet: `<svg class="taisho-svg-icon" viewBox="0 0 24 24"><path d="M4 9.5h16l1.5 9a2.5 2.5 0 0 1-2.5 2.5H5a2.5 2.5 0 0 1-2.5-2.5z"/><path d="M6 9.5V8a6 6 0 0 1 12 0v1.5"/><path d="M9.8 13.2 12 15.6l2.2-2.4M9.5 15.8h5M12 15.6v3.2"/></svg>`
         },
 
         // 組合 B：和洋立體浮雕 (3D Craft)
@@ -3382,7 +4575,8 @@ window.HANDBOOK_DATA.emergencyContacts = [
           edit: `<svg class="taisho-svg-icon" viewBox="0 0 24 24"><polygon points="16 3 21 8 8 21 3 21 3 16 16 3" fill="rgba(226,166,84,0.22)"/><line x1="13.5" y1="5.5" x2="18.5" y2="10.5"/></svg>`,
           del: `<svg class="taisho-svg-icon" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" fill="rgba(194,74,74,0.18)"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>`,
           food: `<svg class="taisho-svg-icon" viewBox="0 0 24 24"><path d="M4 12h16a8 8 0 0 1-16 0z" fill="rgba(226,166,84,0.22)"/><path d="M2 12h20M9 20h6M7 4.5l13 2.5"/></svg>`,
-          spot: `<svg class="taisho-svg-icon" viewBox="0 0 24 24"><path d="M2.5 5.5c5 2 14 2 19 0"/><path d="M4.5 9.5h15"/><path d="M7 6v15M17 6v15"/></svg>`
+          spot: `<svg class="taisho-svg-icon" viewBox="0 0 24 24"><path d="M2.5 5.5c5 2 14 2 19 0"/><path d="M4.5 9.5h15"/><path d="M7 6v15M17 6v15"/></svg>`,
+          wallet: `<svg class="taisho-svg-icon" viewBox="0 0 24 24"><path d="M4 9.5h16l1.5 9a2.5 2.5 0 0 1-2.5 2.5H5a2.5 2.5 0 0 1-2.5-2.5z" fill="rgba(226,166,84,0.22)"/><path d="M6 9.5V8a6 6 0 0 1 12 0v1.5"/><circle cx="9.8" cy="4.2" r="1.1"/><circle cx="14.2" cy="4.2" r="1.1"/><path d="M9.8 13.2 12 15.6l2.2-2.4M9.5 15.8h5M12 15.6v3.2"/></svg>`
         },
 
         // 組合 C：御紋雙線雕花 (Imperial Crest)
@@ -3396,7 +4590,8 @@ window.HANDBOOK_DATA.emergencyContacts = [
           edit: `<svg class="taisho-svg-icon" viewBox="0 0 24 24"><path d="M20.2 3.8a2.5 2.5 0 0 0-3.5 0L6.5 14 4 20l6-2.5L20.2 7.3a2.5 2.5 0 0 0 0-3.5Z"/><path d="m14.5 6 3.5 3.5"/><path d="m4 20 4.5-4.5"/></svg>`,
           del: `<svg class="taisho-svg-icon" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>`,
           food: `<svg class="taisho-svg-icon" viewBox="0 0 24 24"><path d="M4 12h16a8 8 0 0 1-16 0z"/><path d="M2 12h20M9 20h6M7 4.5l13 2.5"/></svg>`,
-          spot: `<svg class="taisho-svg-icon" viewBox="0 0 24 24"><path d="M2.5 5.5c5 2 14 2 19 0"/><path d="M4.5 9.5h15"/><path d="M7 6v15M17 6v15"/></svg>`
+          spot: `<svg class="taisho-svg-icon" viewBox="0 0 24 24"><path d="M2.5 5.5c5 2 14 2 19 0"/><path d="M4.5 9.5h15"/><path d="M7 6v15M17 6v15"/></svg>`,
+          wallet: `<svg class="taisho-svg-icon" viewBox="0 0 24 24"><path d="M4 9.5h16l1.5 9a2.5 2.5 0 0 1-2.5 2.5H5a2.5 2.5 0 0 1-2.5-2.5z"/><path d="M6 9.5V8a6 6 0 0 1 12 0v1.5"/><path d="M9.8 13.2 12 15.6l2.2-2.4M9.5 15.8h5M12 15.6v3.2"/></svg>`
         }
       };
 
@@ -3605,6 +4800,7 @@ window.HANDBOOK_DATA.emergencyContacts = [
         syncRateUI();
         calcFxFromLeft();
         renderWalletHistory();
+        if (window.scheduleCloudPush) window.scheduleCloudPush();
       });
 
       // 頂部抽屜開關
@@ -3694,6 +4890,8 @@ window.HANDBOOK_DATA.emergencyContacts = [
         if (e.key === 'Escape') {
           closeWx();
           closeFx();
+          document.querySelectorAll('.app-modal-backdrop.open').forEach(m => m.classList.remove('open'));
+          if (typeof syncBodyLock === 'function') syncBodyLock();
         }
       });
 
@@ -4070,7 +5268,7 @@ window.HANDBOOK_DATA.emergencyContacts = [
           const isFood = (item.tag || '').includes('美食') || (item.title || '').includes('餐') || (item.title || '').includes('牛舌');
 
           const typeClass = isFlight ? 'flight-item' : (isHotel ? 'hotel-item' : '');
-          
+
           let catIcon = cur.spot;
           let catLabel = item.tag || '景點';
           if (isFlight) { catIcon = cur.flight; catLabel = item.tag || '航班'; }
@@ -4078,27 +5276,31 @@ window.HANDBOOK_DATA.emergencyContacts = [
           else if (isHotel) { catIcon = cur.hotel; catLabel = item.tag || '住宿'; }
           else if (isFood) { catIcon = cur.food; catLabel = item.tag || '美食'; }
 
+          const mapUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(getCleanMapQuery(item.q, item.title))}`;
+          const upStyle = `width:28px;height:28px;font-size:12px;${idx === 0 ? 'opacity:0.35;pointer-events:none;' : ''}`;
+          const downStyle = `width:28px;height:28px;font-size:12px;${idx === dayData.items.length - 1 ? 'opacity:0.35;pointer-events:none;' : ''}`;
+
           html += `
             <div class="tl-card-item ${typeClass}" id="tl-item-${currentDay}-${idx}">
               <div class="tl-node-pin"></div>
               <div class="tl-card-inner" onclick="toggleExpandTl(this)">
                 <div class="tl-head-row">
-                  <span class="tl-time-badge">${item.time || '待定時間'}</span>
-                  <span class="tl-tag-pill">${catIcon} <span>${catLabel}</span></span>
+                  <span class="tl-time-badge">${escHtml(item.time || '待定時間')}</span>
+                  <span class="tl-tag-pill">${catIcon} <span>${escHtml(catLabel)}</span></span>
                 </div>
                 <div class="tl-card-title">
-                  <span>${item.title}</span>
+                  <span>${escHtml(item.title)}</span>
                 </div>
-                ${item.note ? `<div class="tl-card-note">${item.note}</div>` : ''}
-                
-                <!-- 展開後的操作列：支援上移/下移、地圖、修改、刪除 -->
+                ${item.note ? `<div class="tl-card-note">${escHtml(item.note)}</div>` : ''}
+
+                <!-- 展開後的操作列：上移/下移、地圖導航、修改與刪除 -->
                 <div class="tl-card-actions" onclick="event.stopPropagation()">
                   <div style="display:flex;align-items:center;gap:5px;">
-                    <button type="button" class="taisho-action-btn" style="width:28px;height:28px;font-size:12px;" title="上移順序" onclick="moveTimelineItem(${currentDay}, ${idx}, -1)" ${idx === 0 ? 'disabled style="opacity:0.35;pointer-events:none;width:28px;height:28px;"' : ''}>↑</button>
-                    <button type="button" class="taisho-action-btn" style="width:28px;height:28px;font-size:12px;" title="下移順序" onclick="moveTimelineItem(${currentDay}, ${idx}, 1)" ${idx === dayData.items.length - 1 ? 'disabled style="opacity:0.35;pointer-events:none;width:28px;height:28px;"' : ''}>↓</button>
+                    <button type="button" class="taisho-action-btn" style="${upStyle}" title="上移順序" onclick="moveTimelineItem(${currentDay}, ${idx}, -1)" ${idx === 0 ? 'disabled' : ''}>↑</button>
+                    <button type="button" class="taisho-action-btn" style="${downStyle}" title="下移順序" onclick="moveTimelineItem(${currentDay}, ${idx}, 1)" ${idx === dayData.items.length - 1 ? 'disabled' : ''}>↓</button>
                   </div>
                   <div class="action-btn-group">
-                    <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(getCleanMapQuery(item.q, item.title))}" onclick="event.stopPropagation()" target="_blank" rel="noopener" class="taisho-action-btn" title="開啟 Google 地圖導航">
+                    <a href="${mapUrl}" onclick="event.stopPropagation()" target="_blank" rel="noopener" class="taisho-action-btn" title="開啟 Google 地圖">
                       ${cur.map}
                     </a>
                     <button type="button" class="taisho-action-btn" title="修改此行程" onclick="openEditTimelineModal(${currentDay}, ${idx})">
@@ -4123,6 +5325,12 @@ window.HANDBOOK_DATA.emergencyContacts = [
         el.closest('.tl-card-item').classList.toggle('expanded');
       };
 
+      window.toggleTransitTimetable = function(el) {
+        if (!el) return;
+        triggerHaptic(6);
+        el.classList.toggle('expanded');
+      };
+
       // 行程新增與修改 Modal
       const modalTl = document.getElementById('modal-itinerary');
       const modalTlClose = document.getElementById('modal-tl-close');
@@ -4135,13 +5343,52 @@ window.HANDBOOK_DATA.emergencyContacts = [
       const modalTlNote = document.getElementById('modal-tl-note');
       const modalTlQ = document.getElementById('modal-tl-q');
 
+      function setModalTlTag(val) {
+        const normalized = (val || '景點').replace(/\s*\/\s*交通$/, '').trim() || '景點';
+        const pills = document.querySelectorAll('#modal-tl-tag-pills .modal-seg-pill');
+        let matched = false;
+        pills.forEach(p => {
+          const isMatch = p.dataset.val === normalized;
+          p.classList.toggle('active', isMatch);
+          if (isMatch) matched = true;
+        });
+        if (!matched && pills[0]) {
+          pills[0].classList.add('active');
+          modalTlTag.value = pills[0].dataset.val;
+        } else {
+          modalTlTag.value = normalized;
+        }
+      }
+
+      document.querySelectorAll('#modal-tl-tag-pills .modal-seg-pill').forEach(btn => {
+        btn.addEventListener('click', () => {
+          triggerHaptic(6);
+          setModalTlTag(btn.dataset.val);
+        });
+      });
+
+      const modalTlCopyQBtn = document.getElementById('modal-tl-copy-q-btn');
+      if (modalTlCopyQBtn) {
+        modalTlCopyQBtn.addEventListener('click', () => {
+          triggerHaptic(6);
+          const clean = modalTlTitle.value.replace(/【[^】]+】/g, '').trim();
+          if (!clean) {
+            showToast('請先輸入上方景點名稱');
+            modalTlTitle.focus();
+            return;
+          }
+          modalTlQ.value = clean;
+          showToast('✓ 已帶入景點標題為地圖關鍵字');
+        });
+      }
+
       document.getElementById('btn-bottom-add-itinerary').addEventListener('click', () => {
         triggerHaptic(8);
         modalTlTitleText.textContent = `新增 Day ${currentDay + 1} 行程景點`;
         modalTlEditId.value = '';
         modalTlTime.value = '';
         modalTlTitle.value = '';
-        modalTlTag.value = '景點';
+        setModalTlTag('景點');
         modalTlNote.value = '';
         modalTlQ.value = '';
         modalTl.classList.add('open');
@@ -4158,7 +5405,7 @@ window.HANDBOOK_DATA.emergencyContacts = [
         modalTlEditId.value = `${dIdx}_${itemIdx}`;
         modalTlTime.value = item.time || '';
         modalTlTitle.value = item.title || '';
-        modalTlTag.value = item.tag || '景點';
+        setModalTlTag(item.tag || '景點');
         modalTlNote.value = item.note || '';
         modalTlQ.value = item.q || '';
         modalTl.classList.add('open');
@@ -4202,7 +5449,7 @@ window.HANDBOOK_DATA.emergencyContacts = [
           id: editId ? undefined : 'item-' + Date.now(),
           time: modalTlTime.value.trim(),
           title: title,
-          tag: modalTlTag.value,
+          tag: modalTlTag.value || '景點',
           note: modalTlNote.value.trim(),
           q: modalTlQ.value.trim() || title
         };
@@ -4228,13 +5475,47 @@ window.HANDBOOK_DATA.emergencyContacts = [
       });
 
       // =========================================================
-      // TAB 2: 記帳資料與 CRUD (點一下項目才出現修改與刪除 Icon)
+      // TAB 2: 記帳資料與 CRUD（動態分類小計條＋天數標籤＋單手膠囊）
       // =========================================================
+      const DEFAULT_DAY_TAG_MAP = {
+        'exp-flights': '行前',
+        'exp-hotel-d1d2': 'D1',
+        'exp-hotel-d3': 'D3',
+        'exp-hotel-d4': 'D4'
+      };
+      const WALLET_CAT_COLORS = {
+        '住宿': '#E2A654',
+        '機票': '#5B7FA6',
+        '美食': '#C2594A',
+        '交通': '#A6866A',
+        '購物/伴手禮': '#B8737E',
+        '景點/活動': '#4A8B6E',
+        '網卡/雜支': '#5E8C85',
+        '其他': '#7E8694'
+      };
+      const WALLET_CAT_SHORT = {
+        '美食': '美食',
+        '機票': '機票',
+        '住宿': '住宿',
+        '景點/活動': '景點',
+        '交通': '交通',
+        '購物/伴手禮': '購物',
+        '網卡/雜支': '網卡',
+        '其他': '其他'
+      };
+
       let allExpenses = [];
       try {
         const savedExp = safeStorage.get('sendai_expenses_v27');
         if (savedExp) {
           allExpenses = JSON.parse(savedExp);
+          if (Array.isArray(allExpenses)) {
+            allExpenses.forEach(ex => {
+              if (!ex.dayTag && ex.id && DEFAULT_DAY_TAG_MAP[ex.id]) {
+                ex.dayTag = DEFAULT_DAY_TAG_MAP[ex.id];
+              }
+            });
+          }
         } else {
           allExpenses = [
             {
@@ -4243,6 +5524,7 @@ window.HANDBOOK_DATA.emergencyContacts = [
               amount: 16500,
               currency: 'TWD',
               category: '機票',
+              dayTag: '行前',
               note: '星宇航空 2 人來回機票款 NT$ 16,500'
             },
             {
@@ -4251,6 +5533,7 @@ window.HANDBOOK_DATA.emergencyContacts = [
               amount: 7800,
               currency: 'TWD',
               category: '住宿',
+              dayTag: 'D1',
               note: '出站即達免淋雨 NT$ 7,800'
             },
             {
@@ -4259,6 +5542,7 @@ window.HANDBOOK_DATA.emergencyContacts = [
               amount: 15000,
               currency: 'TWD',
               category: '住宿',
+              dayTag: 'D3',
               note: '一泊二食 NT$ 15,000'
             },
             {
@@ -4267,6 +5551,7 @@ window.HANDBOOK_DATA.emergencyContacts = [
               amount: 2800,
               currency: 'TWD',
               category: '住宿',
+              dayTag: 'D4',
               note: '近仙台朝市 NT$ 2,800'
             }
           ];
@@ -4287,6 +5572,20 @@ window.HANDBOOK_DATA.emergencyContacts = [
 
       let currentWalletFilter = 'ALL';
 
+      window.setWalletCatFilter = function(cat) {
+        currentWalletFilter = cat || 'ALL';
+        document.querySelectorAll('#wallet-cat-bar .cat-filter-chip').forEach(b => {
+          b.classList.toggle('active', (b.dataset.cat || 'ALL') === currentWalletFilter);
+        });
+        renderWalletHistory();
+      };
+
+      window.toggleWalletCatFilter = function(cat) {
+        triggerHaptic(6);
+        const next = (currentWalletFilter === cat && cat !== 'ALL') ? 'ALL' : cat;
+        window.setWalletCatFilter(next);
+      };
+
       function renderWalletHistory() {
         const box = document.getElementById('wallet-history-list');
         if (!box) return;
@@ -4294,31 +5593,43 @@ window.HANDBOOK_DATA.emergencyContacts = [
         const cur = ICON_SETS[activeIconSet] || ICON_SETS.craft;
         let grandTwd = 0;
         let totalJpy = 0;
+        let filteredTwd = 0;
+        let filteredJpy = 0;
+        let filteredCount = 0;
+        const catTotals = {};
         let html = '';
 
         allExpenses.forEach((ex, idx) => {
-          const amtTwd = ex.currency === 'JPY' ? Math.round(ex.amount * currentFxRate) : Number(ex.amount);
+          const amtNum = Number(ex.amount) || 0;
+          const amtTwd = ex.currency === 'JPY' ? Math.round(amtNum * currentFxRate) : amtNum;
+          const catName = ex.category || '其他';
           grandTwd += amtTwd;
-          if (ex.currency === 'JPY') totalJpy += Number(ex.amount);
+          if (ex.currency === 'JPY') totalJpy += amtNum;
+          catTotals[catName] = (catTotals[catName] || 0) + amtTwd;
 
-          if (currentWalletFilter !== 'ALL' && ex.category !== currentWalletFilter) {
+          if (currentWalletFilter !== 'ALL' && catName !== currentWalletFilter) {
             return;
           }
+
+          filteredTwd += amtTwd;
+          if (ex.currency === 'JPY') filteredJpy += amtNum;
+          filteredCount += 1;
 
           html += `
             <div class="exp-item-card" id="exp-row-${idx}" onclick="toggleExpandExp(this)">
               <div class="exp-main-row">
                 <div style="flex:1;min-width:0;">
-                  <div style="font-size:13.5px;font-weight:700;color:var(--text-main);">${ex.title}</div>
+                  <div style="font-size:13.5px;font-weight:700;color:var(--text-main);">${escHtml(ex.title)}</div>
                   <div style="font-size:11.5px;color:var(--text-sub);margin-top:2px;">
-                    <span style="color:var(--amber);font-weight:600;">${ex.category || '消費'}</span>
-                    ${ex.note ? ` · <span>${ex.note}</span>` : ''}
+                    ${ex.dayTag ? `<span class="exp-day-badge">${escHtml(ex.dayTag)}</span>` : ''}
+                    <span style="color:var(--amber);font-weight:600;">${escHtml(catName)}</span>
+                    ${ex.note ? ` · <span>${escHtml(ex.note)}</span>` : ''}
                   </div>
                 </div>
 
                 <div style="text-align:right;flex-shrink:0;">
                   <div style="font-family:var(--font-mono);font-size:14px;font-weight:700;color:var(--amber);">
-                    ${ex.currency === 'JPY' ? '¥' : 'NT$'} ${Number(ex.amount).toLocaleString()}
+                    ${ex.currency === 'JPY' ? '¥' : 'NT$'} ${amtNum.toLocaleString()}
                   </div>
                   ${ex.currency === 'JPY' ? `<div style="font-size:10.5px;color:var(--text-muted);font-family:var(--font-mono);">≈ NT$ ${amtTwd.toLocaleString()}</div>` : ''}
                 </div>
@@ -4341,13 +5652,86 @@ window.HANDBOOK_DATA.emergencyContacts = [
         });
 
         box.innerHTML = html || '<div style="text-align:center;padding:18px;color:var(--text-sub);font-size:12.5px;">此分類目前尚無消費記錄</div>';
+
+        const totalLabelEl = document.getElementById('wallet-total-label');
         const totalEl = document.getElementById('wallet-grand-total');
-        if (totalEl) totalEl.textContent = 'NT$ ' + grandTwd.toLocaleString();
         const jpySubEl = document.getElementById('wallet-jpy-sub');
-        if (jpySubEl) jpySubEl.textContent = `日圓消費累計：¥${totalJpy.toLocaleString()}`;
+        const pctSubEl = document.getElementById('wallet-pct-sub');
+
+        if (currentWalletFilter === 'ALL') {
+          if (totalLabelEl) totalLabelEl.textContent = '兩人共同旅費累計支出 (折合台幣)';
+          if (totalEl) totalEl.textContent = 'NT$ ' + grandTwd.toLocaleString();
+          if (jpySubEl) jpySubEl.textContent = `日圓消費累計：¥${totalJpy.toLocaleString()}`;
+          if (pctSubEl) pctSubEl.textContent = `共 ${allExpenses.length} 筆消費明細`;
+        } else {
+          const rawFilterPct = grandTwd > 0 ? (filteredTwd / grandTwd) * 100 : 0;
+          const filterPctStr = (filteredTwd > 0 && rawFilterPct < 0.5) ? '<1%' : `${Math.round(rawFilterPct)}%`;
+          if (totalLabelEl) totalLabelEl.textContent = `【${currentWalletFilter}】分類支出小計`;
+          if (totalEl) totalEl.textContent = 'NT$ ' + filteredTwd.toLocaleString();
+          if (jpySubEl) jpySubEl.textContent = `此分類日圓：¥${filteredJpy.toLocaleString()} · 總計 NT$ ${grandTwd.toLocaleString()}`;
+          if (pctSubEl) pctSubEl.textContent = `佔總旅費 ${filterPctStr}（${filteredCount} 筆）`;
+        }
+
+        // 更新分類佔比長條與互動圖例
+        const bdWrap = document.getElementById('wallet-breakdown-wrap');
+        const bdBar = document.getElementById('wallet-breakdown-bar');
+        const bdLegend = document.getElementById('wallet-breakdown-legend');
+        if (bdWrap && bdBar && bdLegend) {
+          const sortedCats = Object.entries(catTotals)
+            .filter(([, v]) => v > 0)
+            .sort((a, b) => b[1] - a[1]);
+
+          if (grandTwd > 0 && sortedCats.length > 0) {
+            bdWrap.style.display = 'flex';
+            let barHtml = '';
+            let legendHtml = '';
+            sortedCats.forEach(([cat, twdVal]) => {
+              const rawPct = (twdVal / grandTwd) * 100;
+              const pctStr = (rawPct > 0 && rawPct < 0.5) ? '<1%' : `${Math.round(rawPct)}%`;
+              const barPct = Math.max(1.2, rawPct);
+              const color = WALLET_CAT_COLORS[cat] || '#8E97A4';
+              const shortLabel = WALLET_CAT_SHORT[cat] || cat;
+              const isDim = currentWalletFilter !== 'ALL' && currentWalletFilter !== cat;
+              barHtml += `<div class="wallet-breakdown-seg${isDim ? ' dimmed' : ''}" data-cat="${escHtml(cat)}" style="width:${barPct.toFixed(2)}%;background:${color};" title="${escHtml(cat)}：NT$ ${twdVal.toLocaleString()} (${pctStr})"></div>`;
+              legendHtml += `<span class="wallet-legend-item${isDim ? ' dimmed' : ''}" data-cat="${escHtml(cat)}"><span class="wallet-cat-dot" style="background:${color};"></span><span>${escHtml(shortLabel)} ${pctStr}</span></span>`;
+            });
+            bdBar.innerHTML = barHtml;
+            bdLegend.innerHTML = legendHtml;
+
+            bdBar.querySelectorAll('.wallet-breakdown-seg').forEach(seg => {
+              seg.addEventListener('click', (e) => {
+                e.stopPropagation();
+                window.toggleWalletCatFilter(seg.dataset.cat);
+              });
+            });
+            bdLegend.querySelectorAll('.wallet-legend-item').forEach(item => {
+              item.addEventListener('click', (e) => {
+                e.stopPropagation();
+                window.toggleWalletCatFilter(item.dataset.cat);
+              });
+            });
+          } else {
+            bdWrap.style.display = 'none';
+            bdBar.innerHTML = '';
+            bdLegend.innerHTML = '';
+          }
+        }
       }
 
-      // 記帳 Modal 邏輯
+      // 點擊記帳總覽區或記帳頁空白處，自動從單一分類切回「總觀 (ALL)」
+      const walletPaneEl = document.getElementById('pane-wallet');
+      if (walletPaneEl) {
+        walletPaneEl.addEventListener('click', (e) => {
+          if (currentWalletFilter === 'ALL') return;
+          if (e.target.closest('.wallet-breakdown-seg, .wallet-legend-item, .cat-filter-chip, .quick-exp-pill, .exp-item-card, button, input, a')) {
+            return;
+          }
+          triggerHaptic(6);
+          window.setWalletCatFilter('ALL');
+        });
+      }
+
+      // 記帳 Modal 邏輯（單手膠囊＋歸零按鈕＋歸屬天數）
       const modalExp = document.getElementById('modal-expense');
       const modalExpClose = document.getElementById('modal-exp-close');
       const modalExpSubmit = document.getElementById('modal-exp-submit');
@@ -4358,9 +5742,11 @@ window.HANDBOOK_DATA.emergencyContacts = [
       const modalExpAmount = document.getElementById('modal-exp-amount');
       const modalExpCurrency = document.getElementById('modal-exp-currency');
       const modalExpCategory = document.getElementById('modal-exp-category');
+      const modalExpDayTag = document.getElementById('modal-exp-daytag');
       const modalExpNote = document.getElementById('modal-exp-note');
       const modalExpCurrSym = document.getElementById('modal-exp-curr-sym');
       const modalExpCalcTwd = document.getElementById('modal-exp-calc-twd');
+      const modalExpResetBtn = document.getElementById('modal-exp-reset-btn');
 
       function updateModalExpCalc() {
         const val = parseFloat(modalExpAmount.value) || 0;
@@ -4373,8 +5759,92 @@ window.HANDBOOK_DATA.emergencyContacts = [
           modalExpCalcTwd.textContent = ``;
         }
       }
+
+      function setModalExpCurrency(val) {
+        const v = val === 'TWD' ? 'TWD' : 'JPY';
+        modalExpCurrency.value = v;
+        document.querySelectorAll('#modal-exp-curr-pills .modal-seg-pill').forEach(p => {
+          p.classList.toggle('active', p.dataset.val === v);
+        });
+        updateModalExpCalc();
+      }
+
+      function setModalExpCategory(val) {
+        const target = val || '美食';
+        const pills = document.querySelectorAll('#modal-exp-cat-pills .modal-seg-pill');
+        let matched = false;
+        pills.forEach(p => {
+          const ok = p.dataset.val === target;
+          p.classList.toggle('active', ok);
+          if (ok) matched = true;
+        });
+        if (!matched && pills[0]) {
+          pills[0].classList.add('active');
+          modalExpCategory.value = pills[0].dataset.val;
+        } else {
+          modalExpCategory.value = target;
+        }
+      }
+
+      function setModalExpDayTag(val) {
+        const target = val || 'D1';
+        const pills = document.querySelectorAll('#modal-exp-day-pills .modal-seg-pill');
+        let matched = false;
+        pills.forEach(p => {
+          const ok = p.dataset.val === target;
+          p.classList.toggle('active', ok);
+          if (ok) matched = true;
+        });
+        if (!matched && pills[1]) {
+          pills[1].classList.add('active');
+          modalExpDayTag.value = pills[1].dataset.val;
+        } else {
+          modalExpDayTag.value = target;
+        }
+      }
+
+      function getDefaultExpDayTag(preferTripDay) {
+        const now = new Date();
+        const dateStr = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+        const matchedIdx = tripDays.findIndex(d => d.fullDate === dateStr);
+        if (matchedIdx !== -1) return 'D' + (matchedIdx + 1);
+        if (!preferTripDay) {
+          const todayMidnight = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
+          const startMidnight = new Date(2027, 2, 27).getTime();
+          if (todayMidnight < startMidnight) return '行前';
+        }
+        return 'D' + (currentDay + 1);
+      }
+
       modalExpAmount.addEventListener('input', updateModalExpCalc);
       modalExpCurrency.addEventListener('change', updateModalExpCalc);
+
+      document.querySelectorAll('#modal-exp-curr-pills .modal-seg-pill').forEach(btn => {
+        btn.addEventListener('click', () => {
+          triggerHaptic(6);
+          setModalExpCurrency(btn.dataset.val);
+        });
+      });
+      document.querySelectorAll('#modal-exp-cat-pills .modal-seg-pill').forEach(btn => {
+        btn.addEventListener('click', () => {
+          triggerHaptic(6);
+          setModalExpCategory(btn.dataset.val);
+        });
+      });
+      document.querySelectorAll('#modal-exp-day-pills .modal-seg-pill').forEach(btn => {
+        btn.addEventListener('click', () => {
+          triggerHaptic(6);
+          setModalExpDayTag(btn.dataset.val);
+        });
+      });
+      if (modalExpResetBtn) {
+        modalExpResetBtn.addEventListener('click', () => {
+          triggerHaptic(6);
+          modalExpAmount.value = '';
+          updateModalExpCalc();
+          modalExpAmount.focus();
+        });
+      }
 
       window.stepExpAmt = function(delta) {
         triggerHaptic(6);
@@ -4386,15 +5856,16 @@ window.HANDBOOK_DATA.emergencyContacts = [
 
       document.getElementById('btn-top-add-custom-exp').addEventListener('click', () => {
         triggerHaptic(8);
+        const cur = ICON_SETS[activeIconSet] || ICON_SETS.craft;
         modalExpHeader.textContent = '新增一筆共同消費';
-        modalExpIcon.textContent = '💴';
+        modalExpIcon.innerHTML = cur.wallet;
         modalExpEditId.value = '';
         modalExpTitle.value = '';
         modalExpAmount.value = '1000';
-        modalExpCurrency.value = 'JPY';
-        modalExpCategory.value = '美食';
+        setModalExpCurrency('JPY');
+        setModalExpCategory('美食');
+        setModalExpDayTag(getDefaultExpDayTag(false));
         modalExpNote.value = '';
-        updateModalExpCalc();
         modalExp.classList.add('open');
       });
 
@@ -4402,18 +5873,19 @@ window.HANDBOOK_DATA.emergencyContacts = [
       quickPills.forEach(pill => {
         pill.addEventListener('click', () => {
           triggerHaptic(8);
+          const cur = ICON_SETS[activeIconSet] || ICON_SETS.craft;
           const name = pill.dataset.name;
           const amt = pill.dataset.amount;
           const cat = pill.dataset.cat;
           modalExpHeader.textContent = `快速微調記帳 · ${name}`;
-          modalExpIcon.textContent = '⚡';
+          modalExpIcon.innerHTML = cur.wallet;
           modalExpEditId.value = '';
           modalExpTitle.value = name;
           modalExpAmount.value = amt;
-          modalExpCurrency.value = 'JPY';
-          modalExpCategory.value = cat;
+          setModalExpCurrency('JPY');
+          setModalExpCategory(cat);
+          setModalExpDayTag(getDefaultExpDayTag(true));
           modalExpNote.value = '快捷記帳';
-          updateModalExpCalc();
           modalExp.classList.add('open');
         });
       });
@@ -4425,15 +5897,16 @@ window.HANDBOOK_DATA.emergencyContacts = [
         triggerHaptic(8);
         const ex = allExpenses[idx];
         if (!ex) return;
+        const cur = ICON_SETS[activeIconSet] || ICON_SETS.craft;
         modalExpHeader.textContent = '修改此筆消費明細';
-        modalExpIcon.textContent = '✎';
+        modalExpIcon.innerHTML = cur.edit;
         modalExpEditId.value = idx.toString();
         modalExpTitle.value = ex.title || '';
         modalExpAmount.value = ex.amount || 0;
-        modalExpCurrency.value = ex.currency || 'JPY';
-        modalExpCategory.value = ex.category || '美食';
+        setModalExpCurrency(ex.currency || 'JPY');
+        setModalExpCategory(ex.category || '美食');
+        setModalExpDayTag(ex.dayTag || getDefaultExpDayTag(true));
         modalExpNote.value = ex.note || '';
-        updateModalExpCalc();
         modalExp.classList.add('open');
       };
 
@@ -4462,6 +5935,7 @@ window.HANDBOOK_DATA.emergencyContacts = [
           amount: amt,
           currency: modalExpCurrency.value,
           category: modalExpCategory.value,
+          dayTag: (modalExpDayTag ? modalExpDayTag.value : '') || 'D1',
           note: modalExpNote.value.trim()
         };
 
@@ -4781,15 +6255,16 @@ window.HANDBOOK_DATA.emergencyContacts = [
           const rightVal = parseFloat(fxRightInput.value) || 215;
           const jpyAmt = isJpyToTwd ? Math.round(leftVal) : Math.round(rightVal);
           closeFx();
+          const cur = ICON_SETS[activeIconSet] || ICON_SETS.craft;
           modalExpHeader.textContent = '換匯金額直接記帳';
-          modalExpIcon.textContent = '💴';
+          modalExpIcon.innerHTML = cur.wallet;
           modalExpEditId.value = '';
           modalExpTitle.value = '';
           modalExpAmount.value = jpyAmt;
-          modalExpCurrency.value = 'JPY';
-          modalExpCategory.value = '購物/伴手禮';
+          setModalExpCurrency('JPY');
+          setModalExpCategory('購物/伴手禮');
+          setModalExpDayTag(getDefaultExpDayTag(false));
           modalExpNote.value = '由換匯計算機帶入';
-          updateModalExpCalc();
           modalExp.classList.add('open');
           syncBodyLock();
         });
@@ -4799,10 +6274,7 @@ window.HANDBOOK_DATA.emergencyContacts = [
       document.querySelectorAll('#wallet-cat-bar .cat-filter-chip').forEach(btn => {
         btn.addEventListener('click', () => {
           triggerHaptic(6);
-          document.querySelectorAll('#wallet-cat-bar .cat-filter-chip').forEach(b => b.classList.remove('active'));
-          btn.classList.add('active');
-          currentWalletFilter = btn.dataset.cat || 'ALL';
-          renderWalletHistory();
+          window.setWalletCatFilter(btn.dataset.cat || 'ALL');
         });
       });
 
@@ -4815,7 +6287,7 @@ window.HANDBOOK_DATA.emergencyContacts = [
         return (safeStorage.get('sendai_gas_url_v1') || DEFAULT_GAS_URL || '').trim();
       }
 
-      function updateCloudBadge(statusText, color) {
+      function updateCloudBadge(statusText, color, stateKey) {
         const badge = document.getElementById('cloud-sync-badge');
         if (badge) {
           badge.textContent = statusText;
@@ -4824,6 +6296,25 @@ window.HANDBOOK_DATA.emergencyContacts = [
         const shareBtn = document.getElementById('btn-share-gas-link');
         if (shareBtn) {
           shareBtn.style.display = getGasUrl() ? 'block' : 'none';
+        }
+        let resolvedState = stateKey;
+        if (!resolvedState) {
+          const txt = String(statusText || '');
+          if (txt.includes('中') || txt.includes('🟡')) resolvedState = 'syncing';
+          else if (txt.includes('已同步') || txt.includes('🟢')) resolvedState = 'synced';
+          else if (txt.includes('離線') || txt.includes('失敗') || txt.includes('🔴')) resolvedState = 'offline';
+          else resolvedState = 'idle';
+        }
+        const topDot = document.getElementById('top-cloud-dot');
+        if (topDot) {
+          topDot.classList.remove('is-synced', 'is-syncing', 'is-offline', 'is-idle');
+          topDot.classList.add('is-' + resolvedState);
+        }
+        const topBtn = document.getElementById('top-sync-dot-btn');
+        if (topBtn) {
+          const tip = `雲端同步狀態：${statusText}（點擊立即同步）`;
+          topBtn.title = tip;
+          topBtn.setAttribute('aria-label', tip);
         }
       }
 
@@ -4841,16 +6332,297 @@ window.HANDBOOK_DATA.emergencyContacts = [
         } catch (e) {}
       })();
 
+      // =========================================================
+      // TAB 3 子分頁切換 (🎫 票券｜🏨 住行｜💬 指差｜✅ 清單)
+      // =========================================================
+      document.querySelectorAll('#pocket-sub-nav .pocket-sub-tab').forEach(btn => {
+        btn.addEventListener('click', () => {
+          triggerHaptic(6);
+          const targetSub = btn.dataset.sub || 'tickets';
+          document.querySelectorAll('#pocket-sub-nav .pocket-sub-tab').forEach(b => {
+            b.classList.toggle('active', b === btn);
+          });
+          document.querySelectorAll('#pane-pocket .pocket-sub-pane').forEach(p => {
+            p.classList.toggle('active', p.id === 'pocket-sub-' + targetSub);
+          });
+          window.scrollTo(0, 0);
+        });
+      });
+
+      // =========================================================
+      // TAB 3 子分頁 C：💬 日語指差對話卡＋大字卡彈窗
+      // =========================================================
+      let currentPhraseCat = 'ALL';
+      let currentPhraseQuery = '';
+      let filteredPhrases = [];
+      let activePhraseIdx = 0;
+
+      const modalPhrase = document.getElementById('modal-phrase');
+      const modalPhraseClose = document.getElementById('modal-phrase-close');
+      const phraseModalCatEl = document.getElementById('phrase-modal-cat');
+      const phraseModalJpEl = document.getElementById('phrase-modal-jp');
+      const phraseModalZhEl = document.getElementById('phrase-modal-zh');
+      const phraseModalPronEl = document.getElementById('phrase-modal-pron');
+      const phrasePrevBtn = document.getElementById('phrase-prev-btn');
+      const phraseCopyBtn = document.getElementById('phrase-copy-btn');
+      const phraseNextBtn = document.getElementById('phrase-next-btn');
+
+      function showPhraseAt(idx) {
+        if (!filteredPhrases || filteredPhrases.length === 0) return;
+        const len = filteredPhrases.length;
+        activePhraseIdx = ((idx % len) + len) % len;
+        const p = filteredPhrases[activePhraseIdx];
+        if (phraseModalCatEl) phraseModalCatEl.textContent = `${p.cat || '指差對話'} · ${activePhraseIdx + 1}/${len}`;
+        if (phraseModalJpEl) phraseModalJpEl.textContent = p.jp || '';
+        if (phraseModalZhEl) phraseModalZhEl.textContent = p.zh || '';
+        if (phraseModalPronEl) phraseModalPronEl.textContent = p.pron ? `發音：${p.pron}` : '';
+      }
+
+      window.openPhraseModal = function(filteredIdx) {
+        triggerHaptic(8);
+        if (!modalPhrase || filteredPhrases.length === 0) return;
+        showPhraseAt(filteredIdx);
+        modalPhrase.classList.add('open');
+        syncBodyLock();
+      };
+
+      function closePhraseModal() {
+        if (modalPhrase) modalPhrase.classList.remove('open');
+        syncBodyLock();
+      }
+
+      if (modalPhraseClose) modalPhraseClose.addEventListener('click', closePhraseModal);
+      if (modalPhrase) {
+        modalPhrase.addEventListener('click', (e) => {
+          if (e.target === modalPhrase) closePhraseModal();
+        });
+      }
+      if (phrasePrevBtn) {
+        phrasePrevBtn.addEventListener('click', () => {
+          triggerHaptic(6);
+          showPhraseAt(activePhraseIdx - 1);
+        });
+      }
+      if (phraseNextBtn) {
+        phraseNextBtn.addEventListener('click', () => {
+          triggerHaptic(6);
+          showPhraseAt(activePhraseIdx + 1);
+        });
+      }
+      if (phraseCopyBtn) {
+        phraseCopyBtn.addEventListener('click', () => {
+          triggerHaptic(8);
+          const p = filteredPhrases[activePhraseIdx];
+          const jpText = p && p.jp ? p.jp : '';
+          if (!jpText) return;
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(jpText).then(() => {
+              showToast('✓ 已複製日文會話卡');
+            }).catch(() => showToast('✓ 已備妥日文對話'));
+          } else {
+            showToast('✓ 已備妥日文對話');
+          }
+        });
+      }
+
+      const PHRASE_SPEECH_SVG = `<svg class="taisho-svg-icon" viewBox="0 0 24 24"><path class="svg-accent-fill" d="M5 5h14a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H10l-4.5 3.5V17H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2z"/><path d="M5 5h14a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H10l-4.5 3.5V17H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2z"/><path d="M8 9.5h8M8 12.5h5"/></svg>`;
+      const PHRASE_EXPAND_SVG = `<svg class="taisho-svg-icon" viewBox="0 0 24 24"><rect x="3.5" y="4.5" width="17" height="15" rx="2.5" fill="rgba(226,166,84,0.2)"/><path d="M8 9h3.5M8 9v3.5M16 15h-3.5M16 15v-3.5"/></svg>`;
+
+      function renderPhrases() {
+        const box = document.getElementById('pocket-phrases-list');
+        if (!box) return;
+        const cards = (window.HANDBOOK_DATA && Array.isArray(window.HANDBOOK_DATA.phraseCards))
+          ? window.HANDBOOK_DATA.phraseCards
+          : [];
+        const q = currentPhraseQuery.trim().toLowerCase();
+
+        filteredPhrases = cards.filter(p => {
+          const catOk = currentPhraseCat === 'ALL' || p.cat === currentPhraseCat;
+          if (!catOk) return false;
+          if (!q) return true;
+          return (p.jp || '').toLowerCase().includes(q)
+            || (p.zh || '').toLowerCase().includes(q)
+            || (p.pron || '').toLowerCase().includes(q)
+            || (p.cat || '').toLowerCase().includes(q);
+        });
+
+        if (filteredPhrases.length === 0) {
+          box.innerHTML = '<div style="text-align:center;padding:22px;color:var(--text-sub);font-size:12.5px;">找不到符合條件的日語指差卡，請更換關鍵字試試</div>';
+          return;
+        }
+
+        let html = '';
+        filteredPhrases.forEach((p, idx) => {
+          html += `
+            <div class="phrase-card-item" data-fidx="${idx}">
+              <div class="phrase-head-row">
+                <span class="tl-tag-pill">${PHRASE_SPEECH_SVG} <span>${escHtml(p.cat || '常用')}</span></span>
+                <span class="taisho-action-btn" style="width:28px;height:28px;pointer-events:none;" title="放大展示指差大字卡">${PHRASE_EXPAND_SVG}</span>
+              </div>
+              <div class="phrase-zh-txt">${escHtml(p.zh)}</div>
+              <div class="phrase-jp-txt">${escHtml(p.jp)}</div>
+              ${p.pron ? `<div class="phrase-pron-txt">發音：${escHtml(p.pron)}</div>` : ''}
+            </div>
+          `;
+        });
+        box.innerHTML = html;
+        box.querySelectorAll('.phrase-card-item').forEach(cardEl => {
+          cardEl.addEventListener('click', () => {
+            window.openPhraseModal(parseInt(cardEl.dataset.fidx, 10) || 0);
+          });
+        });
+      }
+
+      const phraseSearchInput = document.getElementById('phrase-search-input');
+      if (phraseSearchInput) {
+        phraseSearchInput.addEventListener('input', () => {
+          currentPhraseQuery = phraseSearchInput.value || '';
+          renderPhrases();
+        });
+      }
+      document.querySelectorAll('#phrase-cat-bar .cat-filter-chip').forEach(btn => {
+        btn.addEventListener('click', () => {
+          triggerHaptic(6);
+          currentPhraseCat = btn.dataset.pcat || 'ALL';
+          document.querySelectorAll('#phrase-cat-bar .cat-filter-chip').forEach(b => {
+            b.classList.toggle('active', b === btn);
+          });
+          renderPhrases();
+        });
+      });
+
+      // =========================================================
+      // TAB 3 子分頁 D：行前必備檢查清單 (雙人同步 CRUD)
+      // =========================================================
+      function seedDefaultChecklist() {
+        const defs = (window.HANDBOOK_DATA && Array.isArray(window.HANDBOOK_DATA.defaultChecklist))
+          ? window.HANDBOOK_DATA.defaultChecklist
+          : [];
+        return defs.map((item, i) => ({
+          id: item.id || ('chk-' + (i + 1)),
+          text: item.text || '',
+          done: !!item.done
+        }));
+      }
+
+      let allChecklist = [];
+      try {
+        const savedChk = safeStorage.get('sendai_checklist_v1');
+        if (savedChk) {
+          const parsedChk = JSON.parse(savedChk);
+          allChecklist = Array.isArray(parsedChk) ? parsedChk : seedDefaultChecklist();
+        } else {
+          allChecklist = seedDefaultChecklist();
+        }
+      } catch (e) {
+        allChecklist = seedDefaultChecklist();
+      }
+
+      function saveChecklist(skipCloud) {
+        safeStorage.set('sendai_checklist_v1', JSON.stringify(allChecklist));
+        if (!skipCloud && window.scheduleCloudPush) window.scheduleCloudPush();
+      }
+
+      function renderChecklist() {
+        const box = document.getElementById('pocket-checklist-list');
+        const countEl = document.getElementById('checklist-done-count');
+        const fillEl = document.getElementById('checklist-bar-fill');
+        const total = allChecklist.length;
+        const doneCount = allChecklist.filter(c => !!c.done).length;
+        const pct = total > 0 ? Math.round((doneCount / total) * 100) : 0;
+
+        if (countEl) countEl.textContent = `已完成 ${doneCount} / ${total} 項 · ${pct}%`;
+        if (fillEl) fillEl.style.width = pct + '%';
+        if (!box) return;
+
+        if (total === 0) {
+          box.innerHTML = '<div style="text-align:center;padding:22px;color:var(--text-sub);font-size:12.5px;">尚無檢查項目，可於上方輸入新增行前物品</div>';
+          return;
+        }
+
+        const cur = ICON_SETS[activeIconSet] || ICON_SETS.craft;
+        let html = '';
+        allChecklist.forEach((item, idx) => {
+          const isDone = !!item.done;
+          html += `
+            <div class="checklist-item-card${isDone ? ' done' : ''}" data-cidx="${idx}">
+              <span class="checklist-check-box">${isDone ? '✓' : ''}</span>
+              <span class="checklist-item-text">${escHtml(item.text)}</span>
+              <button type="button" class="taisho-action-btn btn-danger checklist-del-btn" data-cidx="${idx}" title="刪除此項目" aria-label="刪除此項目">${cur.del}</button>
+            </div>
+          `;
+        });
+        box.innerHTML = html;
+
+        box.querySelectorAll('.checklist-item-card').forEach(cardEl => {
+          cardEl.addEventListener('click', () => {
+            triggerHaptic(6);
+            const idx = parseInt(cardEl.dataset.cidx, 10);
+            if (!isNaN(idx) && allChecklist[idx]) {
+              allChecklist[idx].done = !allChecklist[idx].done;
+              saveChecklist();
+              renderChecklist();
+            }
+          });
+        });
+
+        box.querySelectorAll('.checklist-del-btn').forEach(delBtn => {
+          delBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            triggerHaptic(8);
+            const idx = parseInt(delBtn.dataset.cidx, 10);
+            if (!isNaN(idx) && allChecklist[idx]) {
+              allChecklist.splice(idx, 1);
+              saveChecklist();
+              renderChecklist();
+              showToast('✓ 已從行前清單移除');
+            }
+          });
+        });
+      }
+
+      const checklistNewInput = document.getElementById('checklist-new-input');
+      const checklistAddBtn = document.getElementById('checklist-add-btn');
+      function addChecklistItem() {
+        if (!checklistNewInput) return;
+        const text = checklistNewInput.value.trim();
+        if (!text) {
+          showToast('⚠️ 請輸入要加入的檢查項目');
+          checklistNewInput.focus();
+          return;
+        }
+        triggerHaptic(8);
+        allChecklist.push({
+          id: 'chk-' + Date.now(),
+          text: text,
+          done: false
+        });
+        checklistNewInput.value = '';
+        saveChecklist();
+        renderChecklist();
+        showToast('✓ 已加入行前清單');
+      }
+      if (checklistAddBtn) checklistAddBtn.addEventListener('click', addChecklistItem);
+      if (checklistNewInput) {
+        checklistNewInput.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' && !e.isComposing) {
+            e.preventDefault();
+            addChecklistItem();
+          }
+        });
+      }
+
       function buildCloudPayload() {
         const nowTs = Date.now();
         safeStorage.set('sendai_last_edit_v1', String(nowTs));
         return {
-          v: '2.15',
+          v: '2.16',
           updatedAt: nowTs,
           fx: currentFxRate,
           days: tripDays,
           expenses: allExpenses,
-          tickets: allTickets
+          tickets: allTickets,
+          checklist: allChecklist
         };
       }
 
@@ -4864,12 +6636,22 @@ window.HANDBOOK_DATA.emergencyContacts = [
         }
         if (Array.isArray(data.expenses)) {
           allExpenses = data.expenses;
+          allExpenses.forEach(ex => {
+            if (ex && !ex.dayTag && ex.id && DEFAULT_DAY_TAG_MAP[ex.id]) {
+              ex.dayTag = DEFAULT_DAY_TAG_MAP[ex.id];
+            }
+          });
           saveExpenses(true);
           changed = true;
         }
         if (Array.isArray(data.tickets)) {
           allTickets = data.tickets;
           saveTickets(true);
+          changed = true;
+        }
+        if (Array.isArray(data.checklist)) {
+          allChecklist = data.checklist;
+          saveChecklist(true);
           changed = true;
         }
         if (data.fx) {
@@ -4884,6 +6666,7 @@ window.HANDBOOK_DATA.emergencyContacts = [
           renderTimeline();
           renderWalletHistory();
           renderTickets();
+          renderChecklist();
           updateNowNext();
         }
         return changed;
@@ -4892,10 +6675,10 @@ window.HANDBOOK_DATA.emergencyContacts = [
       window.pushToGoogleSheets = async function(silent = true) {
         const gasUrl = getGasUrl();
         if (!gasUrl) {
-          updateCloudBadge('尚未綁定後台', 'var(--text-muted)');
+          updateCloudBadge('尚未綁定後台', 'var(--text-muted)', 'idle');
           return false;
         }
-        updateCloudBadge('🟡 雲端同步中...', '#e8b86d');
+        updateCloudBadge('● 雲端同步中...', '#FFD48F', 'syncing');
         try {
           const payload = buildCloudPayload();
           const res = await fetch(gasUrl, {
@@ -4905,13 +6688,13 @@ window.HANDBOOK_DATA.emergencyContacts = [
           });
           const json = await res.json();
           if (json && json.ok) {
-            updateCloudBadge('🟢 已同步試算表', '#7ae2a6');
+            updateCloudBadge('● 已同步試算表', 'var(--amber)', 'synced');
             if (!silent) showToast('✓ 已即時同步至 Google 試算表');
             return true;
           }
           throw new Error(json && json.error ? json.error : '寫入失敗');
         } catch (err) {
-          updateCloudBadge('🔴 離線快取中', '#ff9494');
+          updateCloudBadge('● 離線快取中', '#D47A7A', 'offline');
           if (!silent) showToast('⚠️ 雲端暫時離線，變更已存於手機快取');
           return false;
         }
@@ -4920,10 +6703,10 @@ window.HANDBOOK_DATA.emergencyContacts = [
       window.pullFromGoogleSheets = async function(force = false, silent = true) {
         const gasUrl = getGasUrl();
         if (!gasUrl) {
-          updateCloudBadge('尚未綁定後台', 'var(--text-muted)');
+          updateCloudBadge('尚未綁定後台', 'var(--text-muted)', 'idle');
           return false;
         }
-        updateCloudBadge('🟡 連線檢查中...', '#e8b86d');
+        updateCloudBadge('● 連線檢查中...', '#FFD48F', 'syncing');
         try {
           const sep = gasUrl.includes('?') ? '&' : '?';
           const res = await fetch(`${gasUrl}${sep}room=${encodeURIComponent(GAS_ROOM_ID)}&t=${Date.now()}`);
@@ -4935,12 +6718,12 @@ window.HANDBOOK_DATA.emergencyContacts = [
             const localTs = Number(safeStorage.get('sendai_last_edit_v1') || 0);
             if (force || remoteTs > localTs || localTs === 0) {
               applyCloudPayload(json.data);
-              updateCloudBadge('🟢 已同步試算表', '#7ae2a6');
+              updateCloudBadge('● 已同步試算表', 'var(--amber)', 'synced');
               if (!silent) showToast('✓ 已載入最新 Google 試算表資料');
             } else if (localTs > remoteTs) {
               await window.pushToGoogleSheets(true);
             } else {
-              updateCloudBadge('🟢 已同步試算表', '#7ae2a6');
+              updateCloudBadge('● 已同步試算表', 'var(--amber)', 'synced');
               if (!silent) showToast('✓ 目前已是最新資料');
             }
           } else {
@@ -4950,7 +6733,7 @@ window.HANDBOOK_DATA.emergencyContacts = [
           }
           return true;
         } catch (err) {
-          updateCloudBadge('🔴 離線快取中', '#ff9494');
+          updateCloudBadge('● 離線快取中', '#D47A7A', 'offline');
           if (!silent) showToast('⚠️ 連線失敗，目前使用本機離線快取');
           return false;
         }
@@ -4972,7 +6755,7 @@ window.HANDBOOK_DATA.emergencyContacts = [
         const trimmed = input.trim();
         if (!trimmed) {
           safeStorage.set('sendai_gas_url_v1', '');
-          updateCloudBadge('尚未綁定後台', 'var(--text-muted)');
+          updateCloudBadge('尚未綁定後台', 'var(--text-muted)', 'idle');
           showToast('已解除 Google 試算表綁定');
           return;
         }
@@ -5010,12 +6793,13 @@ window.HANDBOOK_DATA.emergencyContacts = [
 
       window.resetAllTripData = function() {
         triggerHaptic(10);
-        askTaishoConfirm('確定要將本機行程、記帳與票券恢復為初始預設狀態嗎？', () => {
+        askTaishoConfirm('確定要將本機行程、記帳、票券與行前清單恢復為初始預設狀態嗎？', () => {
           safeStorage.set('sendai_itinerary_v28', '');
           safeStorage.set('sendai_itinerary_v27', '');
           safeStorage.set('sendai_days_v27', '');
           safeStorage.set('sendai_expenses_v27', '');
           safeStorage.set('sendai_tickets_v27', '');
+          safeStorage.set('sendai_checklist_v1', '');
           safeStorage.set('sendai_last_edit_v1', '');
           location.reload();
         });
@@ -5074,11 +6858,13 @@ window.HANDBOOK_DATA.emergencyContacts = [
       renderTimeline();
       renderWalletHistory();
       renderTickets();
+      renderPhrases();
+      renderChecklist();
       updateNowNext();
       if (getGasUrl()) {
         window.pullFromGoogleSheets(false, true);
       } else {
-        updateCloudBadge('尚未綁定後台', 'var(--text-muted)');
+        updateCloudBadge('尚未綁定後台', 'var(--text-muted)', 'idle');
       }
     })();
   </script>
