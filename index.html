@@ -1076,11 +1076,14 @@
       letter-spacing: 0.04em;
     }
 
-    .tab-section-pane { display: none; animation: fadeIn 0.22s ease-out; }
+    .tab-section-pane { display: none; animation: fadeIn 0.12s ease-out; }
     .tab-section-pane.active { display: block; }
     @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(4px); }
-      to { opacity: 1; transform: translateY(0); }
+      from { opacity: 0.65; }
+      to { opacity: 1; }
+    }
+    button, .taisho-nav-tab, .fx-quick-chip, .day-chip, .exp-card-item {
+      touch-action: manipulation;
     }
 
     /* =========================================================
@@ -3474,7 +3477,7 @@ window.HANDBOOK_DATA.emergencyContacts = [
           document.querySelectorAll('.tab-section-pane').forEach(p => p.classList.remove('active'));
           const activePane = document.getElementById('pane-' + target);
           if (activePane) activePane.classList.add('active');
-          window.scrollTo({ top: 0, behavior: 'smooth' });
+          window.scrollTo(0, 0);
         });
       });
 
