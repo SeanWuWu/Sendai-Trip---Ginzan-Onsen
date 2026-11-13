@@ -1,4 +1,4 @@
-const CACHE_NAME = 'sendai-trip-v2.15.9';
+const CACHE_NAME = 'sendai-trip-v2.15.10';
 const ASSETS = [
   './',
   './index.html',

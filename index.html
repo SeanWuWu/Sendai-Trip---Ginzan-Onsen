@@ -1490,7 +1490,7 @@
     .app-viewport {
       position: relative;
       z-index: 5;
-      padding-bottom: calc(68px + env(safe-area-inset-bottom, 6px)) !important;
+      padding-bottom: calc(max(24px, env(safe-area-inset-bottom, 24px)) + 76px) !important;
     }
 
     /* 2. 記帳總花費卡緊湊單行化 */
@@ -1516,7 +1516,7 @@
     .wallet-fab-add-btn {
       position: fixed;
       right: max(18px, calc(50vw - 220px));
-      bottom: calc(68px + env(safe-area-inset-bottom, 8px));
+      bottom: calc(max(24px, env(safe-area-inset-bottom, 24px)) + 66px) !important;
       width: 52px;
       height: 52px;
       border-radius: 50%;
@@ -1555,11 +1555,30 @@
       line-height: 1.35;
     }
 
-    /* 6. 底部三主導覽列消除多餘空白 */
+    /* 6. 懸浮式大正玻璃膠囊導覽列（大幅拉高底部安全距，徹底遠離 iPhone 底部橫槓與 Safari 觸控列） */
     .bottom-taisho-nav {
-      height: calc(54px + max(12px, env(safe-area-inset-bottom, 18px))) !important;
-      padding-top: 6px !important;
-      padding-bottom: max(12px, env(safe-area-inset-bottom, 18px)) !important;
+      bottom: max(24px, env(safe-area-inset-bottom, 24px)) !important;
+      left: 0 !important;
+      right: 0 !important;
+      width: min(calc(100% - 32px), 448px) !important;
+      margin: 0 auto !important;
+      height: 54px !important;
+      padding: 0 8px !important;
+      border-radius: 999px !important;
+      border: 1px solid rgba(226, 166, 84, 0.36) !important;
+      border-top: 1px solid rgba(255, 224, 160, 0.45) !important;
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.68), 0 0 18px rgba(226, 166, 84, 0.14) !important;
+    }
+    .taisho-nav-tab {
+      border-radius: 999px;
+      margin: 4px 2px;
+      height: 46px !important;
+    }
+    .taisho-nav-tab.active {
+      background: rgba(226, 166, 84, 0.16);
+    }
+    .taisho-nav-tab:active {
+      transform: scale(0.94);
     }
     .nav-tab-icon {
       font-size: 17px !important;
