@@ -4,8 +4,8 @@
   "description": "老公與老婆的日本東北仙台、松島海岸、銀山溫泉 5天4夜隨身旅行手冊",
   "start_url": "./index.html",
   "display": "standalone",
-  "background_color": "#F4F7F5",
-  "theme_color": "#F4F7F5",
+  "background_color": "#131922",
+  "theme_color": "#131922",
   "lang": "zh-Hant",
   "icons": [
     {
