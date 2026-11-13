@@ -5038,10 +5038,12 @@ window.HANDBOOK_DATA.emergencyContacts = [
       })();
 
 
-      // 註冊 PWA Service Worker 支援銀山溫泉山區 100% 無網路離線秒開
+      // 註冊 PWA Service Worker（有網立即更新最新版，山區無網 100% 離線秒開）
       if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
-          navigator.serviceWorker.register('./sw.js').catch(() => {});
+          navigator.serviceWorker.register('./sw.js').then((reg) => {
+            reg.update().catch(() => {});
+          }).catch(() => {});
         });
       }
 

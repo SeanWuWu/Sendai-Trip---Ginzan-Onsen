@@ -1,4 +1,4 @@
-const CACHE_NAME = 'sendai-trip-v2.14';
+const CACHE_NAME = 'sendai-trip-v2.15';
 const ASSETS = [
   './',
   './index.html',
@@ -28,7 +28,26 @@ self.addEventListener('fetch', (event) => {
   const url = new URL(event.request.url);
   if (url.origin !== self.location.origin) return;
 
-  // Stale-While-Revalidate：秒開本機快取＋背景自動更新，山區無網路 100% 正常運作
+  const isHtml = event.request.mode === 'navigate' || url.pathname.endsWith('/') || url.pathname.endsWith('.html');
+
+  if (isHtml) {
+    // 網頁主體改用 Network-First（2.5 秒超時自動退回離線快取）：確保有網路時永遠秒拿最新版，無網路時依然秒開
+    event.respondWith(
+      Promise.race([
+        fetch(event.request, { cache: 'no-cache' }).then((networkRes) => {
+          if (networkRes && networkRes.ok) {
+            const clone = networkRes.clone();
+            caches.open(CACHE_NAME).then((cache) => cache.put(event.request, clone));
+          }
+          return networkRes;
+        }),
+        new Promise((_, reject) => setTimeout(() => reject(new Error('timeout')), 2500))
+      ]).catch(() => caches.match(event.request).then((cached) => cached || caches.match('./index.html')))
+    );
+    return;
+  }
+
+  // 靜態圖示資源維持 Stale-While-Revalidate
   event.respondWith(
     caches.match(event.request).then((cached) => {
       const fetchPromise = fetch(event.request)
